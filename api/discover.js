@@ -142,7 +142,7 @@ export default async function handler(req, res) {
     // Get a key at https://aistudio.google.com/apikey and set it in Vercel as
     // AI_API_KEY. The model below is a fast, free-tier model; if Google renames
     // its free models, change the model name in the URL only.
-    const MODEL = "gemini-2.0-flash";
+    const MODEL = "gemini-2.5-flash";
     const apiRes = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${process.env.AI_API_KEY}`,
       {
