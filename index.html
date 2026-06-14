@@ -16,7 +16,7 @@
 <body>
   <div id="root"></div>
   <script type="text/babel" data-presets="react">
-    const { useState, useRef } = React;
+    const { useState, useRef, useEffect } = React;
 
     // The proxy endpoint. Same-origin relative path works when the page and the
     // function are deployed together on Vercel. No CORS needed in that setup.
@@ -342,28 +342,107 @@
       return { vendors: scored, stateKey: matchedState };
     }
 
-    function VendorCard({ vendor, freeLabel, lang }) {
-      const colors = CATEGORY_COLORS[vendor.category];
+    const SHELL_STRINGS = {
+      en: { navDiscover: "Discover", navPlan: "My Plan", navMap: "Map", navPassport: "Passport", planTitle: "My Plan", planEmpty: "Your plan is empty. Open any listing and tap \u201CAdd to plan.\u201D", planShare: "Share my plan", planShared: "Link copied!", addToPlan: "Add to plan", inPlan: "In your plan", follow: "Follow", comingSoon: "Coming soon", mapTitle: "Festival Map", mapDesc: "An interactive festival map will live here.", passportTitle: "Passport", passportDesc: "Collect a stamp at every booth you visit.", profileConnect: "Connect", profileBooth: "Location" },
+      es: { navDiscover: "Descubre", navPlan: "Mi plan", navMap: "Mapa", navPassport: "Pasaporte", planTitle: "Mi plan", planEmpty: "Tu plan está vacío. Abre cualquier elemento y toca \u201CAgregar al plan\u201D.", planShare: "Compartir mi plan", planShared: "¡Enlace copiado!", addToPlan: "Agregar al plan", inPlan: "En tu plan", follow: "Seguir", comingSoon: "Próximamente", mapTitle: "Mapa del festival", mapDesc: "Aquí vivirá un mapa interactivo del festival.", passportTitle: "Pasaporte", passportDesc: "Reúne un sello en cada puesto que visites.", profileConnect: "Conectar", profileBooth: "Ubicación" },
+      zh: { navDiscover: "探索", navPlan: "我的计划", navMap: "地图", navPassport: "护照", planTitle: "我的计划", planEmpty: "你的计划是空的。打开任意项目并点击\u201C加入计划\u201D。", planShare: "分享我的计划", planShared: "链接已复制！", addToPlan: "加入计划", inPlan: "已在计划中", follow: "关注", comingSoon: "敬请期待", mapTitle: "活动地图", mapDesc: "互动活动地图将在此呈现。", passportTitle: "护照", passportDesc: "每参观一个摊位即可收集一枚印章。", profileConnect: "联系", profileBooth: "位置" },
+      ko: { navDiscover: "둘러보기", navPlan: "내 플랜", navMap: "지도", navPassport: "패스포트", planTitle: "내 플랜", planEmpty: "플랜이 비어 있어요. 항목을 열고 \u201C플랜에 추가\u201D를 눌러 보세요.", planShare: "내 플랜 공유", planShared: "링크가 복사되었어요!", addToPlan: "플랜에 추가", inPlan: "플랜에 있음", follow: "팔로우", comingSoon: "곧 제공 예정", mapTitle: "축제 지도", mapDesc: "인터랙티브 축제 지도가 이곳에 표시됩니다.", passportTitle: "패스포트", passportDesc: "방문하는 부스마다 스탬프를 모으세요.", profileConnect: "연결", profileBooth: "위치" },
+      vi: { navDiscover: "Khám phá", navPlan: "Kế hoạch", navMap: "Bản đồ", navPassport: "Hộ chiếu", planTitle: "Kế hoạch của tôi", planEmpty: "Kế hoạch của bạn đang trống. Mở một mục bất kỳ và nhấn \u201CThêm vào kế hoạch\u201D.", planShare: "Chia sẻ kế hoạch", planShared: "Đã sao chép liên kết!", addToPlan: "Thêm vào kế hoạch", inPlan: "Đã trong kế hoạch", follow: "Theo dõi", comingSoon: "Sắp ra mắt", mapTitle: "Bản đồ lễ hội", mapDesc: "Bản đồ lễ hội tương tác sẽ xuất hiện ở đây.", passportTitle: "Hộ chiếu", passportDesc: "Thu thập một con dấu tại mỗi gian hàng bạn ghé thăm.", profileConnect: "Kết nối", profileBooth: "Vị trí" },
+      ja: { navDiscover: "さがす", navPlan: "マイプラン", navMap: "マップ", navPassport: "パスポート", planTitle: "マイプラン", planEmpty: "プランは空です。項目を開いて\u300Cプランに追加\u300Dを押してください。", planShare: "プランを共有", planShared: "リンクをコピーしました！", addToPlan: "プランに追加", inPlan: "プランに追加済み", follow: "フォロー", comingSoon: "近日公開", mapTitle: "会場マップ", mapDesc: "インタラクティブな会場マップがここに表示されます。", passportTitle: "パスポート", passportDesc: "訪れたブースごとにスタンプを集めましょう。", profileConnect: "つながる", profileBooth: "場所" },
+    };
+
+    function localized(vendor, lang) {
       const loc = vendor.i18n && vendor.i18n[lang];
-      const subcategory = (loc && loc.subcategory) || vendor.subcategory;
-      const description = (loc && loc.description) || vendor.description;
+      return {
+        subcategory: (loc && loc.subcategory) || vendor.subcategory,
+        description: (loc && loc.description) || vendor.description,
+      };
+    }
+
+    function VendorCard({ vendor, freeLabel, lang, onOpen, inPlan, onTogglePlan, addLabel, inPlanLabel }) {
+      const colors = CATEGORY_COLORS[vendor.category];
+      const { subcategory, description } = localized(vendor, lang);
       return (
         <div style={{ background: "#1e1e30", borderRadius: 12, padding: 16, borderLeft: `3px solid ${colors.border}`, marginBottom: 12 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: colors.text, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
-                {colors.icon} {subcategory}
+          <div onClick={() => onOpen(vendor)} style={{ cursor: "pointer" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: colors.text, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
+                  {colors.icon} {subcategory}
+                </div>
+                <div style={{ fontSize: 17, fontWeight: 700, color: "#f0ebe3" }}>{vendor.name}</div>
               </div>
-              <div style={{ fontSize: 17, fontWeight: 700, color: "#f0ebe3" }}>{vendor.name}</div>
+              {vendor.priceRange !== "Free" && (
+                <span style={{ fontSize: 13, color: "#f0ebe3", opacity: 0.6, fontWeight: 500 }}>{vendor.priceRange}</span>
+              )}
+              {vendor.priceRange === "Free" && (
+                <span style={{ fontSize: 11, background: "#2ecc7130", color: "#2ecc71", padding: "2px 8px", borderRadius: 20, fontWeight: 600 }}>{freeLabel}</span>
+              )}
             </div>
-            {vendor.priceRange !== "Free" && (
-              <span style={{ fontSize: 13, color: "#f0ebe3", opacity: 0.6, fontWeight: 500 }}>{vendor.priceRange}</span>
-            )}
-            {vendor.priceRange === "Free" && (
-              <span style={{ fontSize: 11, background: "#2ecc7130", color: "#2ecc71", padding: "2px 8px", borderRadius: 20, fontWeight: 600 }}>{freeLabel}</span>
-            )}
+            <p style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.75, lineHeight: 1.5, margin: 0 }}>{description}</p>
           </div>
-          <p style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.75, lineHeight: 1.5, margin: 0 }}>{description}</p>
+          <button onClick={() => onTogglePlan(vendor.id)} style={{ marginTop: 12, padding: "8px 12px", borderRadius: 8, border: "1px solid", borderColor: inPlan ? "#2ecc71" : "#333350", background: inPlan ? "#2ecc7120" : "transparent", color: inPlan ? "#2ecc71" : "#f0ebe3", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+            {inPlan ? "✓ " + inPlanLabel : "+ " + addLabel}
+          </button>
+        </div>
+      );
+    }
+
+    function ProfileOverlay({ vendor, lang, t, inPlan, onTogglePlan, onClose }) {
+      if (!vendor) return null;
+      const colors = CATEGORY_COLORS[vendor.category];
+      const { subcategory, description } = localized(vendor, lang);
+      return (
+        <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.65)", zIndex: 50, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: "#16162a", width: "100%", maxWidth: 480, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20, maxHeight: "85vh", overflowY: "auto", borderTop: `3px solid ${colors.border}` }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: colors.text, textTransform: "uppercase", letterSpacing: "0.05em" }}>{colors.icon} {subcategory}</div>
+              <button onClick={onClose} style={{ background: "transparent", border: "none", color: "#f0ebe3", opacity: 0.5, fontSize: 18, cursor: "pointer" }}>✕</button>
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: "#f0ebe3", marginBottom: 10 }}>{vendor.name}</div>
+            <p style={{ fontSize: 15, color: "#f0ebe3", opacity: 0.8, lineHeight: 1.6, marginTop: 0 }}>{description}</p>
+            <div style={{ background: "#1e1e30", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+              <div style={{ fontSize: 12, color: "#f0ebe3", opacity: 0.5, marginBottom: 4 }}>{t.profileBooth}</div>
+              <div style={{ fontSize: 13, color: "#f0ebe3", opacity: 0.4 }}>{t.comingSoon}</div>
+            </div>
+            <div style={{ background: "#1e1e30", borderRadius: 12, padding: 14, marginBottom: 16 }}>
+              <div style={{ fontSize: 12, color: "#f0ebe3", opacity: 0.5, marginBottom: 6 }}>{t.profileConnect}</div>
+              <div style={{ fontSize: 13, color: "#f0ebe3", opacity: 0.35 }}>🌐 · 📷 · 🔗  {t.comingSoon}</div>
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={() => onTogglePlan(vendor.id)} style={{ flex: 1, padding: 14, borderRadius: 12, border: "1px solid", borderColor: inPlan ? "#2ecc71" : "#ff6b35", background: inPlan ? "#2ecc7120" : "#ff6b35", color: inPlan ? "#2ecc71" : "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
+                {inPlan ? "✓ " + t.inPlan : "+ " + t.addToPlan}
+              </button>
+              <button style={{ flex: 1, padding: "9px 14px", borderRadius: 12, border: "1px solid #333350", background: "transparent", color: "#f0ebe3", opacity: 0.55, fontSize: 14, fontWeight: 600, cursor: "default", lineHeight: 1.2 }}>
+                ♡ {t.follow}
+                <span style={{ display: "block", fontSize: 9, opacity: 0.8, fontWeight: 500 }}>{t.comingSoon}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function BottomNav({ tab, onSelect, t }) {
+      const items = [
+        { key: "discover", icon: "🔍", label: t.navDiscover },
+        { key: "plan", icon: "📋", label: t.navPlan },
+        { key: "map", icon: "🗺️", label: t.navMap },
+        { key: "passport", icon: "🛂", label: t.navPassport },
+      ];
+      return (
+        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#16162af2", borderTop: "1px solid #333350", display: "flex", justifyContent: "center", zIndex: 40 }}>
+          <div style={{ display: "flex", width: "100%", maxWidth: 480 }}>
+            {items.map(it => {
+              const active = tab === it.key;
+              return (
+                <button key={it.key} onClick={() => onSelect(it.key)} style={{ flex: 1, padding: "10px 4px 12px", background: "transparent", border: "none", cursor: "pointer", color: active ? "#ff6b35" : "#f0ebe390", display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+                  <span style={{ fontSize: 20, opacity: active ? 1 : 0.7 }}>{it.icon}</span>
+                  <span style={{ fontSize: 11, fontWeight: active ? 700 : 500 }}>{it.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       );
     }
@@ -414,14 +493,56 @@
 
     function NMFDiscover() {
       const [lang, setLang] = useState("en");
+      const [tab, setTab] = useState("discover");
       const [query, setQuery] = useState("");
       const [results, setResults] = useState(null);
       const [loading, setLoading] = useState(false);
       const [categoryFilter, setCategoryFilter] = useState("All");
       const [error, setError] = useState(null);
+      const [plan, setPlan] = useState([]);
+      const [activeListing, setActiveListing] = useState(null);
+      const [shareMsg, setShareMsg] = useState("");
       const inputRef = useRef(null);
 
-      const t = TRANSLATIONS[lang];
+      const t = { ...TRANSLATIONS[lang], ...SHELL_STRINGS[lang] };
+
+      // Load a saved plan from a shared URL (?plan=) or this device, once on mount.
+      useEffect(() => {
+        let ids = [];
+        try {
+          const p = new URLSearchParams(window.location.search).get("plan");
+          if (p) ids = p.split(",").map(Number).filter(n => !isNaN(n));
+        } catch (e) {}
+        if (ids.length === 0) {
+          try {
+            const saved = JSON.parse(localStorage.getItem("nmf_plan") || "[]");
+            if (Array.isArray(saved)) ids = saved;
+          } catch (e) {}
+        }
+        if (ids.length) setPlan(ids);
+      }, []);
+
+      // Persist the plan to this device whenever it changes.
+      useEffect(() => {
+        try { localStorage.setItem("nmf_plan", JSON.stringify(plan)); } catch (e) {}
+      }, [plan]);
+
+      function togglePlan(id) {
+        setPlan(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+      }
+
+      function sharePlan() {
+        const url = window.location.origin + window.location.pathname + "?plan=" + plan.join(",");
+        if (navigator.share) {
+          navigator.share({ title: "NightMarket.fun", url }).catch(() => {});
+        } else {
+          try {
+            navigator.clipboard.writeText(url);
+            setShareMsg(t.planShared);
+            setTimeout(() => setShareMsg(""), 2000);
+          } catch (e) {}
+        }
+      }
 
       // English keeps the warm per-state lines; other languages use one clean
       // localized line, since the AI (the normal path) already replies translated.
@@ -507,76 +628,129 @@
       }
 
       const displayVendors = results ? results.vendors : filteredVendors;
+      const planVendors = plan.map(id => VENDORS.find(v => v.id === id)).filter(Boolean);
 
       return (
-        <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #12121f 0%, #1a1a2e 30%, #16162a 100%)", color: "#f0ebe3", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif", maxWidth: 480, margin: "0 auto", padding: "0 16px 32px" }}>
+        <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #12121f 0%, #1a1a2e 30%, #16162a 100%)", color: "#f0ebe3", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif", maxWidth: 480, margin: "0 auto", padding: "0 16px 88px" }}>
           <LanguageToggle lang={lang} onSelect={setLang} />
 
-          <div style={{ paddingTop: 16, paddingBottom: 16, textAlign: "center" }}>
-            <img src={LOGO_SRC} alt="NightMarket.fun" style={{ width: "62%", maxWidth: 240, height: "auto", display: "block", margin: "4px auto 8px" }} />
-            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.25em", color: "#ff6b35", marginBottom: 4 }}>2026</div>
-            <h1 style={{ fontSize: 26, fontWeight: 800, margin: "4px 0 6px", lineHeight: 1.1, color: "#f0ebe3" }}>{t.title}</h1>
-            <p style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.5, margin: 0 }}>{t.subtitle}</p>
+          <div style={{ paddingTop: 16, paddingBottom: 8, textAlign: "center" }}>
+            <img src={LOGO_SRC} alt="NightMarket.fun" style={{ width: "52%", maxWidth: 210, height: "auto", display: "block", margin: "4px auto 6px" }} />
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.25em", color: "#ff6b35" }}>2026</div>
           </div>
 
-          <div style={{ position: "relative", marginBottom: 16 }}>
-            <input ref={inputRef} type="text" value={query}
-              onChange={e => { setQuery(e.target.value); if (results) setResults(null); }}
-              onKeyDown={e => e.key === "Enter" && handleSearch()}
-              placeholder={t.placeholder}
-              style={{ width: "100%", padding: "14px 90px 14px 16px", borderRadius: 12, border: "1px solid #333350", background: "#1e1e30", color: "#f0ebe3", fontSize: 15, outline: "none", boxSizing: "border-box" }} />
-            <div style={{ position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)", display: "flex", gap: 4 }}>
-              {query && (
-                <button onClick={handleClear} style={{ padding: "8px 10px", borderRadius: 8, border: "none", background: "transparent", color: "#f0ebe3", opacity: 0.4, fontSize: 14, cursor: "pointer" }}>✕</button>
+          {tab === "discover" && (
+            <React.Fragment>
+              <div style={{ textAlign: "center", marginBottom: 16 }}>
+                <h1 style={{ fontSize: 24, fontWeight: 800, margin: "8px 0 4px", lineHeight: 1.1, color: "#f0ebe3" }}>{t.title}</h1>
+                <p style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.5, margin: 0 }}>{t.subtitle}</p>
+              </div>
+
+              <div style={{ position: "relative", marginBottom: 16 }}>
+                <input ref={inputRef} type="text" value={query}
+                  onChange={e => { setQuery(e.target.value); if (results) setResults(null); }}
+                  onKeyDown={e => e.key === "Enter" && handleSearch()}
+                  placeholder={t.placeholder}
+                  style={{ width: "100%", padding: "14px 90px 14px 16px", borderRadius: 12, border: "1px solid #333350", background: "#1e1e30", color: "#f0ebe3", fontSize: 15, outline: "none", boxSizing: "border-box" }} />
+                <div style={{ position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)", display: "flex", gap: 4 }}>
+                  {query && (
+                    <button onClick={handleClear} style={{ padding: "8px 10px", borderRadius: 8, border: "none", background: "transparent", color: "#f0ebe3", opacity: 0.4, fontSize: 14, cursor: "pointer" }}>✕</button>
+                  )}
+                  <button onClick={handleSearch} disabled={loading || !query.trim()} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: loading ? "#333350" : "#ff6b35", color: "#fff", fontSize: 14, fontWeight: 600, cursor: loading ? "default" : "pointer", opacity: !query.trim() ? 0.4 : 1 }}>
+                    {loading ? "..." : t.go}
+                  </button>
+                </div>
+              </div>
+
+              {!results && !loading && (
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                    {t.suggested.map(s => (
+                      <button key={s} onClick={() => handleSuggestion(s)} style={{ padding: "6px 12px", borderRadius: 20, border: "1px solid #333350", background: "transparent", color: "#f0ebe3", opacity: 0.6, fontSize: 12, cursor: "pointer", whiteSpace: "nowrap" }}>{s}</button>
+                    ))}
+                  </div>
+                </div>
               )}
-              <button onClick={handleSearch} disabled={loading || !query.trim()} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: loading ? "#333350" : "#ff6b35", color: "#fff", fontSize: 14, fontWeight: 600, cursor: loading ? "default" : "pointer", opacity: !query.trim() ? 0.4 : 1 }}>
-                {loading ? "..." : t.go}
-              </button>
-            </div>
-          </div>
 
-          {!results && !loading && (
-            <div style={{ marginBottom: 20 }}>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {t.suggested.map(s => (
-                  <button key={s} onClick={() => handleSuggestion(s)} style={{ padding: "6px 12px", borderRadius: 20, border: "1px solid #333350", background: "transparent", color: "#f0ebe3", opacity: 0.6, fontSize: 12, cursor: "pointer", whiteSpace: "nowrap" }}>{s}</button>
-                ))}
+              {results?.message && (
+                <div style={{ background: "linear-gradient(135deg, #ff6b3515, #9b59b615)", border: "1px solid #333350", borderRadius: 12, padding: 14, marginBottom: 16, fontSize: 14, lineHeight: 1.5, color: "#f0ebe3", opacity: 0.9 }}>{results.message}</div>
+              )}
+
+              {error && (
+                <div style={{ background: "#ff6b3520", border: "1px solid #ff6b3550", borderRadius: 12, padding: 14, marginBottom: 16, fontSize: 14, color: "#ff6b35" }}>{error}</div>
+              )}
+
+              {loading && (
+                <div style={{ textAlign: "center", padding: "40px 0", color: "#f0ebe3", opacity: 0.5 }}>
+                  <div style={{ fontSize: 24, marginBottom: 8 }}>🏮</div>
+                  <div style={{ fontSize: 14 }}>{t.loading}</div>
+                </div>
+              )}
+
+              {!results && !loading && (
+                <div style={{ marginBottom: 16 }}><CategoryFilter selected={categoryFilter} onSelect={setCategoryFilter} t={t} /></div>
+              )}
+
+              {!loading && (
+                <div style={{ fontSize: 12, color: "#f0ebe3", opacity: 0.4, marginBottom: 12 }}>
+                  {results ? t.resultsFor(displayVendors.length, query) : t.listings(displayVendors.length)}
+                </div>
+              )}
+
+              {!loading && displayVendors.map(v => (
+                <VendorCard key={v.id} vendor={v} freeLabel={t.free} lang={lang} onOpen={setActiveListing} inPlan={plan.includes(v.id)} onTogglePlan={togglePlan} addLabel={t.addToPlan} inPlanLabel={t.inPlan} />
+              ))}
+
+              {results && !loading && (
+                <button onClick={handleClear} style={{ display: "block", width: "100%", padding: 14, marginTop: 8, borderRadius: 12, border: "1px solid #333350", background: "transparent", color: "#f0ebe3", opacity: 0.6, fontSize: 14, cursor: "pointer", textAlign: "center" }}>{t.browseAll}</button>
+              )}
+
+              <div style={{ textAlign: "center", marginTop: 32, fontSize: 11, color: "#f0ebe3", opacity: 0.25 }}>{t.footer}</div>
+            </React.Fragment>
+          )}
+
+          {tab === "plan" && (
+            <React.Fragment>
+              <h1 style={{ fontSize: 22, fontWeight: 800, margin: "8px 0 16px", color: "#f0ebe3", textAlign: "center" }}>{t.planTitle}</h1>
+              {planVendors.length === 0 ? (
+                <div style={{ textAlign: "center", padding: "40px 20px", color: "#f0ebe3", opacity: 0.5, fontSize: 14, lineHeight: 1.6 }}>{t.planEmpty}</div>
+              ) : (
+                <React.Fragment>
+                  <button onClick={sharePlan} style={{ display: "block", width: "100%", padding: 14, marginBottom: 16, borderRadius: 12, border: "none", background: "#ff6b35", color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>{shareMsg || ("🔗 " + t.planShare)}</button>
+                  {planVendors.map(v => (
+                    <VendorCard key={v.id} vendor={v} freeLabel={t.free} lang={lang} onOpen={setActiveListing} inPlan={true} onTogglePlan={togglePlan} addLabel={t.addToPlan} inPlanLabel={t.inPlan} />
+                  ))}
+                </React.Fragment>
+              )}
+            </React.Fragment>
+          )}
+
+          {tab === "map" && (
+            <div style={{ textAlign: "center", paddingTop: 12 }}>
+              <h1 style={{ fontSize: 22, fontWeight: 800, margin: "8px 0 0", color: "#f0ebe3" }}>{t.mapTitle}</h1>
+              <div style={{ background: "#1e1e30", border: "1px dashed #333350", borderRadius: 16, padding: "56px 20px", marginTop: 16 }}>
+                <div style={{ fontSize: 44, marginBottom: 14 }}>🗺️</div>
+                <div style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.6, lineHeight: 1.5 }}>{t.mapDesc}</div>
+                <span style={{ display: "inline-block", marginTop: 14, fontSize: 11, color: "#ff6b35", border: "1px solid #ff6b3550", borderRadius: 20, padding: "3px 12px", fontWeight: 600 }}>{t.comingSoon}</span>
               </div>
             </div>
           )}
 
-          {results?.message && (
-            <div style={{ background: "linear-gradient(135deg, #ff6b3515, #9b59b615)", border: "1px solid #333350", borderRadius: 12, padding: 14, marginBottom: 16, fontSize: 14, lineHeight: 1.5, color: "#f0ebe3", opacity: 0.9 }}>{results.message}</div>
-          )}
-
-          {error && (
-            <div style={{ background: "#ff6b3520", border: "1px solid #ff6b3550", borderRadius: 12, padding: 14, marginBottom: 16, fontSize: 14, color: "#ff6b35" }}>{error}</div>
-          )}
-
-          {loading && (
-            <div style={{ textAlign: "center", padding: "40px 0", color: "#f0ebe3", opacity: 0.5 }}>
-              <div style={{ fontSize: 24, marginBottom: 8 }}>🏮</div>
-              <div style={{ fontSize: 14 }}>{t.loading}</div>
+          {tab === "passport" && (
+            <div style={{ textAlign: "center", paddingTop: 12 }}>
+              <h1 style={{ fontSize: 22, fontWeight: 800, margin: "8px 0 4px", color: "#f0ebe3" }}>{t.passportTitle}</h1>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginTop: 16 }}>
+                {Array.from({ length: 9 }).map((_, i) => (
+                  <div key={i} style={{ aspectRatio: "1 / 1", borderRadius: "50%", border: "2px dashed #333350", display: "flex", alignItems: "center", justifyContent: "center", color: "#5a5a78", fontSize: 22 }}>?</div>
+                ))}
+              </div>
+              <div style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.6, marginTop: 18, lineHeight: 1.5 }}>{t.passportDesc}</div>
+              <span style={{ display: "inline-block", marginTop: 12, fontSize: 11, color: "#ff6b35", border: "1px solid #ff6b3550", borderRadius: 20, padding: "3px 12px", fontWeight: 600 }}>{t.comingSoon}</span>
             </div>
           )}
 
-          {!results && !loading && (
-            <div style={{ marginBottom: 16 }}><CategoryFilter selected={categoryFilter} onSelect={setCategoryFilter} t={t} /></div>
-          )}
-
-          {!loading && (
-            <div style={{ fontSize: 12, color: "#f0ebe3", opacity: 0.4, marginBottom: 12 }}>
-              {results ? t.resultsFor(displayVendors.length, query) : t.listings(displayVendors.length)}
-            </div>
-          )}
-
-          {!loading && displayVendors.map(v => <VendorCard key={v.id} vendor={v} freeLabel={t.free} lang={lang} />)}
-
-          {results && !loading && (
-            <button onClick={handleClear} style={{ display: "block", width: "100%", padding: 14, marginTop: 8, borderRadius: 12, border: "1px solid #333350", background: "transparent", color: "#f0ebe3", opacity: 0.6, fontSize: 14, cursor: "pointer", textAlign: "center" }}>{t.browseAll}</button>
-          )}
-
-          <div style={{ textAlign: "center", marginTop: 32, fontSize: 11, color: "#f0ebe3", opacity: 0.25 }}>{t.footer}</div>
+          <BottomNav tab={tab} onSelect={setTab} t={t} />
+          <ProfileOverlay vendor={activeListing} lang={lang} t={t} inPlan={activeListing ? plan.includes(activeListing.id) : false} onTogglePlan={togglePlan} onClose={() => setActiveListing(null)} />
         </div>
       );
     }
