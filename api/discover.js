@@ -141,7 +141,7 @@ export default async function handler(req, res) {
     // Tell the model which language to write the "message" in. Vendor data stays
     // in English; only the recommendation text is localized. The "ids" are always
     // numbers, unaffected by language.
-    const LANG_NAMES = { en: "English", es: "Spanish", zh: "Simplified Chinese", ko: "Korean" };
+    const LANG_NAMES = { en: "English", es: "Spanish", zh: "Simplified Chinese", ko: "Korean", vi: "Vietnamese", ja: "Japanese" };
     const langName = LANG_NAMES[lang] || "English";
     const langInstruction = `\n\nWrite the "message" field in ${langName}. Keep the JSON keys and the vendor IDs exactly as specified; only the message text should be in ${langName}.`;
 
