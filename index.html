@@ -70,16 +70,128 @@
       Activity: { bg: "#2ecc7120", border: "#2ecc71", text: "#2ecc71", icon: "✨" },
     };
 
-    const SUGGESTED_QUERIES = [
-      "I'm hungry for something spicy",
-      "What's good for kids?",
-      "I want to see traditional dance",
-      "Where can I buy handmade gifts?",
-      "What's happening on stage?",
-      "I'm vegan, what can I eat?",
-      "Something fun and interactive",
-      "I love Korean culture",
+    const LANGS = [
+      { code: "en", label: "EN" },
+      { code: "es", label: "ES" },
+      { code: "zh", label: "中文" },
+      { code: "ko", label: "한국어" },
     ];
+
+    // The AI responds in the selected language automatically (the proxy tells it
+    // to). Only these fixed interface strings are translated by hand. Vendor names
+    // and descriptions stay in English in the data; the AI reads English and
+    // replies in the chosen language. Have a native speaker review these before
+    // launch, since machine-quality copy can read awkwardly.
+    const TRANSLATIONS = {
+      en: {
+        title: "Discover",
+        subtitle: "Tell us what you're looking for",
+        placeholder: "e.g. I want spicy food...",
+        go: "Go",
+        loading: "Finding the best picks for you...",
+        browseAll: "Browse all vendors & programming",
+        footer: "NightMarket.fun is a program of The Lunar Foundation",
+        free: "FREE",
+        categories: { All: "All", Food: "Food", Artist: "Artist", Performance: "Performance", Activity: "Activity" },
+        resultsFor: (n, q) => `${n} result${n !== 1 ? "s" : ""} for "${q}"`,
+        listings: (n) => `${n} listing${n !== 1 ? "s" : ""}`,
+        fallbackGeneric: "Here are some picks that might fit.",
+        fallbackBusy: "Our smart guide is busy, so here are some keyword matches.",
+        rateLimit: "Lots of searches happening right now. Here are some quick picks while things settle, try again in a moment for a full answer.",
+        errorNoMatch: "We couldn't find a match for that. Try rephrasing, or browse all vendors below.",
+        suggested: [
+          "I'm hungry for something spicy",
+          "What's good for kids?",
+          "I want to see traditional dance",
+          "Where can I buy handmade gifts?",
+          "What's happening on stage?",
+          "I'm vegan, what can I eat?",
+          "Something fun and interactive",
+          "I love Korean culture",
+        ],
+      },
+      es: {
+        title: "Descubre",
+        subtitle: "Cuéntanos qué estás buscando",
+        placeholder: "ej. quiero algo picante...",
+        go: "Buscar",
+        loading: "Buscando las mejores opciones para ti...",
+        browseAll: "Ver todos los puestos y actividades",
+        footer: "NightMarket.fun es un programa de The Lunar Foundation",
+        free: "GRATIS",
+        categories: { All: "Todo", Food: "Comida", Artist: "Artistas", Performance: "Espectáculos", Activity: "Actividades" },
+        resultsFor: (n, q) => `${n} resultado${n !== 1 ? "s" : ""} para "${q}"`,
+        listings: (n) => `${n} resultado${n !== 1 ? "s" : ""}`,
+        fallbackGeneric: "Aquí tienes algunas opciones que podrían gustarte.",
+        fallbackBusy: "Nuestro guía inteligente está ocupado; aquí tienes coincidencias por palabra clave.",
+        rateLimit: "Hay muchas búsquedas en este momento. Aquí tienes algunas opciones rápidas; inténtalo de nuevo en un momento.",
+        errorNoMatch: "No encontramos coincidencias. Intenta reformularlo o explora todos los puestos abajo.",
+        suggested: [
+          "Tengo ganas de algo picante",
+          "¿Qué hay para niños?",
+          "Quiero ver danza tradicional",
+          "¿Dónde compro regalos artesanales?",
+          "¿Qué hay en el escenario?",
+          "Soy vegano, ¿qué puedo comer?",
+          "Algo divertido e interactivo",
+          "Me encanta la cultura coreana",
+        ],
+      },
+      zh: {
+        title: "探索",
+        subtitle: "告诉我们你在找什么",
+        placeholder: "例如：我想吃辣的…",
+        go: "搜索",
+        loading: "正在为你寻找最佳选择…",
+        browseAll: "浏览所有摊位与节目",
+        footer: "NightMarket.fun 是 The Lunar Foundation 的项目",
+        free: "免费",
+        categories: { All: "全部", Food: "美食", Artist: "艺术家", Performance: "表演", Activity: "活动" },
+        resultsFor: (n, q) => `“${q}” 的 ${n} 个结果`,
+        listings: (n) => `${n} 个项目`,
+        fallbackGeneric: "这里有一些你可能会喜欢的选择。",
+        fallbackBusy: "智能向导正忙，这里是一些关键词匹配结果。",
+        rateLimit: "目前搜索量很大。先为你提供一些快速推荐，请稍后再试以获得完整结果。",
+        errorNoMatch: "没有找到匹配结果。请换个说法，或浏览下面的所有摊位。",
+        suggested: [
+          "我想吃点辣的",
+          "有什么适合孩子的？",
+          "我想看传统舞蹈",
+          "哪里能买到手工礼物？",
+          "舞台上有什么节目？",
+          "我吃素，有什么能吃的？",
+          "想要有趣的互动体验",
+          "我喜欢韩国文化",
+        ],
+      },
+      ko: {
+        title: "둘러보기",
+        subtitle: "무엇을 찾고 계신가요?",
+        placeholder: "예: 매운 음식이 먹고 싶어요…",
+        go: "검색",
+        loading: "최고의 추천을 찾고 있어요…",
+        browseAll: "전체 부스 및 프로그램 보기",
+        footer: "NightMarket.fun은 The Lunar Foundation의 프로그램입니다",
+        free: "무료",
+        categories: { All: "전체", Food: "음식", Artist: "아티스트", Performance: "공연", Activity: "체험" },
+        resultsFor: (n, q) => `"${q}" 검색결과 ${n}개`,
+        listings: (n) => `${n}개 항목`,
+        fallbackGeneric: "마음에 드실 만한 추천을 골라봤어요.",
+        fallbackBusy: "스마트 가이드가 바빠서 키워드 검색 결과를 보여드려요.",
+        rateLimit: "지금 검색량이 많아요. 우선 빠른 추천을 보여드려요. 잠시 후 다시 시도해 주세요.",
+        errorNoMatch: "일치하는 결과를 찾지 못했어요. 다르게 입력하거나 아래에서 전체 부스를 둘러보세요.",
+        suggested: [
+          "매운 음식이 먹고 싶어요",
+          "아이들에게 좋은 건 뭐가 있나요?",
+          "전통 무용을 보고 싶어요",
+          "수공예 선물은 어디서 사나요?",
+          "무대에서는 무슨 공연을 하나요?",
+          "저는 비건인데 뭘 먹을 수 있나요?",
+          "재미있는 체험거리를 찾아요",
+          "한국 문화를 좋아해요",
+        ],
+      },
+    };
 
     const STATE_MESSAGES = {
       thirsty: "Sounds like you need a drink. Here's where to cool off.",
@@ -92,6 +204,11 @@
       stressed: "Take a beat. These are the calmest corners of the market.",
       relax: "Here's where to unwind for a bit.",
       love: "Aw. Here are some sweet things to share together.",
+      sad: "Sorry you're feeling low. A little comfort food or something sweet might help.",
+      bored: "Let's fix that. Here's where the fun is.",
+      lonely: "Come find some good company. These spots are easy to settle into.",
+      happy: "Love the energy. Here's where to take it.",
+      excited: "Love the energy. Here's where to take it.",
       dance: "Let's find you a beat.",
       kids: "Plenty for the little ones. Here's where to head.",
       family: "Great picks for the whole family.",
@@ -112,6 +229,11 @@
         stressed: ["lounge", "chill", "relaxation", "craft", "meditative"],
         relax: ["lounge", "chill", "relaxation", "ambient"],
         love: ["photos", "lantern", "souvenir", "cultural"],
+        sad: ["comfort food", "sweet", "dessert", "lounge", "chill"],
+        bored: ["game", "interactive", "challenge", "craft", "dance"],
+        lonely: ["lounge", "social", "chill", "collaborative"],
+        happy: ["dance", "k-pop", "dj", "high energy"],
+        excited: ["dance", "k-pop", "dj", "high energy"],
         dance: ["dance", "k-pop", "dj", "high energy"],
         kids: ["kids", "family", "all ages", "game", "interactive"],
         family: ["family", "kids", "all ages", "interactive"],
@@ -159,11 +281,10 @@
         .slice(0, 6)
         .map(x => x.v);
 
-      const message = matchedState ? STATE_MESSAGES[matchedState] : "Here are some picks that might fit.";
-      return { vendors: scored, message };
+      return { vendors: scored, stateKey: matchedState };
     }
 
-    function VendorCard({ vendor }) {
+    function VendorCard({ vendor, freeLabel }) {
       const colors = CATEGORY_COLORS[vendor.category];
       return (
         <div style={{ background: "#1e1e30", borderRadius: 12, padding: 16, borderLeft: `3px solid ${colors.border}`, marginBottom: 12 }}>
@@ -178,7 +299,7 @@
               <span style={{ fontSize: 13, color: "#f0ebe3", opacity: 0.6, fontWeight: 500 }}>{vendor.priceRange}</span>
             )}
             {vendor.priceRange === "Free" && (
-              <span style={{ fontSize: 11, background: "#2ecc7130", color: "#2ecc71", padding: "2px 8px", borderRadius: 20, fontWeight: 600 }}>FREE</span>
+              <span style={{ fontSize: 11, background: "#2ecc7130", color: "#2ecc71", padding: "2px 8px", borderRadius: 20, fontWeight: 600 }}>{freeLabel}</span>
             )}
           </div>
           <p style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.75, lineHeight: 1.5, margin: 0 }}>{vendor.description}</p>
@@ -186,7 +307,7 @@
       );
     }
 
-    function CategoryFilter({ selected, onSelect }) {
+    function CategoryFilter({ selected, onSelect, t }) {
       const categories = ["All", "Food", "Artist", "Performance", "Activity"];
       return (
         <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 4, WebkitOverflowScrolling: "touch" }}>
@@ -195,7 +316,22 @@
             const colors = cat !== "All" ? CATEGORY_COLORS[cat] : null;
             return (
               <button key={cat} onClick={() => onSelect(cat)} style={{ padding: "6px 14px", borderRadius: 20, border: "none", fontSize: 13, fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap", background: isSelected ? (colors ? colors.border : "#f0ebe3") : "#2a2a40", color: isSelected ? (cat === "All" ? "#1a1a2e" : "#fff") : "#f0ebe390", transition: "all 0.2s" }}>
-                {colors ? `${colors.icon} ` : ""}{cat}
+                {colors ? `${colors.icon} ` : ""}{t.categories[cat]}
+              </button>
+            );
+          })}
+        </div>
+      );
+    }
+
+    function LanguageToggle({ lang, onSelect }) {
+      return (
+        <div style={{ display: "flex", justifyContent: "center", gap: 6, paddingTop: 16 }}>
+          {LANGS.map(l => {
+            const isSelected = lang === l.code;
+            return (
+              <button key={l.code} onClick={() => onSelect(l.code)} style={{ padding: "5px 12px", borderRadius: 20, border: "1px solid", borderColor: isSelected ? "#ff6b35" : "#333350", background: isSelected ? "#ff6b35" : "transparent", color: isSelected ? "#fff" : "#f0ebe390", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+                {l.label}
               </button>
             );
           })}
@@ -204,12 +340,22 @@
     }
 
     function NMFDiscover() {
+      const [lang, setLang] = useState("en");
       const [query, setQuery] = useState("");
       const [results, setResults] = useState(null);
       const [loading, setLoading] = useState(false);
       const [categoryFilter, setCategoryFilter] = useState("All");
       const [error, setError] = useState(null);
       const inputRef = useRef(null);
+
+      const t = TRANSLATIONS[lang];
+
+      // English keeps the warm per-state lines; other languages use one clean
+      // localized line, since the AI (the normal path) already replies translated.
+      function fallbackMsg(stateKey) {
+        if (lang === "en" && stateKey) return STATE_MESSAGES[stateKey];
+        return t.fallbackGeneric;
+      }
 
       const filteredVendors = categoryFilter === "All" ? VENDORS : VENDORS.filter(v => v.category === categoryFilter);
 
@@ -226,14 +372,14 @@
           const response = await fetch(PROXY_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query, vendorSummary }),
+            body: JSON.stringify({ query, vendorSummary, lang }),
           });
 
           if (response.status === 429) {
             const fb = keywordFallback(query);
             setResults({
               vendors: fb.vendors.length > 0 ? fb.vendors : VENDORS.slice(0, 6),
-              message: "Lots of searches happening right now. Here are some quick picks while things settle, try again in a moment for a full answer.",
+              message: t.rateLimit,
             });
             setCategoryFilter("All");
             return;
@@ -253,7 +399,7 @@
           if (matched.length === 0 && !parsed.message) {
             const fb = keywordFallback(query);
             if (fb.vendors.length > 0) {
-              setResults({ vendors: fb.vendors, message: fb.message });
+              setResults({ vendors: fb.vendors, message: fallbackMsg(fb.stateKey) });
               setCategoryFilter("All");
               return;
             }
@@ -265,10 +411,10 @@
           console.error(err);
           const fb = keywordFallback(query);
           if (fb.vendors.length > 0) {
-            setResults({ vendors: fb.vendors, message: fb.message });
+            setResults({ vendors: fb.vendors, message: t.fallbackBusy });
             setCategoryFilter("All");
           } else {
-            setError("We couldn't find a match for that. Try rephrasing, or browse all vendors below.");
+            setError(t.errorNoMatch);
           }
         } finally {
           setLoading(false);
@@ -291,24 +437,26 @@
 
       return (
         <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #12121f 0%, #1a1a2e 30%, #16162a 100%)", color: "#f0ebe3", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif", maxWidth: 480, margin: "0 auto", padding: "0 16px 32px" }}>
-          <div style={{ paddingTop: 24, paddingBottom: 16, textAlign: "center" }}>
+          <LanguageToggle lang={lang} onSelect={setLang} />
+
+          <div style={{ paddingTop: 16, paddingBottom: 16, textAlign: "center" }}>
             <div style={{ fontSize: 13, fontWeight: 600, letterSpacing: "0.15em", color: "#ff6b35", textTransform: "uppercase", marginBottom: 4 }}>NightMarket.fun 2026</div>
-            <h1 style={{ fontSize: 26, fontWeight: 800, margin: "4px 0 6px", lineHeight: 1.1, color: "#f0ebe3" }}>Discover</h1>
-            <p style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.5, margin: 0 }}>Tell us what you're looking for</p>
+            <h1 style={{ fontSize: 26, fontWeight: 800, margin: "4px 0 6px", lineHeight: 1.1, color: "#f0ebe3" }}>{t.title}</h1>
+            <p style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.5, margin: 0 }}>{t.subtitle}</p>
           </div>
 
           <div style={{ position: "relative", marginBottom: 16 }}>
             <input ref={inputRef} type="text" value={query}
               onChange={e => { setQuery(e.target.value); if (results) setResults(null); }}
               onKeyDown={e => e.key === "Enter" && handleSearch()}
-              placeholder="e.g. I want spicy food..."
+              placeholder={t.placeholder}
               style={{ width: "100%", padding: "14px 90px 14px 16px", borderRadius: 12, border: "1px solid #333350", background: "#1e1e30", color: "#f0ebe3", fontSize: 15, outline: "none", boxSizing: "border-box" }} />
             <div style={{ position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)", display: "flex", gap: 4 }}>
               {query && (
                 <button onClick={handleClear} style={{ padding: "8px 10px", borderRadius: 8, border: "none", background: "transparent", color: "#f0ebe3", opacity: 0.4, fontSize: 14, cursor: "pointer" }}>✕</button>
               )}
               <button onClick={handleSearch} disabled={loading || !query.trim()} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: loading ? "#333350" : "#ff6b35", color: "#fff", fontSize: 14, fontWeight: 600, cursor: loading ? "default" : "pointer", opacity: !query.trim() ? 0.4 : 1 }}>
-                {loading ? "..." : "Go"}
+                {loading ? "..." : t.go}
               </button>
             </div>
           </div>
@@ -316,7 +464,7 @@
           {!results && !loading && (
             <div style={{ marginBottom: 20 }}>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {SUGGESTED_QUERIES.map(s => (
+                {t.suggested.map(s => (
                   <button key={s} onClick={() => handleSuggestion(s)} style={{ padding: "6px 12px", borderRadius: 20, border: "1px solid #333350", background: "transparent", color: "#f0ebe3", opacity: 0.6, fontSize: 12, cursor: "pointer", whiteSpace: "nowrap" }}>{s}</button>
                 ))}
               </div>
@@ -334,27 +482,27 @@
           {loading && (
             <div style={{ textAlign: "center", padding: "40px 0", color: "#f0ebe3", opacity: 0.5 }}>
               <div style={{ fontSize: 24, marginBottom: 8 }}>🏮</div>
-              <div style={{ fontSize: 14 }}>Finding the best picks for you...</div>
+              <div style={{ fontSize: 14 }}>{t.loading}</div>
             </div>
           )}
 
           {!results && !loading && (
-            <div style={{ marginBottom: 16 }}><CategoryFilter selected={categoryFilter} onSelect={setCategoryFilter} /></div>
+            <div style={{ marginBottom: 16 }}><CategoryFilter selected={categoryFilter} onSelect={setCategoryFilter} t={t} /></div>
           )}
 
           {!loading && (
             <div style={{ fontSize: 12, color: "#f0ebe3", opacity: 0.4, marginBottom: 12 }}>
-              {results ? `${displayVendors.length} result${displayVendors.length !== 1 ? "s" : ""} for "${query}"` : `${displayVendors.length} ${categoryFilter === "All" ? "total" : categoryFilter.toLowerCase()} listings`}
+              {results ? t.resultsFor(displayVendors.length, query) : t.listings(displayVendors.length)}
             </div>
           )}
 
-          {!loading && displayVendors.map(v => <VendorCard key={v.id} vendor={v} />)}
+          {!loading && displayVendors.map(v => <VendorCard key={v.id} vendor={v} freeLabel={t.free} />)}
 
           {results && !loading && (
-            <button onClick={handleClear} style={{ display: "block", width: "100%", padding: 14, marginTop: 8, borderRadius: 12, border: "1px solid #333350", background: "transparent", color: "#f0ebe3", opacity: 0.6, fontSize: 14, cursor: "pointer", textAlign: "center" }}>Browse all vendors & programming</button>
+            <button onClick={handleClear} style={{ display: "block", width: "100%", padding: 14, marginTop: 8, borderRadius: 12, border: "1px solid #333350", background: "transparent", color: "#f0ebe3", opacity: 0.6, fontSize: 14, cursor: "pointer", textAlign: "center" }}>{t.browseAll}</button>
           )}
 
-          <div style={{ textAlign: "center", marginTop: 32, fontSize: 11, color: "#f0ebe3", opacity: 0.25 }}>NightMarket.fun is a program of The Lunar Foundation</div>
+          <div style={{ textAlign: "center", marginTop: 32, fontSize: 11, color: "#f0ebe3", opacity: 0.25 }}>{t.footer}</div>
         </div>
       );
     }
