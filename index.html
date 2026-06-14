@@ -73,10 +73,12 @@
     };
 
     const LANGS = [
-      { code: "en", label: "EN" },
-      { code: "es", label: "ES" },
+      { code: "en", label: "English" },
+      { code: "es", label: "Español" },
       { code: "zh", label: "中文" },
       { code: "ko", label: "한국어" },
+      { code: "vi", label: "Tiếng Việt" },
+      { code: "ja", label: "日本語" },
     ];
 
     // The AI responds in the selected language automatically (the proxy tells it
@@ -191,6 +193,60 @@
           "저는 비건인데 뭘 먹을 수 있나요?",
           "재미있는 체험거리를 찾아요",
           "한국 문화를 좋아해요",
+        ],
+      },
+      vi: {
+        title: "Khám phá",
+        subtitle: "Hãy cho chúng tôi biết bạn đang tìm gì",
+        placeholder: "vd: tôi muốn ăn món cay...",
+        go: "Tìm",
+        loading: "Đang tìm những lựa chọn tốt nhất cho bạn...",
+        browseAll: "Xem tất cả gian hàng và chương trình",
+        footer: "NightMarket.fun là một chương trình của The Lunar Foundation",
+        free: "MIỄN PHÍ",
+        categories: { All: "Tất cả", Food: "Ẩm thực", Artist: "Nghệ sĩ", Performance: "Biểu diễn", Activity: "Hoạt động" },
+        resultsFor: (n, q) => `${n} kết quả cho "${q}"`,
+        listings: (n) => `${n} mục`,
+        fallbackGeneric: "Đây là một vài gợi ý có thể phù hợp với bạn.",
+        fallbackBusy: "Trợ lý thông minh đang bận, đây là một số kết quả theo từ khóa.",
+        rateLimit: "Hiện có rất nhiều lượt tìm kiếm. Đây là vài gợi ý nhanh, vui lòng thử lại sau giây lát để có kết quả đầy đủ.",
+        errorNoMatch: "Chúng tôi không tìm thấy kết quả phù hợp. Hãy thử diễn đạt lại hoặc xem tất cả gian hàng bên dưới.",
+        suggested: [
+          "Tôi muốn ăn món gì đó cay",
+          "Có gì cho trẻ em không?",
+          "Tôi muốn xem múa truyền thống",
+          "Mua quà thủ công ở đâu?",
+          "Trên sân khấu có gì?",
+          "Tôi ăn chay, tôi có thể ăn gì?",
+          "Điều gì đó vui và tương tác",
+          "Tôi yêu văn hóa Hàn Quốc",
+        ],
+      },
+      ja: {
+        title: "さがす",
+        subtitle: "お探しのものを教えてください",
+        placeholder: "例：辛い料理が食べたい…",
+        go: "検索",
+        loading: "あなたにぴったりの選択肢を探しています…",
+        browseAll: "すべての出店・プログラムを見る",
+        footer: "NightMarket.fun は The Lunar Foundation のプログラムです",
+        free: "無料",
+        categories: { All: "すべて", Food: "フード", Artist: "アーティスト", Performance: "パフォーマンス", Activity: "アクティビティ" },
+        resultsFor: (n, q) => `「${q}」の検索結果 ${n}件`,
+        listings: (n) => `${n}件`,
+        fallbackGeneric: "あなたに合いそうな候補をいくつかご紹介します。",
+        fallbackBusy: "スマートガイドが混み合っているため、キーワード検索の結果を表示します。",
+        rateLimit: "現在検索が混み合っています。まずは簡単なおすすめを表示します。完全な回答は少し後でもう一度お試しください。",
+        errorNoMatch: "一致する結果が見つかりませんでした。表現を変えるか、下の一覧をご覧ください。",
+        suggested: [
+          "辛いものが食べたい",
+          "子ども向けには何がある？",
+          "伝統舞踊が見たい",
+          "手作りのギフトはどこで買える？",
+          "ステージでは何をやってる？",
+          "ビーガンですが何が食べられる？",
+          "楽しくて参加できるもの",
+          "韓国文化が好き",
         ],
       },
     };
@@ -330,16 +386,28 @@
     }
 
     function LanguageToggle({ lang, onSelect }) {
+      const [open, setOpen] = useState(false);
+      const current = LANGS.find(l => l.code === lang) || LANGS[0];
       return (
-        <div style={{ display: "flex", justifyContent: "center", gap: 6, paddingTop: 16 }}>
-          {LANGS.map(l => {
-            const isSelected = lang === l.code;
-            return (
-              <button key={l.code} onClick={() => onSelect(l.code)} style={{ padding: "5px 12px", borderRadius: 20, border: "1px solid", borderColor: isSelected ? "#ff6b35" : "#333350", background: isSelected ? "#ff6b35" : "transparent", color: isSelected ? "#fff" : "#f0ebe390", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
-                {l.label}
-              </button>
-            );
-          })}
+        <div style={{ position: "relative", display: "flex", justifyContent: "flex-end", paddingTop: 16 }}>
+          <button onClick={() => setOpen(o => !o)} style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 20, border: "1px solid #333350", background: "#1e1e30", color: "#f0ebe3", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+            <span>🌐</span><span>{current.label}</span><span style={{ fontSize: 10, opacity: 0.6 }}>▾</span>
+          </button>
+          {open && (
+            <React.Fragment>
+              <div onClick={() => setOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 10 }} />
+              <div style={{ position: "absolute", top: "100%", right: 0, marginTop: 6, background: "#1e1e30", border: "1px solid #333350", borderRadius: 12, padding: 6, zIndex: 11, minWidth: 150, boxShadow: "0 8px 24px rgba(0,0,0,0.4)" }}>
+                {LANGS.map(l => {
+                  const isSel = l.code === lang;
+                  return (
+                    <button key={l.code} onClick={() => { onSelect(l.code); setOpen(false); }} style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 12px", borderRadius: 8, border: "none", background: isSel ? "#ff6b35" : "transparent", color: isSel ? "#fff" : "#f0ebe3", fontSize: 14, fontWeight: isSel ? 600 : 500, cursor: "pointer" }}>
+                      {l.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </React.Fragment>
+          )}
         </div>
       );
     }
