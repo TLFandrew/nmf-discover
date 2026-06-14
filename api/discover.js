@@ -126,7 +126,7 @@ export default async function handler(req, res) {
 
   try {
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
-    const { query, vendorSummary } = body;
+    const { query, vendorSummary, lang } = body;
 
     if (typeof query !== "string" || !query.trim()) {
       return res.status(400).json({ error: "Missing query" });
@@ -138,10 +138,18 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing vendor data" });
     }
 
+    // Tell the model which language to write the "message" in. Vendor data stays
+    // in English; only the recommendation text is localized. The "ids" are always
+    // numbers, unaffected by language.
+    const LANG_NAMES = { en: "English", es: "Spanish", zh: "Simplified Chinese", ko: "Korean" };
+    const langName = LANG_NAMES[lang] || "English";
+    const langInstruction = `\n\nWrite the "message" field in ${langName}. Keep the JSON keys and the vendor IDs exactly as specified; only the message text should be in ${langName}.`;
+
     // Google Gemini (free tier via Google AI Studio). No credit card required.
     // Get a key at https://aistudio.google.com/apikey and set it in Vercel as
-    // AI_API_KEY. The model below is a fast, free-tier model; if Google renames
-    // its free models, change the model name in the URL only.
+    // AI_API_KEY. gemini-2.5-flash is a current, stable, free-tier model. If
+    // Google ever deprecates it, change this one model name (a newer free option
+    // is gemini-3-flash).
     const MODEL = "gemini-2.5-flash";
     const apiRes = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${process.env.AI_API_KEY}`,
@@ -149,7 +157,7 @@ export default async function handler(req, res) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          systemInstruction: { parts: [{ text: buildSystemPrompt(vendorSummary) }] },
+          systemInstruction: { parts: [{ text: buildSystemPrompt(vendorSummary) + langInstruction }] },
           contents: [{ role: "user", parts: [{ text: query }] }],
           generationConfig: {
             maxOutputTokens: 1000,
