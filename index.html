@@ -23,7 +23,7 @@
     const PROXY_URL = "/api/discover";
 
     const VENDORS = [
-      { id: 1, name: "Red Dragon Bao", category: "Food", subcategory: "Taiwanese", description: "Handcrafted steamed bao buns with traditional and fusion fillings. Signature item: braised pork belly bao with pickled mustard greens.", tags: ["taiwanese", "bao", "street food", "pork", "vegetarian options"], priceRange: "$", familyFriendly: true },
+      { id: 1, name: "Red Dragon Bao", category: "Food", subcategory: "Taiwanese", description: "Handcrafted steamed bao buns with traditional and fusion fillings. Signature item: braised pork belly bao with pickled mustard greens.", tags: ["taiwanese", "bao", "street food", "pork", "vegetarian options"], priceRange: "$", familyFriendly: true, i18n: { es: { subcategory: "Taiwanesa", description: "Panecillos bao al vapor hechos a mano con rellenos tradicionales y de fusión. Especialidad: bao de panza de cerdo estofada con encurtido de hojas de mostaza." }, zh: { subcategory: "台湾", description: "手工制作的蒸包，传统与创意馅料兼备。招牌：红烧五花肉配酸菜包。" }, ko: { subcategory: "대만", description: "전통과 퓨전 속을 채운 수제 찐빵(바오). 대표 메뉴: 간장 삼겹살과 갓절임을 넣은 바오." } } },
       { id: 2, name: "Junbi Matcha", category: "Food", subcategory: "Japanese", description: "Premium ceremonial-grade matcha drinks and matcha-based desserts. Specialty: hand-whisked matcha latte with oat milk.", tags: ["japanese", "matcha", "drinks", "dessert", "vegan options"], priceRange: "$", familyFriendly: true },
       { id: 3, name: "Si Baby-O", category: "Food", subcategory: "Filipino", description: "Filipino comfort food featuring adobo rice bowls, lumpia, and halo-halo. Family recipes passed down three generations.", tags: ["filipino", "rice bowls", "lumpia", "comfort food", "halo-halo"], priceRange: "$", familyFriendly: true },
       { id: 4, name: "Happy Lemon", category: "Food", subcategory: "Taiwanese", description: "Bubble tea and fruit tea specialists with over 30 flavor combinations. Known for rock salt cheese tea series.", tags: ["taiwanese", "boba", "bubble tea", "drinks", "sweet"], priceRange: "$", familyFriendly: true },
@@ -35,7 +35,7 @@
       { id: 10, name: "Chaat & Chai", category: "Food", subcategory: "Indian", description: "Indian street snacks and masala chai. Pani puri, samosa chaat, and dahi vada made fresh to order. Mango lassi for the adventurous.", tags: ["indian", "chaat", "chai", "snacks", "vegetarian", "vegan options"], priceRange: "$", familyFriendly: true },
       { id: 11, name: "Taro & Co.", category: "Food", subcategory: "Pan-Asian", description: "Taro-everything: taro milk tea, taro puffs, taro ice cream, and taro chips. A celebration of the beloved purple root.", tags: ["pan-asian", "taro", "dessert", "drinks", "sweet", "vegan options"], priceRange: "$", familyFriendly: true },
       { id: 12, name: "Nasi Lemak ATX", category: "Food", subcategory: "Malaysian", description: "Malaysia's national dish: fragrant coconut rice with sambal, fried anchovies, peanuts, cucumber, and your choice of protein. Rendang on weekends.", tags: ["malaysian", "rice", "coconut", "sambal", "spicy"], priceRange: "$", familyFriendly: true },
-      { id: 13, name: "Meah Lin", category: "Artist", subcategory: "Illustration", description: "Vibrant digital and mixed-media illustrations celebrating Asian American identity and pop culture. Prints, stickers, and original pieces available.", tags: ["illustration", "prints", "stickers", "asian american", "pop culture", "mixed media"], priceRange: "$$", familyFriendly: true },
+      { id: 13, name: "Meah Lin", category: "Artist", subcategory: "Illustration", description: "Vibrant digital and mixed-media illustrations celebrating Asian American identity and pop culture. Prints, stickers, and original pieces available.", tags: ["illustration", "prints", "stickers", "asian american", "pop culture", "mixed media"], priceRange: "$$", familyFriendly: true, i18n: { es: { subcategory: "Ilustración", description: "Ilustraciones digitales y de técnica mixta llenas de color que celebran la identidad asiático-americana y la cultura pop. Hay láminas, pegatinas y piezas originales." }, zh: { subcategory: "插画", description: "充满活力的数字与综合媒材插画，颂扬亚裔美国人身份与流行文化。提供版画、贴纸及原创作品。" }, ko: { subcategory: "일러스트레이션", description: "아시아계 미국인의 정체성과 팝 문화를 담은 생동감 있는 디지털·혼합 매체 일러스트. 프린트, 스티커, 원화 판매." } } },
       { id: 14, name: "Girlyne White", category: "Artist", subcategory: "Ceramics", description: "Handmade ceramic vessels and tableware inspired by Filipino and Southern traditions. Each piece is one-of-a-kind.", tags: ["ceramics", "pottery", "handmade", "filipino", "tableware", "home decor"], priceRange: "$$", familyFriendly: true },
       { id: 15, name: "Tony Wu", category: "Artist", subcategory: "Photography", description: "Fine art photography documenting AANHPI communities across Texas. Portraits, street photography, and cultural event documentation.", tags: ["photography", "portraits", "documentary", "fine art", "prints"], priceRange: "$$", familyFriendly: true },
       { id: 16, name: "Jasmine Chock", category: "Artist", subcategory: "Jewelry", description: "Handcrafted jewelry blending traditional Chinese motifs with contemporary minimalist design. Gold-filled and sterling silver pieces.", tags: ["jewelry", "handmade", "chinese", "minimalist", "gold", "silver", "accessories"], priceRange: "$$", familyFriendly: true },
@@ -45,7 +45,7 @@
       { id: 20, name: "Lisa Crawford", category: "Artist", subcategory: "Watercolor", description: "Delicate watercolor botanicals and wildlife paintings inspired by Hawaiian and Pacific Islander natural environments.", tags: ["watercolor", "botanical", "hawaiian", "pacific islander", "nature", "prints"], priceRange: "$$", familyFriendly: true },
       { id: 21, name: "Weila Art", category: "Artist", subcategory: "Graphic Design", description: "Screen-printed apparel and art prints with bold typography and AANHPI cultural references. Limited-run t-shirts and tote bags.", tags: ["screen print", "apparel", "t-shirts", "tote bags", "graphic design", "typography"], priceRange: "$", familyFriendly: true },
       { id: 22, name: "Ngan Hoang", category: "Artist", subcategory: "Calligraphy", description: "Vietnamese and Chinese calligraphy demonstrations and custom pieces. Name translations and lucky phrases written on-site.", tags: ["calligraphy", "vietnamese", "chinese", "custom", "interactive", "live demo"], priceRange: "$", familyFriendly: true },
-      { id: 23, name: "Austin Taiko", category: "Performance", subcategory: "Taiko Drumming", description: "Austin's premier taiko drumming ensemble performing powerful, high-energy traditional and contemporary Japanese drumming.", tags: ["taiko", "drumming", "japanese", "high energy", "traditional", "contemporary"], priceRange: "Free", familyFriendly: true },
+      { id: 23, name: "Austin Taiko", category: "Performance", subcategory: "Taiko Drumming", description: "Austin's premier taiko drumming ensemble performing powerful, high-energy traditional and contemporary Japanese drumming.", tags: ["taiko", "drumming", "japanese", "high energy", "traditional", "contemporary"], priceRange: "Free", familyFriendly: true, i18n: { es: { subcategory: "Tambores Taiko", description: "El principal conjunto de tambores taiko de Austin, con percusión japonesa tradicional y contemporánea, potente y llena de energía." }, zh: { subcategory: "太鼓", description: "奥斯汀首屈一指的太鼓乐团，演奏充满力量与活力的日本传统与当代鼓乐。" }, ko: { subcategory: "타이코 드럼", description: "강렬하고 에너지 넘치는 전통·현대 일본 북 연주를 선보이는 오스틴 대표 타이코 드럼 앙상블." } } },
       { id: 24, name: "Austin Filipino Cultural Dance Troupe", category: "Performance", subcategory: "Cultural Dance", description: "Traditional Filipino folk dances including tinikling (bamboo dance), singkil, and pandanggo sa ilaw.", tags: ["filipino", "folk dance", "tinikling", "traditional", "cultural"], priceRange: "Free", familyFriendly: true },
       { id: 25, name: "Kathak Rhythms", category: "Performance", subcategory: "Classical Dance", description: "North Indian classical Kathak dance featuring intricate footwork, expressive storytelling, and live tabla accompaniment.", tags: ["indian", "kathak", "classical dance", "storytelling", "tabla"], priceRange: "Free", familyFriendly: true },
       { id: 26, name: "Hawaiian Kona Isle", category: "Performance", subcategory: "Hawaiian Dance", description: "Traditional and contemporary hula performances with live ukulele and slack-key guitar. Aloha spirit in Central Texas.", tags: ["hawaiian", "hula", "ukulele", "traditional", "contemporary"], priceRange: "Free", familyFriendly: true },
@@ -58,7 +58,7 @@
       { id: 33, name: "Origami Workshop", category: "Activity", subcategory: "Workshop", description: "Learn traditional Japanese paper folding from beginner to intermediate. Take home cranes, flowers, and animal figures. Paper provided.", tags: ["japanese", "origami", "workshop", "hands-on", "kids", "family", "free"], priceRange: "Free", familyFriendly: true },
       { id: 34, name: "Hanbok & Ao Dai Photo Station", category: "Activity", subcategory: "Cultural Experience", description: "Try on traditional Korean hanbok or Vietnamese ao dai and take professional photos against a themed backdrop. Free digital photos emailed.", tags: ["korean", "vietnamese", "hanbok", "ao dai", "photos", "cultural", "family", "dress up"], priceRange: "Free", familyFriendly: true },
       { id: 35, name: "Chopstick Challenge", category: "Activity", subcategory: "Game", description: "Test your chopstick skills in a timed challenge picking up items of increasing difficulty. Prizes for top scores. All skill levels welcome.", tags: ["game", "chopsticks", "challenge", "prizes", "fun", "kids", "competitive"], priceRange: "Free", familyFriendly: true },
-      { id: 36, name: "Lantern Decorating", category: "Activity", subcategory: "Craft", description: "Decorate your own paper lantern with paint, markers, and traditional patterns. Take it home as a glowing souvenir of the night.", tags: ["craft", "lantern", "decorating", "kids", "family", "take home", "souvenir"], priceRange: "Free", familyFriendly: true },
+      { id: 36, name: "Lantern Decorating", category: "Activity", subcategory: "Craft", description: "Decorate your own paper lantern with paint, markers, and traditional patterns. Take it home as a glowing souvenir of the night.", tags: ["craft", "lantern", "decorating", "kids", "family", "take home", "souvenir"], priceRange: "Free", familyFriendly: true, i18n: { es: { subcategory: "Manualidad", description: "Decora tu propia linterna de papel con pintura, marcadores y patrones tradicionales. Llévatela a casa como un recuerdo luminoso de la noche." }, zh: { subcategory: "手工", description: "用颜料、马克笔和传统纹样装饰你自己的纸灯笼，把它作为当晚发光的纪念品带回家。" }, ko: { subcategory: "공예", description: "물감, 마커, 전통 문양으로 나만의 종이 등을 꾸며 보세요. 그날 밤의 빛나는 기념품으로 집에 가져갈 수 있어요." } } },
       { id: 37, name: "Boba Garden Lounge", category: "Activity", subcategory: "Social Space", description: "A chill hangout zone with string lights, floor seating, and ambient lo-fi music. Grab your food and drinks and relax under the stars.", tags: ["lounge", "chill", "social", "ambient", "seating", "relaxation"], priceRange: "Free", familyFriendly: true },
       { id: 38, name: "AANHPI Trivia", category: "Activity", subcategory: "Game", description: "Test your knowledge of AANHPI history, pop culture, food, and music in a live hosted trivia session. Teams of up to 4. Prizes for winners.", tags: ["trivia", "game", "history", "pop culture", "team", "prizes", "educational"], priceRange: "Free", familyFriendly: true },
     ];
@@ -284,14 +284,17 @@
       return { vendors: scored, stateKey: matchedState };
     }
 
-    function VendorCard({ vendor, freeLabel }) {
+    function VendorCard({ vendor, freeLabel, lang }) {
       const colors = CATEGORY_COLORS[vendor.category];
+      const loc = vendor.i18n && vendor.i18n[lang];
+      const subcategory = (loc && loc.subcategory) || vendor.subcategory;
+      const description = (loc && loc.description) || vendor.description;
       return (
         <div style={{ background: "#1e1e30", borderRadius: 12, padding: 16, borderLeft: `3px solid ${colors.border}`, marginBottom: 12 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: colors.text, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
-                {colors.icon} {vendor.subcategory}
+                {colors.icon} {subcategory}
               </div>
               <div style={{ fontSize: 17, fontWeight: 700, color: "#f0ebe3" }}>{vendor.name}</div>
             </div>
@@ -302,7 +305,7 @@
               <span style={{ fontSize: 11, background: "#2ecc7130", color: "#2ecc71", padding: "2px 8px", borderRadius: 20, fontWeight: 600 }}>{freeLabel}</span>
             )}
           </div>
-          <p style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.75, lineHeight: 1.5, margin: 0 }}>{vendor.description}</p>
+          <p style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.75, lineHeight: 1.5, margin: 0 }}>{description}</p>
         </div>
       );
     }
@@ -496,7 +499,7 @@
             </div>
           )}
 
-          {!loading && displayVendors.map(v => <VendorCard key={v.id} vendor={v} freeLabel={t.free} />)}
+          {!loading && displayVendors.map(v => <VendorCard key={v.id} vendor={v} freeLabel={t.free} lang={lang} />)}
 
           {results && !loading && (
             <button onClick={handleClear} style={{ display: "block", width: "100%", padding: 14, marginTop: 8, borderRadius: 12, border: "1px solid #333350", background: "transparent", color: "#f0ebe3", opacity: 0.6, fontSize: 14, cursor: "pointer", textAlign: "center" }}>{t.browseAll}</button>
