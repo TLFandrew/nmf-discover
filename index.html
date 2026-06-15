@@ -363,12 +363,12 @@
     };
 
     const COVER_STRINGS = {
-      en: { coverPresented: "Presented by", coverTitleSponsor: "Title Sponsor", coverPartners: "In partnership with", coverEnter: "Enter", coverYourLogo: "Your logo here", createdBy: "Passport created by The Lunar Foundation", aboutPartners: "About our partners" },
-      es: { coverPresented: "Presentado por", coverTitleSponsor: "Patrocinador principal", coverPartners: "En colaboración con", coverEnter: "Entrar", coverYourLogo: "Tu logo aquí", createdBy: "Pasaporte creado por The Lunar Foundation", aboutPartners: "Sobre nuestros socios" },
-      zh: { coverPresented: "呈献", coverTitleSponsor: "冠名赞助商", coverPartners: "合作伙伴", coverEnter: "进入", coverYourLogo: "您的标志", createdBy: "护照由 The Lunar Foundation 创建", aboutPartners: "关于我们的合作伙伴" },
-      ko: { coverPresented: "주최", coverTitleSponsor: "타이틀 스폰서", coverPartners: "파트너", coverEnter: "들어가기", coverYourLogo: "로고 위치", createdBy: "패스포트 제작: The Lunar Foundation", aboutPartners: "파트너 소개" },
-      vi: { coverPresented: "Trình bày bởi", coverTitleSponsor: "Nhà tài trợ chính", coverPartners: "Hợp tác cùng", coverEnter: "Vào", coverYourLogo: "Logo của bạn", createdBy: "Hộ chiếu được tạo bởi The Lunar Foundation", aboutPartners: "Về các đối tác" },
-      ja: { coverPresented: "主催", coverTitleSponsor: "冠スポンサー", coverPartners: "パートナー", coverEnter: "入る", coverYourLogo: "ロゴを掲載", createdBy: "パスポート制作：The Lunar Foundation", aboutPartners: "パートナーについて" },
+      en: { coverPresented: "Presented by", coverTitleSponsor: "Title Sponsor", coverPartners: "In partnership with", coverEnter: "Enter", coverYourLogo: "Your logo here", createdBy: "Passport created by The Lunar Foundation", aboutPartners: "About our partners", passportMahjong: "Collect a mahjong tile at every stop, then complete runs and sets for bonus points." },
+      es: { coverPresented: "Presentado por", coverTitleSponsor: "Patrocinador principal", coverPartners: "En colaboración con", coverEnter: "Entrar", coverYourLogo: "Tu logo aquí", createdBy: "Pasaporte creado por The Lunar Foundation", aboutPartners: "Sobre nuestros socios", passportMahjong: "Consigue una ficha de mahjong en cada parada y completa corridas y tríos para ganar puntos extra." },
+      zh: { coverPresented: "呈献", coverTitleSponsor: "冠名赞助商", coverPartners: "合作伙伴", coverEnter: "进入", coverYourLogo: "您的标志", createdBy: "护照由 The Lunar Foundation 创建", aboutPartners: "关于我们的合作伙伴", passportMahjong: "在每个站点收集一张麻将牌，凑成顺子和刻子可获得额外积分。" },
+      ko: { coverPresented: "주최", coverTitleSponsor: "타이틀 스폰서", coverPartners: "파트너", coverEnter: "들어가기", coverYourLogo: "로고 위치", createdBy: "패스포트 제작: The Lunar Foundation", aboutPartners: "파트너 소개", passportMahjong: "방문하는 곳마다 마작 타일을 모으고, 순자와 같은 패를 맞춰 보너스 점수를 받으세요." },
+      vi: { coverPresented: "Trình bày bởi", coverTitleSponsor: "Nhà tài trợ chính", coverPartners: "Hợp tác cùng", coverEnter: "Vào", coverYourLogo: "Logo của bạn", createdBy: "Hộ chiếu được tạo bởi The Lunar Foundation", aboutPartners: "Về các đối tác", passportMahjong: "Thu thập một quân mạt chược tại mỗi điểm, rồi hoàn thành các bộ để ghi điểm thưởng." },
+      ja: { coverPresented: "主催", coverTitleSponsor: "冠スポンサー", coverPartners: "パートナー", coverEnter: "入る", coverYourLogo: "ロゴを掲載", createdBy: "パスポート制作：The Lunar Foundation", aboutPartners: "パートナーについて", passportMahjong: "立ち寄るたびに麻雀牌を集め、順子や刻子をそろえてボーナス点を獲得しよう。" },
     };
 
     function localized(vendor, lang) {
@@ -876,15 +876,30 @@
           )}
 
           {tab === "passport" && (
-            <div style={{ textAlign: "center", paddingTop: 12 }}>
-              <h1 style={{ fontSize: 22, fontWeight: 800, margin: "8px 0 4px", color: "#f0ebe3" }}>{t.passportTitle}</h1>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginTop: 16 }}>
-                {Array.from({ length: 9 }).map((_, i) => (
-                  <div key={i} style={{ aspectRatio: "1 / 1", borderRadius: "50%", border: "2px dashed #333350", display: "flex", alignItems: "center", justifyContent: "center", color: "#5a5a78", fontSize: 22 }}>?</div>
+            <div style={{ paddingTop: 12 }}>
+              <h1 style={{ fontSize: 22, fontWeight: 800, margin: "8px 0 8px", color: "#f0ebe3", textAlign: "center" }}>{t.passportTitle}</h1>
+              <p style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.6, lineHeight: 1.5, textAlign: "center", margin: "0 auto 20px", maxWidth: 320 }}>{t.passportMahjong}</p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, maxWidth: 260, margin: "0 auto" }}>
+                {[
+                  { g: "🀐", f: true, set: true }, { g: "🀑", f: true, set: true }, { g: "🀒", f: true, set: true },
+                  { g: "🀇", f: true, set: true }, { g: "🀇", f: true, set: true }, { g: "🀇", f: true, set: true },
+                  { g: "🀙", f: true }, { g: "🀀", f: true }, { g: "", f: false },
+                  { g: "", f: false }, { g: "", f: false }, { g: "", f: false },
+                ].map((tile, i) => (
+                  <div key={i} style={{
+                    aspectRatio: "3 / 4", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26,
+                    ...(tile.f
+                      ? { background: "#f5f0e6", border: tile.set ? "2px solid #ff6b35" : "1px solid #d8d0bf", boxShadow: "0 2px 4px rgba(0,0,0,0.3)" }
+                      : { background: "transparent", border: "2px dashed #333350", color: "#33335090" }),
+                  }}>
+                    {tile.f ? tile.g : "?"}
+                  </div>
                 ))}
               </div>
-              <div style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.6, marginTop: 18, lineHeight: 1.5 }}>{t.passportDesc}</div>
-              <span style={{ display: "inline-block", marginTop: 12, fontSize: 11, color: "#ff6b35", border: "1px solid #ff6b3550", borderRadius: 20, padding: "3px 12px", fontWeight: 600 }}>{t.comingSoon}</span>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 12, color: "#ff6b35", opacity: 0.85, marginTop: 14 }}>🀐🀑🀒 {"\u00B7"} 🀇🀇🀇 {"\u2605"}</div>
+                <span style={{ display: "inline-block", marginTop: 12, fontSize: 11, color: "#ff6b35", border: "1px solid #ff6b3550", borderRadius: 20, padding: "3px 12px", fontWeight: 600 }}>{t.comingSoon}</span>
+              </div>
             </div>
           )}
 
