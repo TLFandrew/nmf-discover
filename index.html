@@ -99,7 +99,7 @@
     // launch, since machine-quality copy can read awkwardly.
     const TRANSLATIONS = {
       en: {
-        title: "Discover",
+        title: "Discover. Meet. Connect.",
         subtitle: "Tell us what you're looking for",
         placeholder: "e.g. I want spicy food...",
         go: "Go",
@@ -126,7 +126,7 @@
         ],
       },
       es: {
-        title: "Descubre",
+        title: "Descubre. Conoce. Conecta.",
         subtitle: "Cuéntanos qué estás buscando",
         placeholder: "ej. quiero algo picante...",
         go: "Buscar",
@@ -153,7 +153,7 @@
         ],
       },
       zh: {
-        title: "探索",
+        title: "发现。相遇。连接。",
         subtitle: "告诉我们你在找什么",
         placeholder: "例如：我想吃辣的…",
         go: "搜索",
@@ -180,7 +180,7 @@
         ],
       },
       ko: {
-        title: "둘러보기",
+        title: "발견. 만남. 연결.",
         subtitle: "무엇을 찾고 계신가요?",
         placeholder: "예: 매운 음식이 먹고 싶어요…",
         go: "검색",
@@ -207,7 +207,7 @@
         ],
       },
       vi: {
-        title: "Khám phá",
+        title: "Khám phá. Gặp gỡ. Kết nối.",
         subtitle: "Hãy cho chúng tôi biết bạn đang tìm gì",
         placeholder: "vd: tôi muốn ăn món cay...",
         go: "Tìm",
@@ -234,7 +234,7 @@
         ],
       },
       ja: {
-        title: "さがす",
+        title: "見つける。出会う。つながる。",
         subtitle: "お探しのものを教えてください",
         placeholder: "例：辛い料理が食べたい…",
         go: "検索",
@@ -759,13 +759,13 @@
 
           <div style={{ paddingTop: 16, paddingBottom: 8, textAlign: "center" }}>
             <img src={LOGO_SRC} alt="NightMarket.fun" style={{ width: "52%", maxWidth: 210, height: "auto", display: "block", margin: "4px auto 6px" }} />
-            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.25em", color: "#ff6b35" }}>2026</div>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.18em", color: "#ff6b35", textTransform: "uppercase" }}>{"2026 "}{t.navPassport}</div>
           </div>
 
           {tab === "discover" && (
             <React.Fragment>
               <div style={{ textAlign: "center", marginBottom: 16 }}>
-                <h1 style={{ fontSize: 24, fontWeight: 800, margin: "8px 0 4px", lineHeight: 1.1, color: "#f0ebe3" }}>{t.title}</h1>
+                <h1 style={{ fontSize: 22, fontWeight: 800, margin: "8px 0 4px", lineHeight: 1.2, color: "#f0ebe3" }}>{t.title}</h1>
                 <p style={{ fontSize: 14, color: "#f0ebe3", opacity: 0.5, margin: 0 }}>{t.subtitle}</p>
               </div>
 
