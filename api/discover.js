@@ -160,8 +160,14 @@ export default async function handler(req, res) {
           systemInstruction: { parts: [{ text: buildSystemPrompt(vendorSummary) + langInstruction }] },
           contents: [{ role: "user", parts: [{ text: query }] }],
           generationConfig: {
-            maxOutputTokens: 1000,
+            maxOutputTokens: 2048,
             responseMimeType: "application/json",
+            // gemini-2.5-flash "thinks" by default, and that thinking counts
+            // against maxOutputTokens. With a tight budget it can use up all the
+            // tokens before writing the answer, returning an empty response.
+            // We don't need reasoning for vendor matching, so turn it off: the
+            // full budget goes to the JSON answer, and it's faster too.
+            thinkingConfig: { thinkingBudget: 0 },
           },
         }),
       }
