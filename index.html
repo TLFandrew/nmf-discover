@@ -13,6 +13,7 @@
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <script src="https://unpkg.com/jsqr@1.4.0/dist/jsQR.js"></script>
 </head>
 <body>
   <div id="root"></div>
@@ -63,6 +64,13 @@
     function qrDataURL(text) {
       try { const qr = qrcode(0, "M"); qr.addData(text); qr.make(); return qr.createDataURL(6, 8); }
       catch (e) { return null; }
+    }
+    // Pull a booth id out of a scanned QR, whether it's a full URL, a ?claim=, or a bare number.
+    function parseClaim(data) {
+      try { const c = new URL(data).searchParams.get("claim"); if (c && TILE_BY_ID[Number(c)]) return Number(c); } catch (e) {}
+      const m = String(data).match(/claim=(\d+)/); if (m && TILE_BY_ID[Number(m[1])]) return Number(m[1]);
+      const n = Number(data); if (!isNaN(n) && TILE_BY_ID[n]) return n;
+      return null;
     }
 
     const LANGS = [
@@ -345,12 +353,12 @@
     };
 
     const COVER_STRINGS = {
-      en: { coverPresented: "Presented by", coverTitleSponsor: "Title Sponsor", coverPartners: "In partnership with", coverEnter: "Enter", coverYourLogo: "Your logo here", createdBy: "Passport created by The Lunar Foundation", aboutPartners: "About our partners", passportMahjong: "Collect a mahjong tile at every stop, then complete runs and sets for bonus points.", legendTitle: "What each tile means", legendVendors: "Vendors & nonprofits", howTitle: "How it works", rulesBody: "Collect tiles as you explore. Scan the QR code at any food, art, vendor, or activity stop to claim its tile. For stage acts, rate the performance within 30 minutes to claim a tile; for film, answer the quick on-screen question; for contests, take part and the host checks you in. Every tile earns points, and rarer tiles are worth more. Three tiles of one suit in a row (a run) or three matching tiles (a set) form automatically from what you have collected and add bonus points. Follow an artist to multiply the tile you collected from them. Collect points to win prizes, and collect every tile for the ultimate honor.", pointsLabel: "points", setsLabel: "Completed sets", collectionLabel: "Your collection", headStartTitle: "Get a head start", headStartBody: "Follow our partners and join their newsletters to earn your first points before you even arrive.", subscribe: "Subscribe", beforeEvent: "Before the event", nextReward: "Next reward", mahjongTitle: "Play Mahjong. Win Prizes.", labelRun: "Run", labelTriplet: "Triplet", setsEmpty: "Collect three in a row or three of a kind to complete a set and earn bonus points.", tileGet: "Tile collected" },
-      es: { coverPresented: "Presentado por", coverTitleSponsor: "Patrocinador principal", coverPartners: "En colaboración con", coverEnter: "Entrar", coverYourLogo: "Tu logo aquí", createdBy: "Pasaporte creado por The Lunar Foundation", aboutPartners: "Sobre nuestros socios", passportMahjong: "Consigue una ficha de mahjong en cada parada y completa corridas y tríos para ganar puntos extra.", legendTitle: "Qué significa cada ficha", legendVendors: "Comercios y ONG", howTitle: "Cómo funciona", rulesBody: "Consigue fichas mientras exploras. Escanea el código QR en cualquier puesto de comida, arte, comercio o actividad para conseguir su ficha. En los espectáculos, califica la actuación dentro de los 30 minutos para conseguir una ficha; en el cine, responde la pregunta rápida en pantalla; en los concursos, participa y el organizador te registra. Cada ficha suma puntos, y las fichas más raras valen más. Tres fichas del mismo palo seguidas (una corrida) o tres fichas iguales (un trío) se forman automáticamente con lo que has reunido y dan puntos extra. Sigue a un artista para multiplicar la ficha que conseguiste de él. Reúne puntos para ganar premios y consigue todas las fichas para el máximo honor.", pointsLabel: "puntos", setsLabel: "Combinaciones completadas", collectionLabel: "Tu colección", headStartTitle: "Toma la delantera", headStartBody: "Sigue a nuestros socios y suscríbete a sus boletines para ganar tus primeros puntos antes de llegar.", subscribe: "Suscribirse", beforeEvent: "Antes del evento", nextReward: "Próxima recompensa", mahjongTitle: "Juega mahjong. Gana premios.", labelRun: "Corrida", labelTriplet: "Trío", setsEmpty: "Reúne tres seguidas o tres iguales para completar una combinación y ganar puntos extra.", tileGet: "Ficha conseguida" },
-      zh: { coverPresented: "呈献", coverTitleSponsor: "冠名赞助商", coverPartners: "合作伙伴", coverEnter: "进入", coverYourLogo: "您的标志", createdBy: "护照由 The Lunar Foundation 创建", aboutPartners: "关于我们的合作伙伴", passportMahjong: "在每个站点收集一张麻将牌，凑成顺子和刻子可获得额外积分。", legendTitle: "每张牌的含义", legendVendors: "商家与非营利组织", howTitle: "玩法", rulesBody: "边逛边收集麻将牌。在任何美食、艺术、商家或活动摊位扫描二维码即可获得该牌。观看舞台表演时，在30分钟内为表演评分即可获得一张牌；影片区回答屏幕上的小问题；比赛区则需亲自参加，由主持人为你登记。每张牌都有积分，越稀有的牌分值越高。同花色三张连续的牌（顺子）或三张相同的牌（刻子）会根据你已收集的牌自动组成，并获得额外积分。关注某位艺术家可让你从其摊位收集的牌翻倍。积累积分赢取奖品，集齐所有牌即可获得最高荣誉。", pointsLabel: "积分", setsLabel: "已完成的组合", collectionLabel: "你的收藏", headStartTitle: "抢先一步", headStartBody: "关注我们的合作伙伴并订阅他们的电子报，在抵达前就赚到第一批积分。", subscribe: "订阅", beforeEvent: "活动开始前", nextReward: "下一个奖励", mahjongTitle: "玩麻将，赢奖品。", labelRun: "顺子", labelTriplet: "刻子", setsEmpty: "收集三张连续或三张相同的牌即可凑成组合，赢得额外积分。", tileGet: "已收集麻将牌" },
-      ko: { coverPresented: "주최", coverTitleSponsor: "타이틀 스폰서", coverPartners: "파트너", coverEnter: "들어가기", coverYourLogo: "로고 위치", createdBy: "패스포트 제작: The Lunar Foundation", aboutPartners: "파트너 소개", passportMahjong: "방문하는 곳마다 마작 타일을 모으고, 순자와 같은 패를 맞춰 보너스 점수를 받으세요.", legendTitle: "각 타일의 의미", legendVendors: "상점 및 비영리단체", howTitle: "이용 방법", rulesBody: "둘러보며 타일을 모으세요. 음식, 예술, 상점, 체험 부스에서 QR 코드를 스캔하면 해당 타일을 받습니다. 공연은 끝난 후 30분 이내에 평점을 남기면 타일을 받고, 영화는 화면에 나오는 간단한 문제에 답하면 되며, 대회는 직접 참가하면 진행자가 확인해 줍니다. 모든 타일은 점수가 되고, 희귀한 타일일수록 점수가 높습니다. 같은 무늬의 연속된 세 타일(순자)이나 같은 타일 세 개(세트)는 모은 타일에서 자동으로 만들어져 보너스 점수를 줍니다. 아티스트를 팔로우하면 그 부스에서 모은 타일의 점수가 배가됩니다. 점수를 모아 상품을 받고, 모든 타일을 모으면 최고의 영예를 얻습니다.", pointsLabel: "점수", setsLabel: "완성한 세트", collectionLabel: "내 컬렉션", headStartTitle: "미리 시작하기", headStartBody: "파트너를 팔로우하고 뉴스레터를 구독하면 도착하기 전에 첫 점수를 모을 수 있어요.", subscribe: "구독", beforeEvent: "행사 전", nextReward: "다음 보상", mahjongTitle: "마작하고 상품 받으세요.", labelRun: "순자", labelTriplet: "세트", setsEmpty: "연속 세 장 또는 같은 패 세 장을 모으면 세트가 완성되어 보너스 점수를 받아요.", tileGet: "타일 획득" },
-      vi: { coverPresented: "Trình bày bởi", coverTitleSponsor: "Nhà tài trợ chính", coverPartners: "Hợp tác cùng", coverEnter: "Vào", coverYourLogo: "Logo của bạn", createdBy: "Hộ chiếu được tạo bởi The Lunar Foundation", aboutPartners: "Về các đối tác", passportMahjong: "Thu thập một quân mạt chược tại mỗi điểm, rồi hoàn thành các bộ để ghi điểm thưởng.", legendTitle: "Ý nghĩa mỗi quân", legendVendors: "Gian hàng & tổ chức phi lợi nhuận", howTitle: "Cách chơi", rulesBody: "Thu thập quân khi bạn dạo quanh. Quét mã QR tại bất kỳ gian hàng ẩm thực, nghệ thuật, gian hàng hay hoạt động nào để nhận quân của gian đó. Với tiết mục sân khấu, hãy đánh giá trong vòng 30 phút để nhận một quân; với phim, trả lời câu hỏi nhanh trên màn hình; với cuộc thi, hãy tham gia và người điều phối sẽ ghi nhận cho bạn. Mỗi quân đều có điểm, và quân càng hiếm thì càng nhiều điểm. Ba quân cùng chất liên tiếp (một bộ chạy) hoặc ba quân giống nhau (một bộ) sẽ tự động hình thành từ những quân bạn đã thu thập và cộng thêm điểm thưởng. Theo dõi một nghệ sĩ để nhân đôi quân bạn đã thu thập từ họ. Tích điểm để nhận quà, và sưu tầm tất cả các quân để đạt vinh dự cao nhất.", pointsLabel: "điểm", setsLabel: "Bộ đã hoàn thành", collectionLabel: "Bộ sưu tập của bạn", headStartTitle: "Khởi đầu sớm", headStartBody: "Theo dõi các đối tác và đăng ký nhận bản tin của họ để kiếm những điểm đầu tiên trước khi bạn đến.", subscribe: "Đăng ký", beforeEvent: "Trước sự kiện", nextReward: "Phần thưởng tiếp theo", mahjongTitle: "Chơi mạt chược. Nhận quà.", labelRun: "Bộ chạy", labelTriplet: "Bộ", setsEmpty: "Thu thập ba quân liên tiếp hoặc ba quân giống nhau để hoàn thành bộ và nhận điểm thưởng.", tileGet: "Đã nhận quân" },
-      ja: { coverPresented: "主催", coverTitleSponsor: "冠スポンサー", coverPartners: "パートナー", coverEnter: "入る", coverYourLogo: "ロゴを掲載", createdBy: "パスポート制作：The Lunar Foundation", aboutPartners: "パートナーについて", passportMahjong: "立ち寄るたびに麻雀牌を集め、順子や刻子をそろえてボーナス点を獲得しよう。", legendTitle: "各牌の意味", legendVendors: "出店・非営利団体", howTitle: "遊び方", rulesBody: "会場を回りながら牌を集めましょう。フード、アート、出店、アクティビティのブースでQRコードを読み取ると、その牌がもらえます。ステージの演目は終了後30分以内に評価すると牌を獲得でき、映画は画面に出る簡単な質問に答え、コンテストは実際に参加すると主催者が記録してくれます。どの牌も得点になり、珍しい牌ほど高得点です。同じ種類の牌が3枚連続する順子、または同じ牌が3枚そろう刻子は、集めた牌から自動的に成立し、ボーナス点が入ります。アーティストをフォローすると、そのブースで集めた牌の得点が倍になります。点数を集めて景品を獲得し、すべての牌を集めれば最高の栄誉が待っています。", pointsLabel: "ポイント", setsLabel: "完成した役", collectionLabel: "あなたのコレクション", headStartTitle: "ひと足先にスタート", headStartBody: "パートナーをフォローし、ニュースレターに登録すると、会場に着く前に最初のポイントを獲得できます。", subscribe: "登録", beforeEvent: "イベント前に", nextReward: "次の特典", mahjongTitle: "麻雀で遊んで景品をゲット。", labelRun: "順子", labelTriplet: "刻子", setsEmpty: "3枚連続か3枚同じ牌をそろえると役が完成し、ボーナス点がもらえます。", tileGet: "牌を獲得" },
+      en: { coverPresented: "Presented by", coverTitleSponsor: "Title Sponsor", coverPartners: "In partnership with", coverEnter: "Enter", coverYourLogo: "Your logo here", createdBy: "Passport created by The Lunar Foundation", aboutPartners: "About our partners", passportMahjong: "Collect a mahjong tile at every stop, then complete runs and sets for bonus points.", legendTitle: "What each tile means", legendVendors: "Vendors & nonprofits", howTitle: "How it works", rulesBody: "Collect tiles as you explore. Scan the QR code at any food, art, vendor, or activity stop to claim its tile. For stage acts, rate the performance within 30 minutes to claim a tile; for film, answer the quick on-screen question; for contests, take part and the host checks you in. Every tile earns points, and rarer tiles are worth more. Three tiles of one suit in a row (a run) or three matching tiles (a set) form automatically from what you have collected and add bonus points. Follow an artist to multiply the tile you collected from them. Collect points to win prizes, and collect every tile for the ultimate honor.", pointsLabel: "points", setsLabel: "Completed sets", collectionLabel: "Your collection", headStartTitle: "Get a head start", headStartBody: "Follow our partners and join their newsletters to earn your first points before you even arrive.", subscribe: "Subscribe", beforeEvent: "Before the event", nextReward: "Next reward", mahjongTitle: "Play Mahjong. Win Prizes.", labelRun: "Run", labelTriplet: "Triplet", setsEmpty: "Collect three in a row or three of a kind to complete a set and earn bonus points.", tileGet: "Tile collected", tileDup: "Already in your collection", scanCta: "Scan a booth code", scanHint: "Point at a booth\u2019s QR code", scanError: "We need camera access to scan. Turn it on in your browser settings, or use the demo codes." },
+      es: { coverPresented: "Presentado por", coverTitleSponsor: "Patrocinador principal", coverPartners: "En colaboración con", coverEnter: "Entrar", coverYourLogo: "Tu logo aquí", createdBy: "Pasaporte creado por The Lunar Foundation", aboutPartners: "Sobre nuestros socios", passportMahjong: "Consigue una ficha de mahjong en cada parada y completa corridas y tríos para ganar puntos extra.", legendTitle: "Qué significa cada ficha", legendVendors: "Comercios y ONG", howTitle: "Cómo funciona", rulesBody: "Consigue fichas mientras exploras. Escanea el código QR en cualquier puesto de comida, arte, comercio o actividad para conseguir su ficha. En los espectáculos, califica la actuación dentro de los 30 minutos para conseguir una ficha; en el cine, responde la pregunta rápida en pantalla; en los concursos, participa y el organizador te registra. Cada ficha suma puntos, y las fichas más raras valen más. Tres fichas del mismo palo seguidas (una corrida) o tres fichas iguales (un trío) se forman automáticamente con lo que has reunido y dan puntos extra. Sigue a un artista para multiplicar la ficha que conseguiste de él. Reúne puntos para ganar premios y consigue todas las fichas para el máximo honor.", pointsLabel: "puntos", setsLabel: "Combinaciones completadas", collectionLabel: "Tu colección", headStartTitle: "Toma la delantera", headStartBody: "Sigue a nuestros socios y suscríbete a sus boletines para ganar tus primeros puntos antes de llegar.", subscribe: "Suscribirse", beforeEvent: "Antes del evento", nextReward: "Próxima recompensa", mahjongTitle: "Juega mahjong. Gana premios.", labelRun: "Corrida", labelTriplet: "Trío", setsEmpty: "Reúne tres seguidas o tres iguales para completar una combinación y ganar puntos extra.", tileGet: "Ficha conseguida", tileDup: "Ya est\u00e1 en tu colecci\u00f3n", scanCta: "Escanear un c\u00f3digo", scanHint: "Apunta al c\u00f3digo QR de un puesto", scanError: "Necesitamos acceso a la c\u00e1mara para escanear. Act\u00edvalo en los ajustes del navegador o usa los c\u00f3digos de demostraci\u00f3n." },
+      zh: { coverPresented: "呈献", coverTitleSponsor: "冠名赞助商", coverPartners: "合作伙伴", coverEnter: "进入", coverYourLogo: "您的标志", createdBy: "护照由 The Lunar Foundation 创建", aboutPartners: "关于我们的合作伙伴", passportMahjong: "在每个站点收集一张麻将牌，凑成顺子和刻子可获得额外积分。", legendTitle: "每张牌的含义", legendVendors: "商家与非营利组织", howTitle: "玩法", rulesBody: "边逛边收集麻将牌。在任何美食、艺术、商家或活动摊位扫描二维码即可获得该牌。观看舞台表演时，在30分钟内为表演评分即可获得一张牌；影片区回答屏幕上的小问题；比赛区则需亲自参加，由主持人为你登记。每张牌都有积分，越稀有的牌分值越高。同花色三张连续的牌（顺子）或三张相同的牌（刻子）会根据你已收集的牌自动组成，并获得额外积分。关注某位艺术家可让你从其摊位收集的牌翻倍。积累积分赢取奖品，集齐所有牌即可获得最高荣誉。", pointsLabel: "积分", setsLabel: "已完成的组合", collectionLabel: "你的收藏", headStartTitle: "抢先一步", headStartBody: "关注我们的合作伙伴并订阅他们的电子报，在抵达前就赚到第一批积分。", subscribe: "订阅", beforeEvent: "活动开始前", nextReward: "下一个奖励", mahjongTitle: "玩麻将，赢奖品。", labelRun: "顺子", labelTriplet: "刻子", setsEmpty: "收集三张连续或三张相同的牌即可凑成组合，赢得额外积分。", tileGet: "已收集麻将牌", tileDup: "已在你的收藏中", scanCta: "扫描摊位二维码", scanHint: "对准摊位的二维码", scanError: "扫描需要使用相机。请在浏览器设置中开启，或使用演示二维码。" },
+      ko: { coverPresented: "주최", coverTitleSponsor: "타이틀 스폰서", coverPartners: "파트너", coverEnter: "들어가기", coverYourLogo: "로고 위치", createdBy: "패스포트 제작: The Lunar Foundation", aboutPartners: "파트너 소개", passportMahjong: "방문하는 곳마다 마작 타일을 모으고, 순자와 같은 패를 맞춰 보너스 점수를 받으세요.", legendTitle: "각 타일의 의미", legendVendors: "상점 및 비영리단체", howTitle: "이용 방법", rulesBody: "둘러보며 타일을 모으세요. 음식, 예술, 상점, 체험 부스에서 QR 코드를 스캔하면 해당 타일을 받습니다. 공연은 끝난 후 30분 이내에 평점을 남기면 타일을 받고, 영화는 화면에 나오는 간단한 문제에 답하면 되며, 대회는 직접 참가하면 진행자가 확인해 줍니다. 모든 타일은 점수가 되고, 희귀한 타일일수록 점수가 높습니다. 같은 무늬의 연속된 세 타일(순자)이나 같은 타일 세 개(세트)는 모은 타일에서 자동으로 만들어져 보너스 점수를 줍니다. 아티스트를 팔로우하면 그 부스에서 모은 타일의 점수가 배가됩니다. 점수를 모아 상품을 받고, 모든 타일을 모으면 최고의 영예를 얻습니다.", pointsLabel: "점수", setsLabel: "완성한 세트", collectionLabel: "내 컬렉션", headStartTitle: "미리 시작하기", headStartBody: "파트너를 팔로우하고 뉴스레터를 구독하면 도착하기 전에 첫 점수를 모을 수 있어요.", subscribe: "구독", beforeEvent: "행사 전", nextReward: "다음 보상", mahjongTitle: "마작하고 상품 받으세요.", labelRun: "순자", labelTriplet: "세트", setsEmpty: "연속 세 장 또는 같은 패 세 장을 모으면 세트가 완성되어 보너스 점수를 받아요.", tileGet: "타일 획득", tileDup: "이미 컬렉션에 있어요", scanCta: "부스 코드 스캔", scanHint: "부스의 QR 코드를 비추세요", scanError: "스캔하려면 카메라 권한이 필요해요. 브라우저 설정에서 켜거나 데모 코드를 사용하세요." },
+      vi: { coverPresented: "Trình bày bởi", coverTitleSponsor: "Nhà tài trợ chính", coverPartners: "Hợp tác cùng", coverEnter: "Vào", coverYourLogo: "Logo của bạn", createdBy: "Hộ chiếu được tạo bởi The Lunar Foundation", aboutPartners: "Về các đối tác", passportMahjong: "Thu thập một quân mạt chược tại mỗi điểm, rồi hoàn thành các bộ để ghi điểm thưởng.", legendTitle: "Ý nghĩa mỗi quân", legendVendors: "Gian hàng & tổ chức phi lợi nhuận", howTitle: "Cách chơi", rulesBody: "Thu thập quân khi bạn dạo quanh. Quét mã QR tại bất kỳ gian hàng ẩm thực, nghệ thuật, gian hàng hay hoạt động nào để nhận quân của gian đó. Với tiết mục sân khấu, hãy đánh giá trong vòng 30 phút để nhận một quân; với phim, trả lời câu hỏi nhanh trên màn hình; với cuộc thi, hãy tham gia và người điều phối sẽ ghi nhận cho bạn. Mỗi quân đều có điểm, và quân càng hiếm thì càng nhiều điểm. Ba quân cùng chất liên tiếp (một bộ chạy) hoặc ba quân giống nhau (một bộ) sẽ tự động hình thành từ những quân bạn đã thu thập và cộng thêm điểm thưởng. Theo dõi một nghệ sĩ để nhân đôi quân bạn đã thu thập từ họ. Tích điểm để nhận quà, và sưu tầm tất cả các quân để đạt vinh dự cao nhất.", pointsLabel: "điểm", setsLabel: "Bộ đã hoàn thành", collectionLabel: "Bộ sưu tập của bạn", headStartTitle: "Khởi đầu sớm", headStartBody: "Theo dõi các đối tác và đăng ký nhận bản tin của họ để kiếm những điểm đầu tiên trước khi bạn đến.", subscribe: "Đăng ký", beforeEvent: "Trước sự kiện", nextReward: "Phần thưởng tiếp theo", mahjongTitle: "Chơi mạt chược. Nhận quà.", labelRun: "Bộ chạy", labelTriplet: "Bộ", setsEmpty: "Thu thập ba quân liên tiếp hoặc ba quân giống nhau để hoàn thành bộ và nhận điểm thưởng.", tileGet: "Đã nhận quân", tileDup: "Đã có trong bộ sưu tập", scanCta: "Quét mã gian hàng", scanHint: "Hướng vào mã QR của gian hàng", scanError: "Cần quyền camera để quét. Hãy bật trong cài đặt trình duyệt, hoặc dùng mã demo." },
+      ja: { coverPresented: "主催", coverTitleSponsor: "冠スポンサー", coverPartners: "パートナー", coverEnter: "入る", coverYourLogo: "ロゴを掲載", createdBy: "パスポート制作：The Lunar Foundation", aboutPartners: "パートナーについて", passportMahjong: "立ち寄るたびに麻雀牌を集め、順子や刻子をそろえてボーナス点を獲得しよう。", legendTitle: "各牌の意味", legendVendors: "出店・非営利団体", howTitle: "遊び方", rulesBody: "会場を回りながら牌を集めましょう。フード、アート、出店、アクティビティのブースでQRコードを読み取ると、その牌がもらえます。ステージの演目は終了後30分以内に評価すると牌を獲得でき、映画は画面に出る簡単な質問に答え、コンテストは実際に参加すると主催者が記録してくれます。どの牌も得点になり、珍しい牌ほど高得点です。同じ種類の牌が3枚連続する順子、または同じ牌が3枚そろう刻子は、集めた牌から自動的に成立し、ボーナス点が入ります。アーティストをフォローすると、そのブースで集めた牌の得点が倍になります。点数を集めて景品を獲得し、すべての牌を集めれば最高の栄誉が待っています。", pointsLabel: "ポイント", setsLabel: "完成した役", collectionLabel: "あなたのコレクション", headStartTitle: "ひと足先にスタート", headStartBody: "パートナーをフォローし、ニュースレターに登録すると、会場に着く前に最初のポイントを獲得できます。", subscribe: "登録", beforeEvent: "イベント前に", nextReward: "次の特典", mahjongTitle: "麻雀で遊んで景品をゲット。", labelRun: "順子", labelTriplet: "刻子", setsEmpty: "3枚連続か3枚同じ牌をそろえると役が完成し、ボーナス点がもらえます。", tileGet: "牌を獲得", tileDup: "すでにコレクションにあります", scanCta: "ブースのコードをスキャン", scanHint: "ブースのQRコードに向けてください", scanError: "スキャンにはカメラの使用許可が必要です。ブラウザの設定で許可するか、デモ用コードをご利用ください。" },
     };
 
     function localized(vendor, lang) {
@@ -735,6 +743,11 @@
       const [claimed, setClaimed] = useState([]);
       const [claimToast, setClaimToast] = useState(null);
       const [showQR, setShowQR] = useState(false);
+      const [scanning, setScanning] = useState(false);
+      const [scanError, setScanError] = useState(false);
+      const videoRef = useRef(null);
+      const scanRef = useRef({ stream: null, raf: 0, done: false });
+      const claimedRef = useRef([]);
       const inputRef = useRef(null);
 
       const t = { ...TRANSLATIONS[lang], ...SHELL_STRINGS[lang], ...COVER_STRINGS[lang] };
@@ -809,10 +822,12 @@
           const params = new URLSearchParams(window.location.search);
           const c = params.get("claim");
           if (c) {
-            const tile = TILE_BY_ID[Number(c)];
+            const id = Number(c); const tile = TILE_BY_ID[id];
             if (tile) {
-              toast = { id: Number(c), suit: tile.suit, rank: tile.rank, name: tile.name };
-              saved = [...saved, toast];
+              const dup = saved.some(x => x.id === id);
+              const entry = { id, suit: tile.suit, rank: tile.rank, name: tile.name };
+              if (!dup) saved = [...saved, entry];
+              toast = { ...entry, dup };
               consumed = true;
             }
           }
@@ -829,6 +844,61 @@
       }, [claimed]);
 
       function resetTiles() { setClaimed([]); try { localStorage.removeItem("nmf_tiles"); } catch (e) {} }
+
+      // Keep a live mirror of claimed tiles for synchronous duplicate checks inside the scan loop.
+      useEffect(() => { claimedRef.current = claimed; }, [claimed]);
+
+      // Claim a booth's tile once. A second scan of the same booth just confirms, no duplicate.
+      function claimById(id) {
+        const tile = TILE_BY_ID[id];
+        if (!tile) return;
+        const dup = claimedRef.current.some(c => c.id === id);
+        const entry = { id, suit: tile.suit, rank: tile.rank, name: tile.name };
+        if (!dup) setClaimed(prev => prev.some(c => c.id === id) ? prev : [...prev, entry]);
+        setClaimToast({ ...entry, dup });
+        setScanning(false);
+      }
+
+      // In-app camera scanner: reads booth QR codes in place, so no new browser tabs.
+      useEffect(() => {
+        if (!scanning) return;
+        const st = scanRef.current; st.done = false;
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.jsQR) { setScanError(true); return; }
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        let cancelled = false;
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } }, audio: false })
+          .then(stream => {
+            if (cancelled) { stream.getTracks().forEach(t => t.stop()); return; }
+            st.stream = stream;
+            const v = videoRef.current;
+            if (!v) { stream.getTracks().forEach(t => t.stop()); return; }
+            v.srcObject = stream;
+            v.play().catch(() => {});
+            const tick = () => {
+              if (cancelled || st.done) return;
+              const v2 = videoRef.current;
+              if (v2 && v2.readyState >= 2 && v2.videoWidth) {
+                canvas.width = v2.videoWidth; canvas.height = v2.videoHeight;
+                ctx.drawImage(v2, 0, 0, canvas.width, canvas.height);
+                let code = null;
+                try { const img = ctx.getImageData(0, 0, canvas.width, canvas.height); code = window.jsQR(img.data, img.width, img.height, { inversionAttempts: "dontInvert" }); } catch (e) {}
+                if (code && code.data) {
+                  const id = parseClaim(code.data);
+                  if (id != null) { st.done = true; claimById(id); return; }
+                }
+              }
+              st.raf = requestAnimationFrame(tick);
+            };
+            st.raf = requestAnimationFrame(tick);
+          })
+          .catch(() => { setScanError(true); });
+        return () => {
+          cancelled = true;
+          if (st.raf) cancelAnimationFrame(st.raf);
+          if (st.stream) { st.stream.getTracks().forEach(t => t.stop()); st.stream = null; }
+        };
+      }, [scanning]);
 
       function togglePlan(id) {
         setPlan(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
@@ -1085,6 +1155,12 @@
                 </div>
               </div>
 
+              {/* Primary action at the event: scan a booth code in-app (no new tabs) */}
+              <button onClick={() => { setScanError(false); setScanning(true); }}
+                style={{ width: "100%", padding: 14, borderRadius: 14, border: "none", background: "linear-gradient(135deg,#ff6b35,#e74c8b)", color: "#fff", fontSize: 15, fontWeight: 800, cursor: "pointer", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                <span style={{ fontSize: 17 }}>📷</span> {t.scanCta}
+              </button>
+
               {/* Head start: partner follows / newsletters - collapsible */}
               <div style={{ background: "linear-gradient(135deg,#ff6b3522,#9b59b622)", border: "1px solid #ff6b3555", borderRadius: 16, padding: "4px 16px", marginBottom: 16 }}>
                 <button onClick={() => setShowHeadStart(!showHeadStart)}
@@ -1181,11 +1257,32 @@
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
                   <TileFace suit={claimToast.suit} rank={claimToast.rank} size={64} highlight />
                 </div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: "#f0ebe3" }}>{t.tileGet}</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: "#f0ebe3" }}>{claimToast.dup ? t.tileDup : t.tileGet}</div>
                 <div style={{ fontSize: 13, color: "#f0ebe3", opacity: 0.7, marginTop: 4 }}>{claimToast.name}</div>
-                <div style={{ fontSize: 14, fontWeight: 800, color: "#ff6b35", marginTop: 10 }}>+10 {t.pointsLabel}</div>
+                {!claimToast.dup && <div style={{ fontSize: 14, fontWeight: 800, color: "#ff6b35", marginTop: 10 }}>+10 {t.pointsLabel}</div>}
                 <button onClick={() => setClaimToast(null)} style={{ marginTop: 16, width: "100%", padding: 12, borderRadius: 12, border: "none", background: "#ff6b35", color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>✓</button>
               </div>
+            </div>
+          )}
+
+          {/* In-app camera scanner */}
+          {scanning && (
+            <div style={{ position: "fixed", inset: 0, background: "#000", zIndex: 66, display: "flex", flexDirection: "column" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 16px" }}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: "#fff" }}>{t.scanCta}</div>
+                <button onClick={() => setScanning(false)} style={{ background: "transparent", border: "none", color: "#fff", fontSize: 22, cursor: "pointer" }}>✕</button>
+              </div>
+              {scanError ? (
+                <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: 28 }}>
+                  <p style={{ color: "#fff", opacity: 0.85, fontSize: 14, lineHeight: 1.6, textAlign: "center" }}>{t.scanError}</p>
+                </div>
+              ) : (
+                <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
+                  <video ref={videoRef} muted playsInline style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 230, height: 230, border: "3px solid #ffffffcc", borderRadius: 20, boxShadow: "0 0 0 100vmax rgba(0,0,0,0.45)" }} />
+                  <div style={{ position: "absolute", bottom: 44, left: 0, right: 0, textAlign: "center", color: "#fff", fontSize: 14, fontWeight: 600, textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>{t.scanHint}</div>
+                </div>
+              )}
             </div>
           )}
 
