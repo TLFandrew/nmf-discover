@@ -14432,7 +14432,7 @@ const VENDORS = [{
   "name": "Pokémon Scavenger Hunt",
   "category": "Activity",
   "subcategory": "Scavenger Hunt",
-  "description": "A Pokémon-themed scavenger hunt across the market. Track down Pokémon hidden at booths throughout the festival to complete your set and win a prize. Full details coming soon.",
+  "description": "A free, all-ages scavenger hunt across Lakeline Park. Find 40 one-of-a-kind Pokémon designed by local kids and hidden in augmented reality throughout the festival, then complete your set to win a prize. Powered by Illust.space.",
   "tags": ["pokemon", "scavenger", "hunt", "creatures", "kids", "family", "game", "all ages"],
   "priceRange": "Free",
   "familyFriendly": true
@@ -14489,6 +14489,14 @@ const VENDORS = [{
   "description": "Placeholder for a Pokémon trading card seller. Promo cards plus figures, plush, and other collectibles. Vendor details coming soon.",
   "products": "Promo cards · Figures · Plush · Collectibles",
   "tags": ["pokemon", "trading cards", "tcg", "cards", "collectibles", "promos", "family"],
+  "familyFriendly": true
+}, {
+  "id": 127,
+  "name": "Jason Paige",
+  "category": "Performance",
+  "subcategory": "Pokémon Theme Vocalist",
+  "description": "The original voice of the Pokémon theme song, live on stage. A high-energy, all-ages sing-along set the whole crowd will know by heart.",
+  "tags": ["pokemon", "performance", "live", "music", "vocalist", "theme song", "family", "all ages"],
   "familyFriendly": true
 }];
 const CATEGORY_COLORS = {
@@ -15749,8 +15757,6 @@ function PassportToggle({
 function ScavengerHuntPanel({
   t
 }) {
-  const total = 12,
-    found = 0;
   return /*#__PURE__*/React.createElement("div", {
     style: {
       paddingTop: 4
@@ -15770,78 +15776,55 @@ function ScavengerHuntPanel({
       opacity: 0.72,
       lineHeight: 1.6,
       textAlign: "center",
-      margin: "0 0 16px"
+      margin: "0 0 18px"
     }
-  }, "Track down Pok\xE9mon hidden at booths across the market. Find them all to complete your set and win a prize."), /*#__PURE__*/React.createElement("div", {
+  }, "Find 40 one-of-a-kind Pok\xE9mon designed by local kids, hidden in augmented reality across Lakeline Park. Complete your set to win a prize."), /*#__PURE__*/React.createElement("button", {
+    disabled: true,
+    "aria-disabled": "true",
     style: {
-      background: "#1e1e30",
-      borderRadius: 16,
-      padding: 16,
-      marginBottom: 16,
-      border: "1px solid #2a2a40"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "space-between",
-      fontSize: 12,
-      color: "#f0ebe3",
-      opacity: 0.7,
-      marginBottom: 6
-    }
-  }, /*#__PURE__*/React.createElement("span", null, "Found"), /*#__PURE__*/React.createElement("span", null, found, " / ", total)), /*#__PURE__*/React.createElement("div", {
-    style: {
-      height: 7,
-      borderRadius: 4,
-      background: "#2a2a40",
-      overflow: "hidden"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: found / total * 100 + "%",
-      height: "100%",
-      background: "linear-gradient(90deg,#ffcb05,#ff6b35)"
-    }
-  }))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "repeat(4, 1fr)",
-      gap: 10,
-      marginBottom: 16
-    }
-  }, Array.from({
-    length: total
-  }).map((_, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    "aria-hidden": "true",
-    style: {
-      height: 64,
-      background: "#1e1e30",
-      border: "1px dashed #333350",
+      width: "100%",
+      padding: 15,
       borderRadius: 14,
+      border: "none",
+      background: "#2a2a40",
+      color: "#f0ebe3",
+      opacity: 0.55,
+      fontSize: 15,
+      fontWeight: 800,
+      cursor: "not-allowed",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      color: "#f0ebe3",
-      opacity: 0.5,
-      fontSize: 22,
-      fontWeight: 800
-    }
-  }, "?"))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      textAlign: "center"
+      gap: 8
     }
   }, /*#__PURE__*/React.createElement("span", {
+    "aria-hidden": "true"
+  }, "\u26A1"), " Catch \u2019em all"), /*#__PURE__*/React.createElement("div", {
     style: {
-      display: "inline-block",
+      textAlign: "center",
+      marginTop: 9,
       fontSize: 11,
-      color: "#ff6b35",
-      border: "1px solid #ff6b3550",
-      borderRadius: 20,
-      padding: "3px 12px",
-      fontWeight: 600
+      color: "#f0ebe3",
+      opacity: 0.5
     }
-  }, t.comingSoon)));
+  }, "Link coming soon"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      marginTop: 16,
+      fontSize: 12,
+      color: "#f0ebe3",
+      opacity: 0.65
+    }
+  }, "Powered by ", /*#__PURE__*/React.createElement("a", {
+    href: "https://www.illust.space",
+    target: "_blank",
+    rel: "noopener noreferrer",
+    style: {
+      color: "#ff6b35",
+      fontWeight: 600,
+      textDecoration: "none"
+    }
+  }, "Illust.space")));
 }
 function CategoryFilter({
   selected,
