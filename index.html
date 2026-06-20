@@ -13911,6 +13911,8 @@ const VENDORS = [{
   "familyFriendly": true
 }, {
   "id": 93,
+  "startMin": 960,
+  "stage": "Main Stage",
   "name": "Austin Moonflower Performing Arts Group",
   "category": "Performance",
   "subcategory": "Classical Chinese Dance",
@@ -13923,6 +13925,8 @@ const VENDORS = [{
   }
 }, {
   "id": 94,
+  "startMin": 1020,
+  "stage": "Main Stage",
   "name": "ATX Artists for Social Impact",
   "category": "Performance",
   "subcategory": "Live Band",
@@ -13936,6 +13940,8 @@ const VENDORS = [{
   }
 }, {
   "id": 95,
+  "startMin": 1080,
+  "stage": "Main Stage",
   "name": "Tam Le-Nguyen",
   "category": "Performance",
   "subcategory": "Spoken Word",
@@ -13949,6 +13955,8 @@ const VENDORS = [{
   }
 }, {
   "id": 96,
+  "startMin": 1140,
+  "stage": "Main Stage",
   "name": "Rumah Budaya di Austin",
   "category": "Performance",
   "subcategory": "Angklung Ensemble",
@@ -13961,6 +13969,8 @@ const VENDORS = [{
   }
 }, {
   "id": 97,
+  "startMin": 960,
+  "stage": "Side Stage",
   "name": "Cassio Stella",
   "category": "Performance",
   "subcategory": "Pop-Rock",
@@ -13988,6 +13998,8 @@ const VENDORS = [{
   }
 }, {
   "id": 99,
+  "startMin": 990,
+  "stage": "Side Stage",
   "name": "AuroraZ",
   "category": "Performance",
   "subcategory": "K-pop Dance",
@@ -13996,6 +14008,8 @@ const VENDORS = [{
   "familyFriendly": true
 }, {
   "id": 100,
+  "startMin": 1050,
+  "stage": "Side Stage",
   "name": "Ramiro Brave",
   "category": "Performance",
   "subcategory": "K-pop / Pop",
@@ -14033,6 +14047,8 @@ const VENDORS = [{
   }
 }, {
   "id": 103,
+  "startMin": 1110,
+  "stage": "Side Stage",
   "name": "Ruan Sisters",
   "category": "Performance",
   "subcategory": "Chinese Instruments",
@@ -14072,6 +14088,8 @@ const VENDORS = [{
   }
 }, {
   "id": 106,
+  "startMin": 1170,
+  "stage": "Side Stage",
   "name": "Habang Buhay",
   "category": "Performance",
   "subcategory": "Indie Band",
@@ -14083,6 +14101,8 @@ const VENDORS = [{
   }
 }, {
   "id": 107,
+  "startMin": 1200,
+  "stage": "Side Stage",
   "name": "QiLi Dance",
   "category": "Performance",
   "subcategory": "Chinese Dance",
@@ -15316,6 +15336,7 @@ function VendorCard({
     subcategory,
     description
   } = localized(vendor, lang);
+  const [myRating, setMyRating] = useState(() => loadRating(vendor.id));
   return /*#__PURE__*/React.createElement("div", {
     style: {
       background: "#1e1e30",
@@ -15399,7 +15420,67 @@ function VendorCard({
       lineHeight: 1.5,
       margin: 0
     }
-  }, description)), /*#__PURE__*/React.createElement("button", {
+  }, description)), ratingState(vendor) !== "na" && (() => {
+    const st = ratingState(vendor);
+    if (st === "upcoming") return /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 10,
+        fontSize: 12,
+        color: "#f0ebe3",
+        opacity: 0.5
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      "aria-hidden": "true"
+    }, "\u2B50"), " Rating opens at ", fmtTime(vendor.startMin));
+    const locked = st === "closed";
+    return /*#__PURE__*/React.createElement("div", {
+      onClick: e => e.stopPropagation(),
+      style: {
+        marginTop: 10,
+        paddingTop: 10,
+        borderTop: "1px solid #2a2a40"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        fontWeight: 600,
+        color: "#f0ebe3",
+        opacity: 0.6,
+        marginBottom: 5
+      }
+    }, myRating ? "Your rating" : locked ? "Rating closed" : "Rate this performance"), /*#__PURE__*/React.createElement("div", {
+      role: "radiogroup",
+      "aria-label": "Rate " + vendor.name,
+      style: {
+        display: "flex",
+        gap: 4
+      }
+    }, [1, 2, 3, 4, 5].map(n => /*#__PURE__*/React.createElement("button", {
+      key: n,
+      role: "radio",
+      "aria-checked": myRating === n,
+      "aria-label": n + (n === 1 ? " star" : " stars"),
+      disabled: locked,
+      onClick: () => {
+        if (locked) return;
+        setMyRating(n);
+        saveRating(vendor.id, n);
+      },
+      style: {
+        background: "none",
+        border: "none",
+        padding: "2px 1px",
+        cursor: locked ? "default" : "pointer",
+        fontSize: 24,
+        lineHeight: 1
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      "aria-hidden": "true",
+      style: {
+        color: n <= myRating ? "#ffcb05" : "#3a3a52"
+      }
+    }, "\u2605")))));
+  })(), /*#__PURE__*/React.createElement("button", {
     onClick: () => onTogglePlan(vendor.id),
     style: {
       marginTop: 12,
@@ -15941,6 +16022,41 @@ function fmtTime(min) {
   return h12 + ":" + (m < 10 ? "0" + m : m) + " " + p;
 }
 const STAGE_ORDER = ["Main Stage", "Side Stage", "Cinema by the Lake", "Kids Corner"];
+
+// Performance ratings: internal use only, stored on the attendee's device for now.
+const EVENT_DATE = "2026-11-14";
+const RATING_WINDOW_MIN = 60;
+const RATINGS_DEMO_MODE = true; // forces the window open so it demos any day; set false for live time-gating
+function loadRating(id) {
+  try {
+    return JSON.parse(localStorage.getItem("nmf_ratings") || "{}")[id] || 0;
+  } catch (e) {
+    return 0;
+  }
+}
+function saveRating(id, stars) {
+  try {
+    var r = JSON.parse(localStorage.getItem("nmf_ratings") || "{}");
+    if (stars) {
+      r[id] = stars;
+    } else {
+      delete r[id];
+    }
+    localStorage.setItem("nmf_ratings", JSON.stringify(r));
+  } catch (e) {}
+}
+function ratingState(vendor) {
+  if (!vendor || vendor.category !== "Performance" || vendor.startMin == null) return "na";
+  if (RATINGS_DEMO_MODE) return "open";
+  var start = new Date(EVENT_DATE + "T00:00:00");
+  start.setHours(Math.floor(vendor.startMin / 60), vendor.startMin % 60, 0, 0);
+  var now = Date.now(),
+    open = start.getTime(),
+    close = open + RATING_WINDOW_MIN * 60000;
+  if (now < open) return "upcoming";
+  if (now > close) return "closed";
+  return "open";
+}
 function MapToggle({
   view,
   onSelect,
