@@ -15721,7 +15721,8 @@ function ProfileOverlay({
 function BottomNav({
   tab,
   onSelect,
-  t
+  t,
+  lift
 }) {
   const items = [{
     key: "discover",
@@ -15751,7 +15752,8 @@ function BottomNav({
       display: "flex",
       justifyContent: "center",
       zIndex: 40,
-      paddingBottom: "env(safe-area-inset-bottom)"
+      paddingBottom: "env(safe-area-inset-bottom)",
+      transform: lift && lift > 1 ? "translateY(-" + lift + "px)" : undefined
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -16799,6 +16801,7 @@ function NMFDiscover() {
   const [tab, setTab] = useState("discover");
   const [passportView, setPassportView] = useState("mahjong");
   const [mapView, setMapView] = useState("map");
+  const [navLift, setNavLift] = useState(0);
   const [showCover, setShowCover] = useState(true);
   const [showAbout, setShowAbout] = useState(false);
   const [query, setQuery] = useState("");
@@ -16955,6 +16958,29 @@ function NMFDiscover() {
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
+
+  // Keep the bottom nav above iOS Safari's bottom toolbar by tracking the visual viewport.
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    let raf = 0;
+    const update = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        setNavLift(Math.max(0, window.innerHeight - vv.height - vv.offsetTop));
+      });
+    };
+    update();
+    vv.addEventListener("resize", update);
+    vv.addEventListener("scroll", update);
+    window.addEventListener("scroll", update);
+    return () => {
+      cancelAnimationFrame(raf);
+      vv.removeEventListener("resize", update);
+      vv.removeEventListener("scroll", update);
+      window.removeEventListener("scroll", update);
+    };
+  }, []);
 
   // Persist the plan to this device whenever it changes.
   useEffect(() => {
@@ -18162,7 +18188,8 @@ function NMFDiscover() {
   })), /*#__PURE__*/React.createElement(BottomNav, {
     tab: tab,
     onSelect: setTab,
-    t: t
+    t: t,
+    lift: navLift
   }), /*#__PURE__*/React.createElement(ProfileOverlay, {
     vendor: activeListing,
     lang: lang,
