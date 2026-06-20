@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#16162a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="NMF Passport" />
   <title>NightMarket.fun Discover</title>
   <style>
     * { box-sizing: border-box; }
@@ -15745,7 +15750,8 @@ function BottomNav({
       borderTop: "1px solid #333350",
       display: "flex",
       justifyContent: "center",
-      zIndex: 40
+      zIndex: 40,
+      paddingBottom: "env(safe-area-inset-bottom)"
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -17306,7 +17312,7 @@ function NMFDiscover() {
       fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
       maxWidth: 480,
       margin: "0 auto",
-      padding: "0 16px 88px"
+      padding: "0 16px calc(88px + env(safe-area-inset-bottom))"
     }
   }, /*#__PURE__*/React.createElement(LanguageToggle, {
     lang: lang,
