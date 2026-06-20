@@ -13896,6 +13896,8 @@ const VENDORS = [{
   }
 }, {
   "id": 92,
+  "startMin": 990,
+  "stage": "Main Stage",
   "name": "iDance Performing Arts Group",
   "category": "Performance",
   "subcategory": "Chinese Dance",
@@ -13966,6 +13968,8 @@ const VENDORS = [{
   }
 }, {
   "id": 98,
+  "startMin": 1020,
+  "stage": "Side Stage",
   "name": "DJ Ard",
   "category": "Performance",
   "subcategory": "DJ Set",
@@ -13998,6 +14002,8 @@ const VENDORS = [{
   }
 }, {
   "id": 101,
+  "startMin": 1110,
+  "stage": "Main Stage",
   "name": "Debbie's Kpop Dance Team",
   "category": "Performance",
   "subcategory": "K-pop Cover Dance",
@@ -14009,6 +14015,8 @@ const VENDORS = [{
   }
 }, {
   "id": 102,
+  "startMin": 1140,
+  "stage": "Side Stage",
   "name": "Austin Filipino Cultural Dance Troupe",
   "category": "Performance",
   "subcategory": "Filipino Folk Dance",
@@ -14031,6 +14039,8 @@ const VENDORS = [{
   }
 }, {
   "id": 104,
+  "startMin": 1080,
+  "stage": "Side Stage",
   "name": "KhushATX Queer Desi Dancers",
   "category": "Performance",
   "subcategory": "South Asian Fusion",
@@ -14043,6 +14053,8 @@ const VENDORS = [{
   }
 }, {
   "id": 105,
+  "startMin": 1050,
+  "stage": "Main Stage",
   "name": "Austin Taiko",
   "category": "Performance",
   "subcategory": "Taiko Drumming",
@@ -14077,6 +14089,8 @@ const VENDORS = [{
   }
 }, {
   "id": 108,
+  "startMin": 1200,
+  "stage": "Main Stage",
   "name": "Team Phoenix",
   "category": "Performance",
   "subcategory": "Martial Arts",
@@ -14120,6 +14134,8 @@ const VENDORS = [{
   }
 }, {
   "id": 110,
+  "startMin": 960,
+  "stage": "Kids Corner",
   "name": "Origami Workshop",
   "category": "Activity",
   "subcategory": "Workshop",
@@ -14182,6 +14198,8 @@ const VENDORS = [{
   }
 }, {
   "id": 112,
+  "startMin": 1080,
+  "stage": "Kids Corner",
   "name": "Chopstick Challenge",
   "category": "Activity",
   "subcategory": "Game",
@@ -14213,6 +14231,8 @@ const VENDORS = [{
   }
 }, {
   "id": 113,
+  "startMin": 1020,
+  "stage": "Kids Corner",
   "name": "Lantern Decorating",
   "category": "Activity",
   "subcategory": "Craft",
@@ -14368,6 +14388,8 @@ const VENDORS = [{
   }
 }, {
   "id": 118,
+  "startMin": 1050,
+  "stage": "Cinema by the Lake",
   "name": "Cinema by the Lake: AANHPI Shorts",
   "category": "Film",
   "subcategory": "Short Films",
@@ -14399,6 +14421,8 @@ const VENDORS = [{
   }
 }, {
   "id": 119,
+  "startMin": 1170,
+  "stage": "Cinema by the Lake",
   "name": "Feature Film Under the Stars",
   "category": "Film",
   "subcategory": "Feature Screening",
@@ -14493,6 +14517,8 @@ const VENDORS = [{
   "familyFriendly": true
 }, {
   "id": 127,
+  "startMin": 1170,
+  "stage": "Main Stage",
   "name": "Jason Paige",
   "category": "Performance",
   "subcategory": "Pokémon Theme Vocalist",
@@ -14902,6 +14928,7 @@ const SHELL_STRINGS = {
     navDiscover: "Discover",
     navPlan: "My Plan",
     navMap: "Map",
+    navGuide: "Guide",
     navPassport: "Passport",
     navQuests: "Quests",
     navMahjong: "Mahjong",
@@ -14930,6 +14957,7 @@ const SHELL_STRINGS = {
     navDiscover: "Descubre",
     navPlan: "Mi plan",
     navMap: "Mapa",
+    navGuide: "Guía",
     navPassport: "Pasaporte",
     navQuests: "Misiones",
     navMahjong: "Mahjong",
@@ -14958,6 +14986,7 @@ const SHELL_STRINGS = {
     navDiscover: "探索",
     navPlan: "我的计划",
     navMap: "地图",
+    navGuide: "指南",
     navPassport: "护照",
     navQuests: "任务",
     navMahjong: "麻将",
@@ -14986,6 +15015,7 @@ const SHELL_STRINGS = {
     navDiscover: "둘러보기",
     navPlan: "내 플랜",
     navMap: "지도",
+    navGuide: "가이드",
     navPassport: "패스포트",
     navQuests: "퀘스트",
     navMahjong: "마작",
@@ -15014,6 +15044,7 @@ const SHELL_STRINGS = {
     navDiscover: "Khám phá",
     navPlan: "Kế hoạch",
     navMap: "Bản đồ",
+    navGuide: "Hướng dẫn",
     navPassport: "Hộ chiếu",
     navQuests: "Nhiệm vụ",
     navMahjong: "Mạt chược",
@@ -15042,6 +15073,7 @@ const SHELL_STRINGS = {
     navDiscover: "さがす",
     navPlan: "マイプラン",
     navMap: "マップ",
+    navGuide: "ガイド",
     navPassport: "パスポート",
     navQuests: "クエスト",
     navMahjong: "麻雀",
@@ -15329,7 +15361,16 @@ function VendorCard({
       fontWeight: 700,
       color: "#f0ebe3"
     }
-  }, vendor.name)), vendor.priceRange && vendor.priceRange !== "Free" && /*#__PURE__*/React.createElement("span", {
+  }, vendor.name), vendor.startMin != null && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: "#ff6b35",
+      fontWeight: 600,
+      marginTop: 3
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    "aria-hidden": "true"
+  }, "\uD83D\uDD52"), " ", fmtTime(vendor.startMin), vendor.stage ? " · " + vendor.stage : "")), vendor.priceRange && vendor.priceRange !== "Free" && /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: 13,
       color: "#f0ebe3",
@@ -15455,7 +15496,16 @@ function ProfileOverlay({
       lineHeight: 1.6,
       marginTop: 0
     }
-  }, description), vendor.photos && vendor.photos.length > 0 && /*#__PURE__*/React.createElement("div", {
+  }, description), vendor.startMin != null && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: "#ff6b35",
+      fontWeight: 700,
+      margin: "0 0 14px"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    "aria-hidden": "true"
+  }, "\uD83D\uDD52"), " ", fmtTime(vendor.startMin), vendor.stage ? " · " + vendor.stage : ""), vendor.photos && vendor.photos.length > 0 && /*#__PURE__*/React.createElement("div", {
     style: {
       marginBottom: 14
     }
@@ -15679,7 +15729,7 @@ function BottomNav({
   }, {
     key: "map",
     icon: "🗺️",
-    label: t.navMap
+    label: t.navGuide
   }, {
     key: "passport",
     icon: "🧭",
@@ -15873,6 +15923,133 @@ function ScavengerHuntPanel({
       textDecoration: "none"
     }
   }, "Illust.space")));
+}
+function fmtTime(min) {
+  if (min == null) return "";
+  var h = Math.floor(min / 60),
+    m = min % 60;
+  var p = h >= 12 ? "PM" : "AM",
+    h12 = h % 12 || 12;
+  return h12 + ":" + (m < 10 ? "0" + m : m) + " " + p;
+}
+const STAGE_ORDER = ["Main Stage", "Side Stage", "Cinema by the Lake", "Kids Corner"];
+function MapToggle({
+  view,
+  onSelect,
+  t
+}) {
+  const tabs = [{
+    key: "map",
+    label: t.navMap
+  }, {
+    key: "schedule",
+    label: "Schedule"
+  }];
+  return /*#__PURE__*/React.createElement("div", {
+    role: "tablist",
+    "aria-label": "Map or schedule",
+    style: {
+      display: "flex",
+      gap: 6,
+      background: "#1e1e30",
+      border: "1px solid #2a2a40",
+      borderRadius: 14,
+      padding: 4,
+      marginBottom: 14
+    }
+  }, tabs.map(tb => {
+    const active = view === tb.key;
+    return /*#__PURE__*/React.createElement("button", {
+      key: tb.key,
+      role: "tab",
+      "aria-selected": active,
+      onClick: () => onSelect(tb.key),
+      style: {
+        flex: 1,
+        padding: "9px 4px",
+        borderRadius: 10,
+        border: "none",
+        cursor: "pointer",
+        fontSize: 13,
+        fontWeight: 700,
+        background: active ? "#ff6b35" : "transparent",
+        color: active ? "#fff" : "#f0ebe390",
+        transition: "all 0.2s"
+      }
+    }, tb.label);
+  }));
+}
+function SchedulePanel({
+  t
+}) {
+  const timed = VENDORS.filter(v => v.startMin != null);
+  const byStage = {};
+  timed.forEach(v => {
+    (byStage[v.stage] = byStage[v.stage] || []).push(v);
+  });
+  const stages = STAGE_ORDER.filter(s => byStage[s]).concat(Object.keys(byStage).filter(s => STAGE_ORDER.indexOf(s) < 0));
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      paddingTop: 2
+    }
+  }, /*#__PURE__*/React.createElement("h1", {
+    style: {
+      fontSize: 22,
+      fontWeight: 800,
+      margin: "4px 0 4px",
+      color: "#f0ebe3",
+      textAlign: "center"
+    }
+  }, "Schedule"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      fontSize: 11,
+      color: "#f0ebe3",
+      opacity: 0.55,
+      marginBottom: 16
+    }
+  }, "Placeholder lineup. Final acts and times TBA."), stages.map(stage => /*#__PURE__*/React.createElement("div", {
+    key: stage,
+    style: {
+      background: "#1e1e30",
+      border: "1px solid #2a2a40",
+      borderRadius: 14,
+      padding: "12px 14px",
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 800,
+      color: "#ff6b35",
+      textTransform: "uppercase",
+      letterSpacing: "0.05em",
+      marginBottom: 8
+    }
+  }, stage), byStage[stage].slice().sort((a, b) => a.startMin - b.startMin).map((v, i) => /*#__PURE__*/React.createElement("div", {
+    key: v.id,
+    style: {
+      display: "flex",
+      gap: 12,
+      alignItems: "baseline",
+      padding: "7px 0",
+      borderTop: i === 0 ? "none" : "1px solid #2a2a4080"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      width: 64,
+      flexShrink: 0,
+      fontSize: 13,
+      fontWeight: 700,
+      color: "#f0ebe3"
+    }
+  }, fmtTime(v.startMin)), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14,
+      color: "#f0ebe3",
+      opacity: 0.85
+    }
+  }, v.name))))));
 }
 function CategoryFilter({
   selected,
@@ -16615,6 +16792,7 @@ function NMFDiscover() {
   const [lang, setLang] = useState("en");
   const [tab, setTab] = useState("discover");
   const [passportView, setPassportView] = useState("mahjong");
+  const [mapView, setMapView] = useState("map");
   const [showCover, setShowCover] = useState(true);
   const [showAbout, setShowAbout] = useState(false);
   const [query, setQuery] = useState("");
@@ -17402,20 +17580,43 @@ function NMFDiscover() {
       fontWeight: 700,
       cursor: "pointer"
     }
-  }, shareMsg || "🔗 " + t.planShare), planVendors.map(v => /*#__PURE__*/React.createElement(VendorCard, {
-    key: v.id,
-    vendor: v,
-    freeLabel: t.free,
-    lang: lang,
-    onOpen: setActiveListing,
-    inPlan: true,
-    onTogglePlan: togglePlan,
-    addLabel: t.addToPlan,
-    inPlanLabel: t.inPlan
-  })))), tab === "map" && /*#__PURE__*/React.createElement("div", {
+  }, shareMsg || "🔗 " + t.planShare), (() => {
+    const timed = planVendors.filter(v => v.startMin != null).slice().sort((a, b) => a.startMin - b.startMin);
+    const untimed = planVendors.filter(v => v.startMin == null);
+    const card = v => /*#__PURE__*/React.createElement(VendorCard, {
+      key: v.id,
+      vendor: v,
+      freeLabel: t.free,
+      lang: lang,
+      onOpen: setActiveListing,
+      inPlan: true,
+      onTogglePlan: togglePlan,
+      addLabel: t.addToPlan,
+      inPlanLabel: t.inPlan
+    });
+    const label = txt => /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 12,
+        fontWeight: 700,
+        color: "#f0ebe3",
+        opacity: 0.55,
+        textTransform: "uppercase",
+        letterSpacing: "0.06em",
+        margin: "4px 0 10px"
+      }
+    }, txt);
+    return /*#__PURE__*/React.createElement(React.Fragment, null, timed.length > 0 && label("Your day"), timed.map(card), untimed.length > 0 && label("Booths to visit"), untimed.map(card));
+  })())), tab === "map" && /*#__PURE__*/React.createElement("div", {
     style: {
-      textAlign: "center",
       paddingTop: 12
+    }
+  }, /*#__PURE__*/React.createElement(MapToggle, {
+    view: mapView,
+    onSelect: setMapView,
+    t: t
+  }), mapView === "map" && /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center"
     }
   }, /*#__PURE__*/React.createElement("h1", {
     style: {
@@ -17515,7 +17716,9 @@ function NMFDiscover() {
       textAlign: "right",
       fontWeight: 600
     }
-  }, t.comingSoon))), tab === "passport" && /*#__PURE__*/React.createElement("div", {
+  }, t.comingSoon))), mapView === "schedule" && /*#__PURE__*/React.createElement(SchedulePanel, {
+    t: t
+  })), tab === "passport" && /*#__PURE__*/React.createElement("div", {
     style: {
       paddingTop: 12
     }
