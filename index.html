@@ -15329,7 +15329,7 @@ function VendorCard({
       opacity: 0.6,
       fontWeight: 500
     }
-  }, vendor.priceRange), vendor.priceRange === "Free" && /*#__PURE__*/React.createElement("span", {
+  }, vendor.priceRange), (["Performance", "Activity", "Contest", "Film"].includes(vendor.category) || vendor.priceRange === "Free") && /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: 11,
       background: "#2ecc7130",
