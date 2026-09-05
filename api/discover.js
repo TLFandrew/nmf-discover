@@ -147,10 +147,10 @@ export default async function handler(req, res) {
 
     // Google Gemini (free tier via Google AI Studio). No credit card required.
     // Get a key at https://aistudio.google.com/apikey and set it in Vercel as
-    // AI_API_KEY. gemini-2.5-flash is a current, stable, free-tier model. If
-    // Google ever deprecates it, change this one model name (a newer free option
-    // is gemini-3-flash).
-    const MODEL = "gemini-2.5-flash";
+    // AI_API_KEY. gemini-3.5-flash-lite is a current, fast, low-cost, free-tier
+    // model (gemini-2.5-flash retired Oct 16, 2026). If Google ever retires this
+    // one, change this single model name to the current Flash-Lite (or Flash) model.
+    const MODEL = "gemini-3.5-flash-lite";
     const apiRes = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${process.env.AI_API_KEY}`,
       {
@@ -162,12 +162,6 @@ export default async function handler(req, res) {
           generationConfig: {
             maxOutputTokens: 2048,
             responseMimeType: "application/json",
-            // gemini-2.5-flash "thinks" by default, and that thinking counts
-            // against maxOutputTokens. With a tight budget it can use up all the
-            // tokens before writing the answer, returning an empty response.
-            // We don't need reasoning for vendor matching, so turn it off: the
-            // full budget goes to the JSON answer, and it's faster too.
-            thinkingConfig: { thinkingBudget: 0 },
           },
         }),
       }
