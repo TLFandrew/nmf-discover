@@ -76,42 +76,6 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") return res.status(204).end();
-
-  // ---- TEMPORARY DIAGNOSTIC (remove before launch) ----
-  // Visit /api/track?diag=1 in a browser to see config + a live test write.
-  // Never prints the secret key itself.
-  if (req.method === "GET") {
-    const wantsDiag = (req.query && req.query.diag) || (req.url && req.url.indexOf("diag=") !== -1);
-    if (!wantsDiag) return res.status(405).json({ ok: false });
-    const key = SUPABASE_SERVICE_KEY || "";
-    let keyType = "MISSING";
-    if (key.startsWith("sb_secret_")) keyType = "secret key (correct)";
-    else if (key.startsWith("sb_publishable_")) keyType = "PUBLISHABLE key — WRONG, this is the public key; use the secret key";
-    else if (key.startsWith("eyJ")) keyType = "legacy JWT (anon or service_role — the test write below reveals which)";
-    else if (key) keyType = "unrecognized format";
-    let host = "";
-    try { host = SUPABASE_URL ? new URL(SUPABASE_URL).host : ""; } catch (e) { host = "invalid URL"; }
-    const report = {
-      diagnostic: true,
-      supabaseUrlSet: !!SUPABASE_URL,
-      supabaseUrlHost: host,
-      serviceKeySet: !!SUPABASE_SERVICE_KEY,
-      serviceKeyType: keyType,
-      testWrite: null,
-    };
-    if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
-      try {
-        const r = await sbInsert("events", { type: "diagnostic", device_id: "diag", vendor_id: 0, meta: { note: "self-test" } }, {});
-        let body = "";
-        try { body = await r.text(); } catch (e) {}
-        report.testWrite = { status: r.status, ok: r.status >= 200 && r.status < 300, response: (body || "(empty)").slice(0, 300) };
-      } catch (e) {
-        report.testWrite = { error: String(e).slice(0, 300) };
-      }
-    }
-    return res.status(200).json(report);
-  }
-
   if (req.method !== "POST") return res.status(405).json({ ok: false });
 
   // Not configured yet: no-op so the app keeps working during setup.
