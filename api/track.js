@@ -60,7 +60,12 @@ async function sbInsert(table, row, opts) {
   if (SUPABASE_SERVICE_KEY && SUPABASE_SERVICE_KEY.startsWith("eyJ")) {
     headers["Authorization"] = "Bearer " + SUPABASE_SERVICE_KEY;
   }
-  const url = SUPABASE_URL + "/rest/v1/" + table + (opts.onConflict ? ("?on_conflict=" + opts.onConflict) : "");
+  // Normalize the base URL so a trailing slash or an accidental /rest/v1 suffix
+  // in SUPABASE_URL cannot produce a malformed path (which returns PGRST125).
+  var base = (SUPABASE_URL || "").trim();
+  if (base && !/^https?:\/\//i.test(base)) base = "https://" + base;
+  base = base.replace(/\/+$/, "").replace(/\/rest\/v1$/i, "");
+  const url = base + "/rest/v1/" + table + (opts.onConflict ? ("?on_conflict=" + opts.onConflict) : "");
   return fetch(url, { method: "POST", headers, body: JSON.stringify(row) });
 }
 
