@@ -4,8 +4,8 @@
 // lets the tool cover the 2026 roster automatically: whatever text is in the app gets
 // translated here, with nothing to hand-maintain.
 //
-// Same Gemini model and key (AI_API_KEY) as /api/discover. Thinking is disabled so the
-// whole token budget goes to the answer (see api/discover.js for the full explanation).
+// Same Gemini model and key (AI_API_KEY) as /api/discover
+// (gemini-3.5-flash-lite; see api/discover.js).
 //
 // LAUNCH UPGRADE (not needed for the demo): for a public event with many devices, add a
 // shared cache (Upstash Redis / Vercel KV) keyed by id+lang+source-hash so the first
@@ -84,7 +84,7 @@ export default async function handler(req, res) {
       "Listings:\n" + JSON.stringify(payload);
 
     const url =
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + key;
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=" + key;
 
     const r = await fetch(url, {
       method: "POST",
@@ -94,7 +94,6 @@ export default async function handler(req, res) {
         generationConfig: {
           maxOutputTokens: 6144,
           responseMimeType: "application/json",
-          thinkingConfig: { thinkingBudget: 0 },
         },
       }),
     });
