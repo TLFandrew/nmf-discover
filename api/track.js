@@ -88,6 +88,8 @@ export default async function handler(req, res) {
   const type = String(body.type || "");
   const device = String(body.deviceId || "").slice(0, 64);
   if (!device) return res.status(200).json({ ok: false, skipped: "no-device" });
+  const program = String(body.program || "").slice(0, 16) || null;
+  const year = parseInt(body.year, 10) || null;
 
   try {
     if (type === "rating") {
@@ -99,7 +101,7 @@ export default async function handler(req, res) {
       // One row per (device, performance); re-rating within the window overwrites.
       await sbInsert(
         "ratings",
-        { device_id: device, vendor_id: vendorId, stars: stars, updated_at: new Date().toISOString() },
+        { device_id: device, vendor_id: vendorId, stars: stars, updated_at: new Date().toISOString(), program: program, year: year },
         { upsert: true, onConflict: "device_id,vendor_id" }
       );
       return res.status(200).json({ ok: true });
@@ -109,7 +111,7 @@ export default async function handler(req, res) {
       const q = String(body.query || "").trim().slice(0, 200);
       const lang = String(body.lang || "").slice(0, 8);
       if (!q) return res.status(200).json({ ok: false, skipped: "empty" });
-      await sbInsert("events", { type: "search", device_id: device, query: q, lang: lang }, {});
+      await sbInsert("events", { type: "search", device_id: device, query: q, lang: lang, program: program, year: year }, {});
       return res.status(200).json({ ok: true });
     }
 
@@ -117,7 +119,22 @@ export default async function handler(req, res) {
       const vendorId = parseInt(body.vendorId, 10);
       if (!(vendorId >= 0)) return res.status(200).json({ ok: false, skipped: "bad-vendor" });
       const meta = type === "social" ? { platform: String(body.platform || "").slice(0, 24) } : null;
-      await sbInsert("events", { type: type, device_id: device, vendor_id: vendorId, meta: meta }, {});
+      await sbInsert("events", { type: type, device_id: device, vendor_id: vendorId, meta: meta, program: program, year: year }, {});
+      return res.status(200).json({ ok: true });
+    }
+
+    if (type === "filter") {
+      const category = String(body.category || "").slice(0, 40);
+      if (!category) return res.status(200).json({ ok: false, skipped: "empty" });
+      await sbInsert("events", { type: "filter", device_id: device, meta: { category: category }, program: program, year: year }, {});
+      return res.status(200).json({ ok: true });
+    }
+
+    if (type === "search_empty") {
+      const q = String(body.query || "").trim().slice(0, 200);
+      const lang = String(body.lang || "").slice(0, 8);
+      if (!q) return res.status(200).json({ ok: false, skipped: "empty" });
+      await sbInsert("events", { type: "search_empty", device_id: device, query: q, lang: lang, program: program, year: year }, {});
       return res.status(200).json({ ok: true });
     }
 
