@@ -12750,7 +12750,6 @@ const {
 // The proxy endpoint. Same-origin relative path works when the page and the
 // function are deployed together on Vercel. No CORS needed in that setup.
 const PROXY_URL = "/api/discover";
-const GOODMAPS_URL = ""; // paste the GoodMaps web map or QR link here once the park is scanned
 const TRANSLATE_URL = "/api/translate"; // batched, on-demand AI translation of listing text
 
 // Runtime translation cache: listing id -> lang -> { subcategory, description, src }.
@@ -13210,8 +13209,6 @@ const SHELL_STRINGS = {
     profileBooth: "Location",
     profilePhotos: "Photos",
     profileProducts: "What they offer",
-    mapGoodmaps: "Open accessible map in GoodMaps",
-    mapGoodmapsNote: "Audio wayfinding built for blind and low-vision visitors",
     close: "Close",
     clear: "Clear search"
   },
@@ -13257,8 +13254,6 @@ const SHELL_STRINGS = {
     profileBooth: "Ubicación",
     profilePhotos: "Fotos",
     profileProducts: "Qué ofrecen",
-    mapGoodmaps: "Abrir mapa accesible en GoodMaps",
-    mapGoodmapsNote: "Orientación por audio para personas ciegas o con baja visión",
     close: "Cerrar",
     clear: "Borrar búsqueda"
   },
@@ -13304,8 +13299,6 @@ const SHELL_STRINGS = {
     profileBooth: "位置",
     profilePhotos: "照片",
     profileProducts: "商品与价格",
-    mapGoodmaps: "在 GoodMaps 中打开无障碍地图",
-    mapGoodmapsNote: "为视障人士打造的语音导航",
     close: "关闭",
     clear: "清除搜索"
   },
@@ -13351,8 +13344,6 @@ const SHELL_STRINGS = {
     profileBooth: "위치",
     profilePhotos: "사진",
     profileProducts: "판매 품목",
-    mapGoodmaps: "GoodMaps에서 접근성 지도 열기",
-    mapGoodmapsNote: "시각장애인을 위한 음성 길찾기",
     close: "닫기",
     clear: "검색 지우기"
   },
@@ -13398,8 +13389,6 @@ const SHELL_STRINGS = {
     profileBooth: "Vị trí",
     profilePhotos: "Hình ảnh",
     profileProducts: "Sản phẩm & giá",
-    mapGoodmaps: "Mở bản đồ tiếp cận trong GoodMaps",
-    mapGoodmapsNote: "Chỉ đường bằng âm thanh cho người khiếm thị",
     close: "Đóng",
     clear: "Xóa tìm kiếm"
   },
@@ -13445,8 +13434,6 @@ const SHELL_STRINGS = {
     profileBooth: "場所",
     profilePhotos: "写真",
     profileProducts: "商品と価格",
-    mapGoodmaps: "GoodMaps でアクセシブルマップを開く",
-    mapGoodmapsNote: "視覚障害のある方向けの音声ナビ",
     close: "閉じる",
     clear: "検索をクリア"
   }
@@ -13659,10 +13646,10 @@ function TlfToggle(props) {
     style: { display: "inline-flex", gap: 2, background: "#1e1e30", border: "1px solid #2a2a40", borderRadius: 999, padding: 3 }
   }, /*#__PURE__*/React.createElement("button", {
     role: "tab", "aria-selected": true, "aria-label": "NightMarket", title: "NightMarket",
-    style: { width: 32, height: 32, borderRadius: 999, border: "none", cursor: "default", fontSize: 16, lineHeight: 1, background: "#ff6b35", display: "flex", alignItems: "center", justifyContent: "center" }
+    style: { width: 44, height: 44, borderRadius: 999, border: "none", cursor: "default", fontSize: 16, lineHeight: 1, background: "#ff6b35", display: "flex", alignItems: "center", justifyContent: "center" }
   }, "🏮"), /*#__PURE__*/React.createElement("button", {
     role: "tab", "aria-selected": false, "aria-label": "Austin Dragon Boat Festival", title: "Austin Dragon Boat Festival", onClick: onOpenAdbf,
-    style: { width: 32, height: 32, borderRadius: 999, border: "none", cursor: "pointer", fontSize: 16, lineHeight: 1, background: "transparent", display: "flex", alignItems: "center", justifyContent: "center" }
+    style: { width: 44, height: 44, borderRadius: 999, border: "none", cursor: "pointer", fontSize: 16, lineHeight: 1, background: "transparent", display: "flex", alignItems: "center", justifyContent: "center" }
   }, "🐉"));
 }
 
@@ -13680,7 +13667,7 @@ function AdbfFullscreen(props) {
     style: { position: "fixed", inset: 0, zIndex: 60, backgroundColor: "#0a0a14", backgroundImage: "url(" + ADBF_POSTER + ")", backgroundSize: "cover", backgroundPosition: "center", display: "flex", flexDirection: "column" }
   }, /*#__PURE__*/React.createElement("div", { style: { position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(10,10,20,0.45) 0%, rgba(10,10,20,0.15) 38%, rgba(10,10,20,0.9) 100%)" } }), /*#__PURE__*/React.createElement("button", {
     onClick: onClose, "aria-label": "Close",
-    style: { position: "absolute", top: "calc(env(safe-area-inset-top) + 14px)", right: 14, zIndex: 2, width: 38, height: 38, borderRadius: 19, border: "none", background: "rgba(0,0,0,0.5)", color: "#fff", fontSize: 18, cursor: "pointer" }
+    style: { position: "absolute", top: "calc(env(safe-area-inset-top) + 14px)", right: 14, zIndex: 2, width: 44, height: 44, borderRadius: 22, border: "none", background: "rgba(0,0,0,0.5)", color: "#fff", fontSize: 18, cursor: "pointer" }
   }, "✕"), /*#__PURE__*/React.createElement("div", { style: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "calc(env(safe-area-inset-top) + 24px) 22px 8px", position: "relative", zIndex: 1 } }, /*#__PURE__*/React.createElement("img", { src: ADBF_LOGO, alt: "Austin Dragon Boat Festival", style: { width: "min(320px, 80vw)", maxHeight: "100%", height: "auto", display: "block" } })), /*#__PURE__*/React.createElement("div", {
     style: { position: "relative", zIndex: 1, padding: "20px 22px calc(env(safe-area-inset-bottom) + 26px)", background: "linear-gradient(180deg, rgba(11,11,28,0) 0%, rgba(11,11,28,0.55) 22%, rgba(11,11,28,0.9) 55%, rgba(11,11,28,0.97) 100%)" }
   }, /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#7fe3d6", marginBottom: 8, textShadow: "0 1px 4px rgba(0,0,0,0.8)" } }, t.adbfAlso), /*#__PURE__*/React.createElement("div", { style: { fontSize: 30, fontWeight: 800, color: "#fff", lineHeight: 1.1, marginBottom: 6, textShadow: "0 1px 6px rgba(0,0,0,0.7)" } }, t.adbfName), /*#__PURE__*/React.createElement("div", { style: { fontSize: 15, fontWeight: 700, color: "#7fe3d6", marginBottom: 16, textShadow: "0 1px 4px rgba(0,0,0,0.8)" } }, t.adbfReturns), /*#__PURE__*/React.createElement("div", { style: { display: "flex", gap: 18, marginBottom: 20, flexWrap: "wrap" } }, stat("3,000+", t.adbfStat1), stat("163", t.adbfStat2), stat("26 yrs", t.adbfStat3)), /*#__PURE__*/React.createElement("a", { href: "https://youtu.be/QVSgtWItwSc", target: "_blank", rel: "noopener noreferrer", style: { display: "block", textAlign: "center", padding: 14, borderRadius: 12, background: "#14504d", color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", marginBottom: 10 } }, "▶  " + t.adbfWatch), /*#__PURE__*/React.createElement("a", { href: "https://photos.app.goo.gl/XDdBaNtUHVhipU489", target: "_blank", rel: "noopener noreferrer", style: { display: "block", textAlign: "center", padding: 13, borderRadius: 12, background: "rgba(255,255,255,0.12)", color: "#fff", fontSize: 14, fontWeight: 600, textDecoration: "none", border: "1px solid rgba(255,255,255,0.25)", marginBottom: 10 } }, "📷  " + t.adbfPhotos), /*#__PURE__*/React.createElement("a", { href: "https://www.atxdragonboat.com", target: "_blank", rel: "noopener noreferrer", style: { display: "block", textAlign: "center", padding: 13, borderRadius: 12, background: "rgba(255,255,255,0.12)", color: "#fff", fontSize: 14, fontWeight: 600, textDecoration: "none", border: "1px solid rgba(255,255,255,0.25)" } }, t.adbfLearn)));
@@ -14047,7 +14034,7 @@ function ProfileOverlay({
       borderRadius: 12,
       border: "none",
       background: "#ff6b35",
-      color: "#fff",
+      color: "#1a1a2e",
       fontSize: 14,
       fontWeight: 700,
       cursor: "pointer",
@@ -14397,6 +14384,15 @@ function deviceId() {
     return "anon";
   }
 }
+var __lastFilterTap = { cat: null, t: 0 };
+function trackFilterTap(cat) {
+  if (!cat || cat === "All") return;
+  var now = Date.now();
+  if (cat === __lastFilterTap.cat && now - __lastFilterTap.t < 1000) return;
+  __lastFilterTap = { cat: cat, t: now };
+  track("filter", { category: cat });
+}
+
 function track(type, data) {
   try {
     fetch(TRACK_URL, {
@@ -14588,7 +14584,7 @@ function CategoryFilter({
     const label = isSandbox ? "Trainer's Sandbox" : t.categories[cat];
     return /*#__PURE__*/React.createElement("button", {
       key: cat,
-      onClick: () => onSelect(cat),
+      onClick: () => { onSelect(cat); trackFilterTap(cat); },
       style: {
         padding: "6px 14px",
         borderRadius: 20,
@@ -14623,13 +14619,14 @@ function LanguageToggle({
       display: "flex",
       alignItems: "center",
       gap: 6,
-      padding: "6px 12px",
-      borderRadius: 20,
-      border: "1px solid #333350",
-      background: "#1e1e30",
+      padding: "9px 14px",
+      minHeight: 44,
+      borderRadius: 22,
+      border: "2px solid #7fe3d6",
+      background: "rgba(127,227,214,0.14)",
       color: "#f0ebe3",
-      fontSize: 13,
-      fontWeight: 600,
+      fontSize: 14,
+      fontWeight: 700,
       cursor: "pointer"
     }
   }, /*#__PURE__*/React.createElement("span", null, "\uD83C\uDF10"), /*#__PURE__*/React.createElement("span", null, current.label), /*#__PURE__*/React.createElement("span", {
@@ -14823,7 +14820,7 @@ function Onboarding(props) {
       /*#__PURE__*/React.createElement("p", { style: { fontSize: 12.5, color: "#a7a3b5", textAlign: "center", lineHeight: 1.5, margin: "18px 0 6px" } }, s.obSupport),
       /*#__PURE__*/React.createElement("div", { style: { textAlign: "center", color: "#a7a3b5", opacity: 0.7, fontSize: 11.5, margin: "6px 0 0" } }, s.obFoot)),
     /*#__PURE__*/React.createElement("div", { style: { flex: "0 0 auto", borderTop: "1px solid #2a2a40", background: "#141422e6", padding: "12px 22px calc(env(safe-area-inset-bottom) + 14px)" } },
-      /*#__PURE__*/React.createElement("button", { onClick: props.onDone, style: { width: "100%", padding: 16, border: "none", borderRadius: 14, cursor: "pointer", background: "#ff6b35", color: "#fff", fontSize: 16, fontWeight: 700 } }, s.obStart)));
+      /*#__PURE__*/React.createElement("button", { onClick: props.onDone, style: { width: "100%", padding: 16, border: "none", borderRadius: 14, cursor: "pointer", background: "#ff6b35", color: "#1a1a2e", fontSize: 16, fontWeight: 700 } }, s.obStart)));
 }
 
 function IntroCover({
@@ -14987,7 +14984,7 @@ function IntroCover({
       borderRadius: 30,
       border: "none",
       background: "#ff6b35",
-      color: "#fff",
+      color: "#1a1a2e",
       fontSize: 15,
       fontWeight: 700,
       cursor: "pointer",
@@ -15324,7 +15321,7 @@ function TileFace({
       padding: "0 " + size * 0.07 + "px",
       borderRadius: size * 0.2,
       background: "#ff6b35",
-      color: "#fff",
+      color: "#1a1a2e",
       fontSize: size * 0.27,
       fontWeight: 800,
       lineHeight: 1,
@@ -15843,6 +15840,7 @@ function NMFDiscover() {
           return;
         }
       }
+      if (matched.length === 0) track("search_empty", { query: query.trim(), lang: lang });
       setResults({
         vendors: matched,
         message: parsed.message || ""
@@ -15858,6 +15856,7 @@ function NMFDiscover() {
         });
         setCategoryFilter("All");
       } else {
+        track("search_empty", { query: query.trim(), lang: lang });
         setError(t.errorNoMatch);
       }
     } finally {
@@ -16031,6 +16030,7 @@ function NMFDiscover() {
       whiteSpace: "nowrap"
     }
   }, s)))), results?.message && /*#__PURE__*/React.createElement("div", {
+    role: "status", "aria-live": "polite",
     style: {
       background: "linear-gradient(135deg, #ff6b3528, #9b59b622)",
       border: "1px solid #ff6b3555",
@@ -16163,7 +16163,7 @@ function NMFDiscover() {
       borderRadius: 12,
       border: "none",
       background: "#ff6b35",
-      color: "#fff",
+      color: "#1a1a2e",
       fontSize: 14,
       fontWeight: 700,
       cursor: "pointer"
@@ -16242,66 +16242,6 @@ function NMFDiscover() {
       border: "1px solid #ff6b3550",
       borderRadius: 20,
       padding: "3px 12px",
-      fontWeight: 600
-    }
-  }, t.comingSoon)), /*#__PURE__*/React.createElement("a", {
-    href: GOODMAPS_URL || undefined,
-    target: "_blank",
-    rel: "noopener noreferrer",
-    onClick: e => {
-      if (!GOODMAPS_URL) e.preventDefault();
-    },
-    style: {
-      display: "block",
-      textDecoration: "none",
-      marginTop: 14,
-      background: "#1e1e30",
-      border: "1px solid #333350",
-      borderRadius: 12,
-      padding: 14,
-      cursor: GOODMAPS_URL ? "pointer" : "default"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 10,
-      textAlign: "left"
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 24
-    }
-  }, "\uD83E\uDDED"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 14,
-      fontWeight: 700,
-      color: "#f0ebe3"
-    }
-  }, t.mapGoodmaps), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
-      color: "#f0ebe3",
-      opacity: 0.6,
-      marginTop: 2,
-      lineHeight: 1.4
-    }
-  }, t.mapGoodmapsNote)), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 16,
-      color: "#ff6b35"
-    }
-  }, "\u2197")), !GOODMAPS_URL && /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 10,
-      color: "#ff6b35",
-      opacity: 0.85,
-      marginTop: 8,
-      textAlign: "right",
       fontWeight: 600
     }
   }, t.comingSoon))), mapView === "schedule" && /*#__PURE__*/React.createElement(SchedulePanel, {
@@ -16647,6 +16587,7 @@ function NMFDiscover() {
     key: sgrp.suit
   }, /*#__PURE__*/React.createElement("div", {
     onClick: () => setExpandedSuit(expandedSuit === sgrp.suit ? null : sgrp.suit),
+    role: "button", tabIndex: 0, "aria-expanded": expandedSuit === sgrp.suit, onKeyDown: e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setExpandedSuit(expandedSuit === sgrp.suit ? null : sgrp.suit); } },
     style: {
       display: "flex",
       alignItems: "center",
@@ -16826,7 +16767,7 @@ function NMFDiscover() {
       borderRadius: 12,
       border: "none",
       background: "#ff6b35",
-      color: "#fff",
+      color: "#1a1a2e",
       fontSize: 14,
       fontWeight: 700,
       cursor: "pointer"
@@ -17045,5 +16986,6 @@ function NMFDiscover() {
 }
 ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(NMFDiscover, null));
 </script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}</script>
 </body>
 </html>
