@@ -14744,35 +14744,31 @@ function Onboarding(props) {
   var brand = "NightMarket.fun";
   var hp = String(s.obHead).split(brand);
   var items = [
-    ["\uD83D\uDD0D", (t.navDiscover || "Discover"), s.obDiscoverD],
-    ["\uD83D\uDDFA\uFE0F", (t.navGuide || "Guide"), s.obGuideD],
-    ["\uD83E\uDDED", (t.navQuests || "Quests"), s.obQuestsD],
-    ["\uD83D\uDCCB", (t.navPlan || "My Plan"), s.obPlanD]
+    ["🔍", (t.navDiscover || "Discover"), s.obDiscoverD, "discover"],
+    ["🗺️", (t.navGuide || "Guide"), s.obGuideD, "map"],
+    ["🧭", (t.navQuests || "Quests"), s.obQuestsD, "passport"],
+    ["📋", (t.navPlan || "My Plan"), s.obPlanD, "plan"]
   ];
-  return /*#__PURE__*/React.createElement("div", {
-    role: "dialog", "aria-label": "Welcome",
-    style: { position: "fixed", inset: 0, zIndex: 70, background: "linear-gradient(180deg,#12121f 0%,#1a1a2e 34%,#16162a 100%)", color: "#f0ebe3", overflowY: "auto", display: "flex", flexDirection: "column", padding: "22px 24px calc(env(safe-area-inset-bottom) + 24px)" }
-  }, /*#__PURE__*/React.createElement("div", { style: { display: "flex", justifyContent: "flex-end", marginBottom: 6 } },
-      /*#__PURE__*/React.createElement("div", { className: "ob-langpulse" }, /*#__PURE__*/React.createElement(LanguageToggle, { lang: lang, onSelect: props.onSelectLang }))
-    ), /*#__PURE__*/React.createElement("h1", { style: { fontSize: 26, fontWeight: 800, lineHeight: 1.15, margin: "16px 0 8px" } },
-      hp[0], /*#__PURE__*/React.createElement("span", { style: { color: "#ff3ea0" } }, brand), hp[1] || ""
-    ), /*#__PURE__*/React.createElement("p", { style: { color: "#a7a3b5", fontSize: 15, lineHeight: 1.5, margin: "0 0 20px" } }, s.obIntro),
-    /*#__PURE__*/React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 12 } },
-      items.map(function (it, idx) {
-        return /*#__PURE__*/React.createElement("div", { key: idx, style: { display: "flex", gap: 14, alignItems: "flex-start", background: "#1e1e30", border: "1px solid #2a2a40", borderRadius: 16, padding: "14px 15px" } },
-          /*#__PURE__*/React.createElement("div", { "aria-hidden": "true", style: { width: 40, height: 40, flex: "0 0 40px", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, background: "#26263c" } }, it[0]),
-          /*#__PURE__*/React.createElement("div", null,
-            /*#__PURE__*/React.createElement("div", { style: { fontSize: 15.5, fontWeight: 700, marginBottom: 3 } }, it[1]),
-            /*#__PURE__*/React.createElement("div", { style: { fontSize: 13.5, color: "#a7a3b5", lineHeight: 1.45 } }, it[2])
-          )
-        );
-      })
-    ), /*#__PURE__*/React.createElement("div", { style: { marginTop: "auto", paddingTop: 20 } },
-      /*#__PURE__*/React.createElement("p", { style: { fontSize: 12.5, color: "#a7a3b5", textAlign: "center", lineHeight: 1.5, margin: "0 0 14px" } }, s.obSupport),
-      /*#__PURE__*/React.createElement("button", { onClick: props.onDone, style: { width: "100%", padding: 16, border: "none", borderRadius: 14, cursor: "pointer", background: "#ff6b35", color: "#fff", fontSize: 16, fontWeight: 700 } }, s.obStart),
-      /*#__PURE__*/React.createElement("div", { style: { textAlign: "center", color: "#a7a3b5", opacity: 0.7, fontSize: 11.5, marginTop: 14 } }, s.obFoot)
-    )
-  );
+  function goto(tab) { return function () { props.onGoto(tab); }; }
+  return /*#__PURE__*/React.createElement("div", { role: "dialog", "aria-label": "Welcome", style: { position: "fixed", inset: 0, zIndex: 70, background: "linear-gradient(180deg,#12121f 0%,#1a1a2e 34%,#16162a 100%)", color: "#f0ebe3", display: "flex", flexDirection: "column" } },
+    /*#__PURE__*/React.createElement("div", { style: { flex: "0 0 auto", display: "flex", justifyContent: "flex-end", padding: "22px 22px 6px" } },
+      /*#__PURE__*/React.createElement("div", { className: "ob-langpulse" }, /*#__PURE__*/React.createElement(LanguageToggle, { lang: lang, onSelect: props.onSelectLang }))),
+    /*#__PURE__*/React.createElement("div", { style: { flex: "1 1 auto", overflowY: "auto", WebkitOverflowScrolling: "touch", padding: "0 22px 14px" } },
+      /*#__PURE__*/React.createElement("h1", { style: { fontSize: 26, fontWeight: 800, lineHeight: 1.15, margin: "6px 0 8px" } }, hp[0], /*#__PURE__*/React.createElement("span", { style: { color: "#ff3ea0" } }, brand), hp[1] || ""),
+      /*#__PURE__*/React.createElement("p", { style: { color: "#a7a3b5", fontSize: 15, lineHeight: 1.5, margin: "0 0 18px" } }, s.obIntro),
+      /*#__PURE__*/React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 12 } },
+        items.map(function (it, idx) {
+          return /*#__PURE__*/React.createElement("button", { key: idx, onClick: goto(it[3]), "aria-label": it[1], style: { textAlign: "left", width: "100%", display: "flex", gap: 14, alignItems: "center", background: "#1e1e30", border: "1px solid #2a2a40", borderRadius: 16, padding: "14px 15px", color: "#f0ebe3", cursor: "pointer", font: "inherit" } },
+            /*#__PURE__*/React.createElement("div", { "aria-hidden": "true", style: { width: 40, height: 40, flex: "0 0 40px", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, background: "#26263c" } }, it[0]),
+            /*#__PURE__*/React.createElement("div", { style: { flex: 1, minWidth: 0 } },
+              /*#__PURE__*/React.createElement("div", { style: { fontSize: 15.5, fontWeight: 700, marginBottom: 3 } }, it[1]),
+              /*#__PURE__*/React.createElement("div", { style: { fontSize: 13.5, color: "#a7a3b5", lineHeight: 1.45 } }, it[2])),
+            /*#__PURE__*/React.createElement("span", { "aria-hidden": "true", style: { color: "#7fe3d6", fontSize: 22, flex: "0 0 auto" } }, "›"));
+        })),
+      /*#__PURE__*/React.createElement("p", { style: { fontSize: 12.5, color: "#a7a3b5", textAlign: "center", lineHeight: 1.5, margin: "18px 0 6px" } }, s.obSupport),
+      /*#__PURE__*/React.createElement("div", { style: { textAlign: "center", color: "#a7a3b5", opacity: 0.7, fontSize: 11.5, margin: "6px 0 0" } }, s.obFoot)),
+    /*#__PURE__*/React.createElement("div", { style: { flex: "0 0 auto", borderTop: "1px solid #2a2a40", background: "#141422e6", padding: "12px 22px calc(env(safe-area-inset-bottom) + 14px)" } },
+      /*#__PURE__*/React.createElement("button", { onClick: props.onDone, style: { width: "100%", padding: 16, border: "none", borderRadius: 14, cursor: "pointer", background: "#ff6b35", color: "#fff", fontSize: 16, fontWeight: 700 } }, s.obStart)));
 }
 
 function IntroCover({
@@ -15894,7 +15890,7 @@ function NMFDiscover() {
       position: "relative",
       marginBottom: 16
     }
-  }, /*#__PURE__*/React.createElement("input", {
+  }, /*#__PURE__*/React.createElement("span", { "aria-hidden": "true", style: { position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", fontSize: 18, opacity: 0.8, pointerEvents: "none" } }, "🔍"), /*#__PURE__*/React.createElement("input", {
     ref: inputRef,
     type: "text",
     value: query,
@@ -15907,14 +15903,16 @@ function NMFDiscover() {
     placeholder: t.placeholder,
     style: {
       width: "100%",
-      padding: "14px 90px 14px 16px",
-      borderRadius: 12,
-      border: "1px solid #333350",
-      background: "#1e1e30",
+      padding: "18px 96px 18px 46px",
+      borderRadius: 14,
+      border: "2px solid #ff6b35",
+      background: "#24243c",
       color: "#f0ebe3",
-      fontSize: 15,
+      fontSize: 17,
+      fontWeight: 500,
       outline: "none",
-      boxSizing: "border-box"
+      boxSizing: "border-box",
+      boxShadow: "0 0 0 4px rgba(255,107,53,0.13)"
     }
   }), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -16692,7 +16690,7 @@ function NMFDiscover() {
     onSelect: setTab,
     t: t,
     lift: navLift
-  }), showAdbf && /*#__PURE__*/React.createElement(AdbfFullscreen, { onClose: function () { setShowAdbf(false); } }), (!showCover && showOnboarding) && /*#__PURE__*/React.createElement(Onboarding, { t: t, lang: lang, onSelectLang: setLang, onDone: function () { setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} } }), /*#__PURE__*/React.createElement(ProfileOverlay, {
+  }), showAdbf && /*#__PURE__*/React.createElement(AdbfFullscreen, { onClose: function () { setShowAdbf(false); } }), (!showCover && showOnboarding) && /*#__PURE__*/React.createElement(Onboarding, { t: t, lang: lang, onSelectLang: setLang, onDone: function () { setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} }, onGoto: function (tab) { setTab(tab); setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} } }), /*#__PURE__*/React.createElement(ProfileOverlay, {
     vendor: activeListing,
     lang: lang,
     t: t,
