@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>NMF Passport — Insights</title>
+<style>
+  :root{ --bg:#12121f; --bg2:#16162a; --panel:#1a1a2b; --line:#2a2a40; --text:#f0ebe3;
+         --muted:#a7a3b5; --orange:#ff6b35; --teal:#7fe3d6; --gold:#e6c34a; --track:#26263c; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:linear-gradient(180deg,var(--bg),var(--bg2)); color:var(--text);
+        font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif; min-height:100vh; }
+  .wrap{ max-width:1080px; margin:0 auto; padding:26px 20px 48px; }
+
+  /* passcode gate */
+  #gate{ position:fixed; inset:0; background:var(--bg); display:flex; align-items:center; justify-content:center; padding:24px; z-index:10; }
+  .gatecard{ width:360px; max-width:100%; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:26px; text-align:center; }
+  .gatecard h1{ font-size:19px; margin:0 0 4px; }
+  .gatecard p{ color:var(--muted); font-size:13.5px; margin:0 0 18px; }
+  .gatecard input{ width:100%; padding:13px 14px; border-radius:12px; border:1px solid var(--line);
+        background:#24243c; color:var(--text); font-size:15px; outline:none; margin-bottom:12px; }
+  .gatecard button{ width:100%; padding:14px; border:none; border-radius:12px; background:var(--orange);
+        color:#1a1a2e; font-size:15px; font-weight:700; cursor:pointer; }
+  .gateerr{ color:#ffb59c; font-size:12.5px; min-height:16px; margin-top:10px; }
+
+  header.top{ display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:4px; }
+  h1.title{ font-size:25px; font-weight:800; margin:0; letter-spacing:-.02em; }
+  .sub{ color:var(--muted); font-size:13px; margin:2px 0 20px; }
+  .ctl{ display:flex; align-items:center; gap:8px; }
+  select, .refresh{ background:var(--panel); border:1px solid var(--line); color:var(--text);
+        border-radius:10px; padding:9px 12px; font-size:13.5px; font-weight:600; cursor:pointer; }
+  .banner{ background:#26263c; border:1px solid var(--line); color:var(--muted); font-size:12.5px;
+        padding:8px 12px; border-radius:10px; margin-bottom:18px; display:none; }
+
+  .stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:18px; }
+  .stat{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px 18px; }
+  .stat .n{ font-size:30px; font-weight:800; line-height:1; }
+  .stat .l{ font-size:12.5px; color:var(--muted); margin-top:6px; }
+  .stat.accent .n{ color:var(--orange); }
+
+  .grid{ display:grid; grid-template-columns:1.35fr 1fr; gap:16px; }
+  @media(max-width:820px){ .grid{ grid-template-columns:1fr; } .stats{ grid-template-columns:1fr 1fr; } }
+  .panel{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:18px 20px; margin-bottom:16px; }
+  .panel h2{ font-size:15px; font-weight:700; margin:0 0 3px; }
+  .panel .hint{ font-size:12px; color:var(--muted); margin:0 0 14px; }
+  .empty{ color:var(--muted); font-size:13px; padding:6px 0; }
+
+  table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  th{ text-align:right; color:var(--muted); font-weight:600; font-size:12px; padding:0 0 8px; }
+  th:first-child{ text-align:left; }
+  td{ padding:9px 0; border-top:1px solid var(--line); text-align:right; font-variant-numeric:tabular-nums; }
+  td:first-child{ text-align:left; font-weight:600; }
+  td .cat{ display:block; font-weight:400; color:var(--muted); font-size:11.5px; }
+
+  .bar{ display:flex; align-items:center; gap:10px; margin:9px 0; font-size:13px; }
+  .bar .k{ width:120px; flex:0 0 120px; }
+  .bar .track{ flex:1; height:10px; background:var(--track); border-radius:6px; overflow:hidden; }
+  .bar .fill{ height:100%; border-radius:6px; background:var(--orange); }
+  .bar.teal .fill{ background:var(--teal); }
+  .bar .v{ width:56px; flex:0 0 56px; text-align:right; color:var(--muted); font-variant-numeric:tabular-nums; }
+
+  .fav{ display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-top:1px solid var(--line); font-size:14px; }
+  .fav:first-of-type{ border-top:none; }
+  .fav .s{ color:var(--gold); font-weight:700; }
+  .fav .votes{ color:var(--muted); font-size:12px; font-weight:400; margin-left:6px; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:7px; }
+  .chip{ background:var(--track); border-radius:999px; padding:6px 12px; font-size:13px; }
+  .chip .c{ color:var(--muted); font-size:11.5px; margin-left:5px; }
+  .gaplabel{ color:#ffb59c; font-size:12.5px; margin:16px 0 8px; font-weight:600; }
+  .gap .chip{ background:#3a2320; color:#ffb59c; border:1px solid #5a2f27; }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gatecard">
+    <h1>Passport Insights</h1>
+    <p>Staff only. Enter the shared passcode to view.</p>
+    <input id="gatepass" type="password" placeholder="Passcode" autocomplete="off" />
+    <button id="gatebtn">View dashboard</button>
+    <div class="gateerr" id="gateerr"></div>
+  </div>
+</div>
+
+<div class="wrap" id="dash" style="display:none">
+  <header class="top">
+    <h1 class="title">NightMarket.fun Passport — Insights</h1>
+    <div class="ctl">
+      <select id="prog">
+        <option value="nmf|2026">NightMarket 2026</option>
+        <option value="adbf|2027">Dragon Boat 2027</option>
+      </select>
+      <button class="refresh" id="refresh">Refresh</button>
+    </div>
+  </header>
+  <div class="sub">Anonymous engagement, a program of The Lunar Foundation. Numbers update as the app is used.</div>
+  <div class="banner" id="banner"></div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="grid">
+    <div>
+      <div class="panel"><h2>Most-engaged listings</h2><p class="hint">Ranked by profile views. The backbone of each vendor's engagement report.</p><div id="engagement"></div></div>
+      <div class="panel"><h2>What people browsed</h2><p class="hint">Category taps, which parts of the market drew interest.</p><div id="category"></div></div>
+      <div class="panel"><h2>Social taps by platform</h2><p class="hint">Follows and profile taps we sent to makers.</p><div id="social"></div></div>
+    </div>
+    <div>
+      <div class="panel"><h2>Audience favorites</h2><p class="hint">Top-rated performances.</p><div id="favorites"></div></div>
+      <div class="panel"><h2>What people searched</h2><p class="hint">Top terms, and the ones that came back empty.</p><div id="searches"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var KEY = null;
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+  function num(n){ n = Number(n||0); return n.toLocaleString(); }
+  function maxOf(rows,f){ var m=0; rows.forEach(function(r){ if(Number(r[f])>m) m=Number(r[f]); }); return m||1; }
+
+  function bars(rows, keyField, valField, teal){
+    if(!rows.length) return '<div class="empty">No data yet.</div>';
+    var mx = maxOf(rows, valField);
+    return rows.slice(0,10).map(function(r){
+      var w = Math.round(Number(r[valField]||0)/mx*100);
+      return '<div class="bar'+(teal?' teal':'')+'"><span class="k">'+esc(r[keyField]||'—')+'</span>'+
+             '<span class="track"><span class="fill" style="width:'+w+'%"></span></span>'+
+             '<span class="v">'+num(r[valField])+'</span></div>';
+    }).join('');
+  }
+
+  function render(d){
+    // banner if everything is empty
+    var totalRows = ["performance_scores","listing_engagement","category_taps","search_terms","demand_gaps","social_by_platform"]
+      .reduce(function(a,k){ return a + (d[k]?d[k].length:0); }, 0);
+    var banner = document.getElementById('banner');
+    if(totalRows === 0){ banner.style.display='block'; banner.textContent='No events recorded yet for this program. Panels fill once the app is deployed and people use it.'; }
+    else { banner.style.display='none'; }
+
+    // stat tiles
+    var reach = (d.reach_summary && d.reach_summary[0]) || { devices:0, interactions:0 };
+    document.getElementById('stats').innerHTML =
+      '<div class="stat accent"><div class="n">'+num(reach.devices)+'</div><div class="l">Attendees engaged (devices)</div></div>'+
+      '<div class="stat"><div class="n">'+num(reach.interactions)+'</div><div class="l">Total interactions</div></div>'+
+      '<div class="stat"><div class="n">'+num((d.listing_engagement||[]).length)+'</div><div class="l">Listings with activity</div></div>';
+
+    // most-engaged listings
+    var le = d.listing_engagement || [];
+    document.getElementById('engagement').innerHTML = le.length ?
+      '<table><tr><th>Listing</th><th>Views</th><th>Social</th><th>Plan adds</th></tr>'+
+      le.slice(0,10).map(function(r){
+        return '<tr><td>'+esc(r.vendor_name||('#'+r.vendor_id))+'<span class="cat">'+esc(r.category||'')+'</span></td>'+
+               '<td>'+num(r.views)+'</td><td>'+num(r.social_taps)+'</td><td>'+num(r.plan_adds)+'</td></tr>';
+      }).join('')+'</table>' : '<div class="empty">No data yet.</div>';
+
+    // category interest
+    document.getElementById('category').innerHTML = bars(d.category_taps||[], 'category', 'taps', false);
+
+    // social by platform
+    document.getElementById('social').innerHTML = bars(d.social_by_platform||[], 'platform', 'taps', true);
+
+    // favorites
+    var ps = (d.performance_scores||[]).filter(function(r){ return Number(r.votes)>0; });
+    document.getElementById('favorites').innerHTML = ps.length ?
+      ps.slice(0,8).map(function(r){
+        return '<div class="fav"><span>'+esc(r.vendor_name||('#'+r.vendor_id))+'</span>'+
+               '<span><span class="s">'+Number(r.avg_stars).toFixed(1)+'</span>'+
+               '<span class="votes">'+num(r.votes)+' ratings</span></span></div>';
+      }).join('') : '<div class="empty">No ratings yet.</div>';
+
+    // searches + demand gaps
+    var st = d.search_terms || [], dg = d.demand_gaps || [];
+    var html = st.length ?
+      '<div class="chips">'+st.slice(0,12).map(function(r){ return '<span class="chip">'+esc(r.term)+'<span class="c">'+num(r.searches)+'</span></span>'; }).join('')+'</div>'
+      : '<div class="empty">No searches yet.</div>';
+    if(dg.length){
+      html += '<div class="gaplabel">Searched, not found</div><div class="chips gap">'+
+              dg.slice(0,12).map(function(r){ return '<span class="chip">'+esc(r.term)+'</span>'; }).join('')+'</div>';
+    }
+    document.getElementById('searches').innerHTML = html;
+  }
+
+  function load(){
+    var sel = document.getElementById('prog').value.split('|');
+    document.getElementById('banner').style.display='none';
+    fetch('/api/report?program='+encodeURIComponent(sel[0])+'&year='+encodeURIComponent(sel[1]), {
+      headers: { 'x-dashboard-key': KEY }
+    }).then(function(r){
+      if(r.status===401){ throw new Error('unauthorized'); }
+      if(!r.ok){ throw new Error('server'); }
+      return r.json();
+    }).then(function(d){
+      document.getElementById('gate').style.display='none';
+      document.getElementById('dash').style.display='block';
+      try{ sessionStorage.setItem('nmf_dash_key', KEY); }catch(e){}
+      render(d);
+    }).catch(function(err){
+      if(String(err.message)==='unauthorized'){
+        KEY=null; try{ sessionStorage.removeItem('nmf_dash_key'); }catch(e){}
+        document.getElementById('gate').style.display='flex';
+        document.getElementById('dash').style.display='none';
+        document.getElementById('gateerr').textContent='Wrong passcode. Try again.';
+      } else {
+        document.getElementById('gateerr').textContent='Could not load. Check the connection and try again.';
+      }
+    });
+  }
+
+  document.getElementById('gatebtn').addEventListener('click', function(){
+    KEY = document.getElementById('gatepass').value.trim();
+    document.getElementById('gateerr').textContent='';
+    if(KEY) load();
+  });
+  document.getElementById('gatepass').addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('gatebtn').click(); });
+  document.getElementById('refresh').addEventListener('click', load);
+  document.getElementById('prog').addEventListener('change', load);
+
+  // try a saved passcode from this browser session
+  try{ var saved = sessionStorage.getItem('nmf_dash_key'); if(saved){ KEY=saved; load(); } }catch(e){}
+</script>
+</body>
+</html>
