@@ -138,6 +138,14 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true });
     }
 
+    if (type === "partner_follow") {
+      const partner = String(body.partner || "").slice(0, 40);
+      const platform = String(body.platform || "").slice(0, 24);
+      if (!partner || !platform) return res.status(200).json({ ok: false, skipped: "empty" });
+      await sbInsert("events", { type: "partner_follow", device_id: device, meta: { partner: partner, platform: platform }, program: program, year: year }, {});
+      return res.status(200).json({ ok: true });
+    }
+
     // Unknown event types are accepted and ignored, so future client versions
     // can add events without ever erroring against an older function.
     return res.status(200).json({ ok: false, skipped: "unknown-type" });
