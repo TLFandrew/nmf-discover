@@ -13652,10 +13652,10 @@ function TlfToggle(props) {
     style: { display: "inline-flex", gap: 2, background: "#1e1e30", border: "1px solid #2a2a40", borderRadius: 999, padding: 3 }
   }, /*#__PURE__*/React.createElement("button", {
     role: "tab", "aria-selected": true, "aria-label": "NightMarket", title: "NightMarket",
-    style: { width: 44, height: 44, borderRadius: 999, border: "none", cursor: "default", fontSize: 16, lineHeight: 1, background: "#ff6b35", display: "flex", alignItems: "center", justifyContent: "center" }
+    style: { width: 36, height: 36, borderRadius: 999, border: "none", cursor: "default", fontSize: 16, lineHeight: 1, background: "#ff6b35", display: "flex", alignItems: "center", justifyContent: "center" }
   }, "🏮"), /*#__PURE__*/React.createElement("button", {
     role: "tab", "aria-selected": false, "aria-label": "Austin Dragon Boat Festival", title: "Austin Dragon Boat Festival", onClick: onOpenAdbf,
-    style: { width: 44, height: 44, borderRadius: 999, border: "none", cursor: "pointer", fontSize: 16, lineHeight: 1, background: "transparent", display: "flex", alignItems: "center", justifyContent: "center" }
+    style: { width: 36, height: 36, borderRadius: 999, border: "none", cursor: "pointer", fontSize: 16, lineHeight: 1, background: "transparent", display: "flex", alignItems: "center", justifyContent: "center" }
   }, "🐉"));
 }
 
@@ -14577,7 +14577,8 @@ function LanguageToggle({
       alignItems: "center",
       gap: 6,
       padding: "9px 14px",
-      minHeight: 44,
+      height: 44,
+      boxSizing: "border-box",
       borderRadius: 22,
       border: "2px solid #7fe3d6",
       background: "rgba(127,227,214,0.14)",
@@ -14768,6 +14769,31 @@ function Onboarding(props) {
       /*#__PURE__*/React.createElement("button", { onClick: props.onDone, style: { width: "100%", padding: 16, border: "none", borderRadius: 14, cursor: "pointer", background: "#ff6b35", color: "#1a1a2e", fontSize: 16, fontWeight: 700 } }, s.obStart)));
 }
 
+const SPONSOR_TIERS = [
+  { name: "Presenting", h: 58, ph: 1, sponsors: [] },
+  { name: "Gold", h: 52, ph: 1, sponsors: [] },
+  { name: "Silver", h: 44, ph: 2, sponsors: [] },
+  { name: "Bronze", h: 38, ph: 2, sponsors: [] },
+  { name: "Community Partner", h: 34, ph: 3, sponsors: [] },
+  { name: "Community Supporter", h: 32, ph: 3, sponsors: [] },
+  { name: "Local Business Supporter", h: 30, ph: 4, sponsors: [] }
+];
+function SponsorWall({ t, onClose }) {
+  return /*#__PURE__*/React.createElement("div", { role: "dialog", "aria-label": "Sponsors", style: { position: "fixed", inset: 0, height: "100dvh", zIndex: 65, background: "#16162a", color: "#f0ebe3", display: "flex", flexDirection: "column" } },
+    /*#__PURE__*/React.createElement("div", { style: { flex: "0 0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "calc(env(safe-area-inset-top) + 16px) 18px 12px", borderBottom: "1px solid #24243a" } },
+      /*#__PURE__*/React.createElement("div", { style: { fontSize: 18, fontWeight: 800 } }, t.sponsorsTitle || "Our Sponsors"),
+      /*#__PURE__*/React.createElement("button", { onClick: onClose, "aria-label": "Close", style: { width: 34, height: 34, borderRadius: "50%", border: "1px solid #2a2a40", background: "transparent", color: "#a7a3b5", fontSize: 16, cursor: "pointer", fontFamily: "inherit", flexShrink: 0 } }, "\u2715")),
+    /*#__PURE__*/React.createElement("div", { style: { flex: "1 1 auto", overflowY: "auto", WebkitOverflowScrolling: "touch", padding: "18px 18px calc(env(safe-area-inset-bottom) + 24px)" } },
+      /*#__PURE__*/React.createElement("div", { style: { textAlign: "center", color: "#a7a3b5", fontSize: 13, marginBottom: 22 } }, t.sponsorsSub || "Made possible by these partners"),
+      SPONSOR_TIERS.map(function (tier) {
+        return /*#__PURE__*/React.createElement("div", { key: tier.name, style: { marginBottom: 24 } },
+          /*#__PURE__*/React.createElement("div", { style: { textAlign: "center", color: "#7fe3d6", fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 12 } }, tier.name),
+          /*#__PURE__*/React.createElement("div", { style: { display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 12 } },
+            tier.sponsors.length > 0
+              ? tier.sponsors.map(function (sp, i) { return /*#__PURE__*/React.createElement("img", { key: i, src: sp.src, alt: sp.alt, style: { height: tier.h, width: "auto", objectFit: "contain" } }); })
+              : Array.from({ length: tier.ph }).map(function (_, i) { return /*#__PURE__*/React.createElement("div", { key: i, style: { width: Math.round(tier.h * 2.4), height: tier.h, maxWidth: "44%", border: "1px dashed #3f3f55", borderRadius: 10, background: "#ffffff05" } }); })));
+      })));
+}
 function IntroCover({ t, lang, onSelectLang, onEnter, onAbout }) {
   const partners = [{ src: TLF_LOGO, alt: "The Lunar Foundation", tile: false, h: 34 }, { src: GAACC_LOGO, alt: "Greater Austin Asian Chamber of Commerce", tile: false, h: 40 }, { src: CEDARPARK_LOGO, alt: "City of Cedar Park", tile: false, h: 30 }];
   const LANGS = [["en", "English"], ["es", "Espa\u00f1ol"], ["zh", "\u4e2d\u6587"], ["ko", "\ud55c\uad6d\uc5b4"], ["vi", "Ti\u1ebfng Vi\u1ec7t"], ["ja", "\u65e5\u672c\u8a9e"]];
@@ -15124,6 +15150,7 @@ function NMFDiscover() {
       const [showAdbf, setShowAdbf] = useState(false);
   const [navLift, setNavLift] = useState(0);
   const [showCover, setShowCover] = useState(true);
+  const [showSponsors, setShowSponsors] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(function () { try { return !localStorage.getItem("nmf_onboarded"); } catch (e) { return true; } });
   const [showAbout, setShowAbout] = useState(false);
   const [query, setQuery] = useState("");
@@ -15669,7 +15696,7 @@ function NMFDiscover() {
       margin: "0 auto",
       padding: "0 16px calc(88px + env(safe-area-inset-bottom))"
     }
-  }, /*#__PURE__*/React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", paddingTop: 16 } }, /*#__PURE__*/React.createElement(TlfToggle, { onOpenAdbf: function () { setShowAdbf(true); } }), /*#__PURE__*/React.createElement(LanguageToggle, { lang: lang, onSelect: setLang })), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 16 } }, /*#__PURE__*/React.createElement(TlfToggle, { onOpenAdbf: function () { setShowAdbf(true); } }), /*#__PURE__*/React.createElement("button", { onClick: function () { setShowSponsors(true); }, "aria-label": t.navSponsors || "Sponsors", style: { display: "inline-flex", alignItems: "center", height: 44, boxSizing: "border-box", padding: "0 16px", borderRadius: 22, border: "2px solid #ff6b35", background: "rgba(255,107,53,0.14)", color: "#f0ebe3", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" } }, t.navSponsors || "Sponsors"), /*#__PURE__*/React.createElement(LanguageToggle, { lang: lang, onSelect: setLang })), /*#__PURE__*/React.createElement("div", {
     style: {
       paddingTop: 16,
       paddingBottom: 8,
@@ -16382,7 +16409,7 @@ function NMFDiscover() {
     onSelect: setTab,
     t: t,
     lift: navLift
-  }), showAdbf && /*#__PURE__*/React.createElement(AdbfFullscreen, { t: t, onClose: function () { setShowAdbf(false); } }), (!showCover && showOnboarding) && /*#__PURE__*/React.createElement(Onboarding, { t: t, lang: lang, onSelectLang: setLang, onDone: function () { setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} }, onGoto: function (tab) { setTab(tab); setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} } }), /*#__PURE__*/React.createElement(ProfileOverlay, {
+  }), showAdbf && /*#__PURE__*/React.createElement(AdbfFullscreen, { t: t, onClose: function () { setShowAdbf(false); } }), (!showCover && showOnboarding) && /*#__PURE__*/React.createElement(Onboarding, { t: t, lang: lang, onSelectLang: setLang, onDone: function () { setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} }, onGoto: function (tab) { setTab(tab); setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} } }), showSponsors && /*#__PURE__*/React.createElement(SponsorWall, { t: t, onClose: function () { setShowSponsors(false); } }), /*#__PURE__*/React.createElement(ProfileOverlay, {
     vendor: activeListing,
     lang: lang,
     t: t,
