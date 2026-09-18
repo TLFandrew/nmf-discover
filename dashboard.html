@@ -3,177 +3,261 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>NMF Passport — Insights</title>
+<title>NightMarket.fun Passport — Insights</title>
 <style>
-  :root{ --bg:#12121f; --bg2:#16162a; --panel:#1a1a2b; --line:#2a2a40; --text:#f0ebe3;
-         --muted:#a7a3b5; --orange:#ff6b35; --teal:#7fe3d6; --gold:#e6c34a; --track:#26263c; }
+  :root{ --bg:#16162a; --card:#1b1b2b; --bd:#2a2a40; --tx:#f0ebe3; --mut:#a7a3b5; --or:#ff6b35; --te:#7fe3d6; --pk:#ff3ea0; --go:#f6c453; --vi:#9b59f6; --bl:#3498db; }
   *{ box-sizing:border-box; }
-  body{ margin:0; background:linear-gradient(180deg,var(--bg),var(--bg2)); color:var(--text);
-        font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif; min-height:100vh; }
-  .wrap{ max-width:1080px; margin:0 auto; padding:26px 20px 48px; }
-
-  /* passcode gate */
-  #gate{ position:fixed; inset:0; background:var(--bg); display:flex; align-items:center; justify-content:center; padding:24px; z-index:10; }
-  .gatecard{ width:360px; max-width:100%; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:26px; text-align:center; }
-  .gatecard h1{ font-size:19px; margin:0 0 4px; }
-  .gatecard p{ color:var(--muted); font-size:13.5px; margin:0 0 18px; }
-  .gatecard input{ width:100%; padding:13px 14px; border-radius:12px; border:1px solid var(--line);
-        background:#24243c; color:var(--text); font-size:15px; outline:none; margin-bottom:12px; }
-  .gatecard button{ width:100%; padding:14px; border:none; border-radius:12px; background:var(--orange);
-        color:#1a1a2e; font-size:15px; font-weight:700; cursor:pointer; }
-  .gateerr{ color:#ffb59c; font-size:12.5px; min-height:16px; margin-top:10px; }
-
-  header.top{ display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:4px; }
-  h1.title{ font-size:25px; font-weight:800; margin:0; letter-spacing:-.02em; }
-  .sub{ color:var(--muted); font-size:13px; margin:2px 0 20px; }
-  .ctl{ display:flex; align-items:center; gap:8px; }
-  select, .refresh{ background:var(--panel); border:1px solid var(--line); color:var(--text);
-        border-radius:10px; padding:9px 12px; font-size:13.5px; font-weight:600; cursor:pointer; }
-  .banner{ background:#26263c; border:1px solid var(--line); color:var(--muted); font-size:12.5px;
-        padding:8px 12px; border-radius:10px; margin-bottom:18px; display:none; }
-
-  .stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:18px; }
-  .stat{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px 18px; }
-  .stat .n{ font-size:30px; font-weight:800; line-height:1; }
-  .stat .l{ font-size:12.5px; color:var(--muted); margin-top:6px; }
-  .stat.accent .n{ color:var(--orange); }
-
-  .grid{ display:grid; grid-template-columns:1.35fr 1fr; gap:16px; }
-  @media(max-width:820px){ .grid{ grid-template-columns:1fr; } .stats{ grid-template-columns:1fr 1fr; } }
-  .panel{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:18px 20px; margin-bottom:16px; }
-  .panel h2{ font-size:15px; font-weight:700; margin:0 0 3px; }
-  .panel .hint{ font-size:12px; color:var(--muted); margin:0 0 14px; }
-  .empty{ color:var(--muted); font-size:13px; padding:6px 0; }
-
-  table{ width:100%; border-collapse:collapse; font-size:13.5px; }
-  th{ text-align:right; color:var(--muted); font-weight:600; font-size:12px; padding:0 0 8px; }
+  body{ margin:0; background:var(--bg); color:var(--tx); font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif; }
+  .wrap{ max-width:1080px; margin:0 auto; padding:20px 16px 70px; }
+  /* gate */
+  #gate{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+  #gate .box{ width:100%; max-width:340px; background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:24px; text-align:center; }
+  #gate h1{ font-size:18px; margin:0 0 4px; }
+  #gate p{ font-size:13px; color:var(--mut); margin:0 0 18px; }
+  #gate input{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--bd); background:#24243c; color:var(--tx); font-size:16px; }
+  #gate button{ width:100%; margin-top:10px; padding:12px; border-radius:10px; border:none; background:var(--or); color:#1a1a2e; font-weight:700; font-size:15px; cursor:pointer; }
+  #gateerr{ color:#ff8f8f; font-size:12px; margin-top:10px; min-height:14px; }
+  /* header */
+  .top{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+  .top h1{ font-size:22px; font-weight:800; margin:0; }
+  .ctrl{ display:flex; gap:8px; align-items:center; }
+  .ctrl select,.ctrl button{ background:var(--card); border:1px solid var(--bd); color:var(--tx); border-radius:10px; padding:8px 12px; font-size:13px; font-family:inherit; cursor:pointer; }
+  .sub{ font-size:13px; color:var(--mut); margin-top:2px; }
+  .legend{ display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--mut); margin-top:12px; }
+  .legend span{ display:flex; align-items:center; gap:6px; }
+  .dot{ width:8px; height:8px; border-radius:50%; flex:0 0 auto; }
+  #banner{ display:none; background:#20203a; border:1px solid var(--bd); border-radius:12px; padding:12px 14px; font-size:13px; color:var(--mut); margin-top:14px; }
+  /* grid + cards */
+  .grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:18px; }
+  .card{ grid-column:span 1; background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:16px 18px; min-width:0; }
+  .card.wide{ grid-column:span 2; }
+  .card.soon{ border-style:dashed; background:#191828; }
+  .chead{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:14px; }
+  .ctitle{ font-size:14px; font-weight:800; }
+  .cnote{ font-size:11px; color:var(--mut); margin-top:3px; }
+  .badge{ font-size:10px; font-weight:700; letter-spacing:.04em; border-radius:20px; padding:2px 8px; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+  .badge .d{ width:6px; height:6px; border-radius:50%; }
+  .b-live{ color:var(--te); background:rgba(127,227,214,.09); border:1px solid rgba(127,227,214,.35); }
+  .b-live .d{ background:var(--te); }
+  .b-soon{ color:var(--or); background:rgba(255,107,53,.09); border:1px solid rgba(255,107,53,.35); }
+  .b-soon .d{ background:var(--or); }
+  /* stat tiles */
+  .stats{ display:flex; gap:22px; flex-wrap:wrap; }
+  .stat .n{ font-size:32px; font-weight:800; line-height:1; }
+  .stat .l{ font-size:11px; color:var(--mut); text-transform:uppercase; letter-spacing:.07em; font-weight:700; margin-top:6px; }
+  .stat.accent .n{ color:var(--te); }
+  /* bars */
+  .bar{ margin-bottom:9px; }
+  .bar .row{ display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; }
+  .bar .k{ color:var(--tx); } .bar .v{ color:var(--mut); }
+  .track{ height:8px; background:#ffffff0d; border-radius:6px; overflow:hidden; }
+  .fill{ height:100%; border-radius:6px; background:var(--or); }
+  .fill.teal{ background:var(--te); } .fill.pink{ background:var(--pk); } .fill.vi{ background:var(--vi); }
+  /* table */
+  table{ width:100%; border-collapse:collapse; font-size:13px; }
+  th{ text-align:right; color:var(--mut); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; padding:6px 0; border-bottom:1px solid var(--bd); }
   th:first-child{ text-align:left; }
-  td{ padding:9px 0; border-top:1px solid var(--line); text-align:right; font-variant-numeric:tabular-nums; }
-  td:first-child{ text-align:left; font-weight:600; }
-  td .cat{ display:block; font-weight:400; color:var(--muted); font-size:11.5px; }
-
-  .bar{ display:flex; align-items:center; gap:10px; margin:9px 0; font-size:13px; }
-  .bar .k{ width:120px; flex:0 0 120px; }
-  .bar .track{ flex:1; height:10px; background:var(--track); border-radius:6px; overflow:hidden; }
-  .bar .fill{ height:100%; border-radius:6px; background:var(--orange); }
-  .bar.teal .fill{ background:var(--teal); }
-  .bar .v{ width:56px; flex:0 0 56px; text-align:right; color:var(--muted); font-variant-numeric:tabular-nums; }
-
-  .fav{ display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-top:1px solid var(--line); font-size:14px; }
-  .fav:first-of-type{ border-top:none; }
-  .fav .s{ color:var(--gold); font-weight:700; }
-  .fav .votes{ color:var(--muted); font-size:12px; font-weight:400; margin-left:6px; }
-
+  td{ padding:8px 0; border-bottom:1px solid var(--bd); text-align:right; }
+  td:first-child{ text-align:left; color:var(--tx); }
+  td .cat{ font-size:10px; color:var(--mut); margin-left:8px; }
+  /* favorites */
+  .fav{ display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid var(--bd); font-size:13px; }
+  .fav .s{ color:var(--go); font-weight:700; margin-right:8px; } .fav .votes{ color:var(--mut); font-size:11px; }
+  /* chips */
   .chips{ display:flex; flex-wrap:wrap; gap:7px; }
-  .chip{ background:var(--track); border-radius:999px; padding:6px 12px; font-size:13px; }
-  .chip .c{ color:var(--muted); font-size:11.5px; margin-left:5px; }
-  .gaplabel{ color:#ffb59c; font-size:12.5px; margin:16px 0 8px; font-weight:600; }
-  .gap .chip{ background:#3a2320; color:#ffb59c; border:1px solid #5a2f27; }
+  .chip{ font-size:13px; color:var(--tx); background:#ffffff0d; border:1px solid var(--bd); border-radius:20px; padding:4px 11px; }
+  .chip .c{ color:var(--mut); font-size:11px; margin-left:4px; }
+  .chips.gap .chip{ color:var(--go); border-color:rgba(246,196,83,.3); }
+  .gaplabel{ font-size:11px; color:var(--mut); font-weight:700; margin:12px 0 8px; text-transform:uppercase; letter-spacing:.05em; }
+  /* funnel */
+  .fstage{ margin-bottom:8px; } .fstage .row{ display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; }
+  .fbar{ height:24px; background:#ffffff0d; border-radius:8px; overflow:hidden; }
+  .fbar span{ display:block; height:100%; border-radius:8px; min-width:22px; }
+  /* empty + soon placeholders */
+  .empty{ font-size:12px; color:var(--mut); padding:8px 0; }
+  .phrow{ height:10px; background:#ffffff08; border:1px dashed #3a3a52; border-radius:6px; margin-bottom:9px; }
+  .phrow.w80{ width:80%; } .phrow.w60{ width:60%; } .phrow.w45{ width:45%; }
+  .unlock{ font-size:11px; color:var(--or); margin-top:10px; font-weight:600; }
+  .footer{ text-align:center; font-size:11px; color:var(--mut); margin-top:26px; }
+  @media(max-width:720px){ .grid{ grid-template-columns:1fr; } .card.wide{ grid-column:span 1; } }
 </style>
 </head>
 <body>
 
 <div id="gate">
-  <div class="gatecard">
+  <div class="box">
     <h1>Passport Insights</h1>
-    <p>Staff only. Enter the shared passcode to view.</p>
-    <input id="gatepass" type="password" placeholder="Passcode" autocomplete="off" />
+    <p>Enter the staff passcode.</p>
+    <input id="gatepass" type="password" placeholder="Passcode" autocomplete="off">
     <button id="gatebtn">View dashboard</button>
-    <div class="gateerr" id="gateerr"></div>
+    <div id="gateerr"></div>
   </div>
 </div>
 
-<div class="wrap" id="dash" style="display:none">
-  <header class="top">
-    <h1 class="title">NightMarket.fun Passport — Insights</h1>
-    <div class="ctl">
-      <select id="prog">
-        <option value="nmf|2026">NightMarket 2026</option>
-        <option value="adbf|2027">Dragon Boat 2027</option>
-      </select>
-      <button class="refresh" id="refresh">Refresh</button>
+<div id="dash" style="display:none"><div class="wrap">
+  <div class="top">
+    <div>
+      <h1>NightMarket.fun 2026 · Passport Insights</h1>
+      <div class="sub">Live where data is flowing. In progress everywhere else — nothing here is invented.</div>
     </div>
-  </header>
-  <div class="sub">Anonymous engagement, a program of The Lunar Foundation. Numbers update as the app is used.</div>
-  <div class="banner" id="banner"></div>
-
-  <div class="stats" id="stats"></div>
+    <div class="ctrl">
+      <select id="prog"><option value="nmf|2026">NMF 2026</option><option value="adbf|2027">ADBF 2027</option></select>
+      <button id="refresh">Refresh</button>
+    </div>
+  </div>
+  <div class="legend">
+    <span><span class="dot" style="background:var(--te)"></span>Live — collecting from the app now</span>
+    <span><span class="dot" style="background:var(--or)"></span>Not yet — unlocks as we build QR scans, the raffle, and cross-referencing</span>
+  </div>
+  <div id="banner"></div>
 
   <div class="grid">
-    <div>
-      <div class="panel"><h2>Most-engaged listings</h2><p class="hint">Ranked by profile views. The backbone of each vendor's engagement report.</p><div id="engagement"></div></div>
-      <div class="panel"><h2>What people browsed</h2><p class="hint">Category taps, which parts of the market drew interest.</p><div id="category"></div></div>
-      <div class="panel"><h2>Social taps by platform</h2><p class="hint">Follows and profile taps we sent to makers.</p><div id="social"></div></div>
+
+    <!-- LIVE: reach -->
+    <div class="card wide">
+      <div class="chead"><div><div class="ctitle">Engagement so far</div><div class="cnote">Everyone who has opened and used the Passport</div></div><span class="badge b-live"><span class="d"></span>LIVE</span></div>
+      <div class="stats" id="stats"></div>
     </div>
-    <div>
-      <div class="panel"><h2>Audience favorites</h2><p class="hint">Top-rated performances.</p><div id="favorites"></div></div>
-      <div class="panel"><h2>What people searched</h2><p class="hint">Top terms, and the ones that came back empty.</p><div id="searches"></div></div>
+
+    <!-- LIVE: discovery funnel (partial) -->
+    <div class="card wide">
+      <div class="chead"><div><div class="ctitle">Discovery funnel</div><div class="cnote">Did people find and connect with listings</div></div><span class="badge b-live"><span class="d"></span>LIVE (partial)</span></div>
+      <div id="funnel"></div>
+      <div class="cnote" style="margin-top:8px">Viewed and saved are live. “Came to the booth” lights up with on-site booth QR scans.</div>
     </div>
+
+    <!-- LIVE: most-engaged -->
+    <div class="card wide">
+      <div class="chead"><div class="ctitle">Most-engaged listings</div><span class="badge b-live"><span class="d"></span>LIVE</span></div>
+      <div id="engagement"></div>
+    </div>
+
+    <!-- LIVE: interests -->
+    <div class="card">
+      <div class="chead"><div class="ctitle">Top interests explored</div><span class="badge b-live"><span class="d"></span>LIVE</span></div>
+      <div id="category"></div>
+    </div>
+
+    <!-- LIVE: social -->
+    <div class="card">
+      <div class="chead"><div class="ctitle">Follows &amp; social taps</div><span class="badge b-live"><span class="d"></span>LIVE</span></div>
+      <div id="social"></div>
+    </div>
+
+    <!-- LIVE: favorites -->
+    <div class="card">
+      <div class="chead"><div class="ctitle">Audience favorites</div><span class="badge b-live"><span class="d"></span>LIVE</span></div>
+      <div id="favorites"></div>
+    </div>
+
+    <!-- LIVE: searches -->
+    <div class="card">
+      <div class="chead"><div class="ctitle">What people searched</div><span class="badge b-live"><span class="d"></span>LIVE</span></div>
+      <div id="searches"></div>
+    </div>
+
+    <!-- ================= NOT YET ================= -->
+
+    <div class="card soon wide">
+      <div class="chead"><div><div class="ctitle">Confirmed attendance &amp; reach</div><div class="cnote">Bodies actually in the park, from on-site QR scans — counts the workforce ticketing can’t see</div></div><span class="badge b-soon"><span class="d"></span>NOT YET</span></div>
+      <div class="phrow w80"></div><div class="phrow w60"></div><div class="phrow w45"></div>
+      <div class="unlock">Unlocks with: the on-site QR scan system (bar, booths, hunt) + TicketSpice cross-reference</div>
+    </div>
+
+    <div class="card soon">
+      <div class="chead"><div class="ctitle">Language mix</div><span class="badge b-soon"><span class="d"></span>NOT YET</span></div>
+      <div class="phrow w80"></div><div class="phrow w60"></div>
+      <div class="unlock">Unlocks with: logging the language each visitor picks (small change, wiring next)</div>
+    </div>
+
+    <div class="card soon">
+      <div class="chead"><div class="ctitle">Where they came from</div><span class="badge b-soon"><span class="d"></span>NOT YET</span></div>
+      <div class="phrow w80"></div><div class="phrow w45"></div>
+      <div class="unlock">Unlocks with: the optional zip question at the raffle</div>
+    </div>
+
+    <div class="card soon">
+      <div class="chead"><div class="ctitle">Scan activity by type</div><span class="badge b-soon"><span class="d"></span>NOT YET</span></div>
+      <div class="phrow w80"></div><div class="phrow w60"></div><div class="phrow w45"></div>
+      <div class="unlock">Unlocks with: the typed QR scan system (bar, booth, hunt, VIP, block)</div>
+    </div>
+
+    <div class="card soon">
+      <div class="chead"><div class="ctitle">Opt-in capture</div><span class="badge b-soon"><span class="d"></span>NOT YET</span></div>
+      <div class="phrow w60"></div><div class="phrow w45"></div>
+      <div class="unlock">Unlocks with: the raffle email flow + ACT survey redemption</div>
+    </div>
+
   </div>
-</div>
+  <div class="footer">NightMarket.fun is a joint program of The Lunar Foundation and the Greater Austin Asian Chamber of Commerce</div>
+</div></div>
 
 <script>
   var KEY = null;
   function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
   function num(n){ n = Number(n||0); return n.toLocaleString(); }
   function maxOf(rows,f){ var m=0; rows.forEach(function(r){ if(Number(r[f])>m) m=Number(r[f]); }); return m||1; }
+  function sumOf(rows,f){ var s=0; rows.forEach(function(r){ s+=Number(r[f]||0); }); return s; }
 
-  function bars(rows, keyField, valField, teal){
-    if(!rows.length) return '<div class="empty">No data yet.</div>';
+  function bars(rows, keyField, valField, cls){
+    if(!rows.length) return '<div class="empty">No data yet — collecting.</div>';
     var mx = maxOf(rows, valField);
-    return rows.slice(0,10).map(function(r){
+    return rows.slice(0,8).map(function(r){
       var w = Math.round(Number(r[valField]||0)/mx*100);
-      return '<div class="bar'+(teal?' teal':'')+'"><span class="k">'+esc(r[keyField]||'—')+'</span>'+
-             '<span class="track"><span class="fill" style="width:'+w+'%"></span></span>'+
-             '<span class="v">'+num(r[valField])+'</span></div>';
+      return '<div class="bar"><div class="row"><span class="k">'+esc(r[keyField]||'—')+'</span><span class="v">'+num(r[valField])+'</span></div>'+
+             '<div class="track"><div class="fill '+(cls||'')+'" style="width:'+w+'%"></div></div></div>';
     }).join('');
   }
 
   function render(d){
-    // banner if everything is empty
     var totalRows = ["performance_scores","listing_engagement","category_taps","search_terms","demand_gaps","social_by_platform"]
       .reduce(function(a,k){ return a + (d[k]?d[k].length:0); }, 0);
     var banner = document.getElementById('banner');
-    if(totalRows === 0){ banner.style.display='block'; banner.textContent='No events recorded yet for this program. Panels fill once the app is deployed and people use it.'; }
+    if(totalRows === 0){ banner.style.display='block'; banner.textContent='No app events recorded yet for this program. The live panels populate as soon as people use the Passport — the plumbing is connected and waiting.'; }
     else { banner.style.display='none'; }
 
-    // stat tiles
     var reach = (d.reach_summary && d.reach_summary[0]) || { devices:0, interactions:0 };
-    document.getElementById('stats').innerHTML =
-      '<div class="stat accent"><div class="n">'+num(reach.devices)+'</div><div class="l">Attendees engaged (devices)</div></div>'+
-      '<div class="stat"><div class="n">'+num(reach.interactions)+'</div><div class="l">Total interactions</div></div>'+
-      '<div class="stat"><div class="n">'+num((d.listing_engagement||[]).length)+'</div><div class="l">Listings with activity</div></div>';
-
-    // most-engaged listings
     var le = d.listing_engagement || [];
+    document.getElementById('stats').innerHTML =
+      '<div class="stat accent"><div class="n">'+num(reach.devices)+'</div><div class="l">Devices engaged</div></div>'+
+      '<div class="stat"><div class="n">'+num(reach.interactions)+'</div><div class="l">Total interactions</div></div>'+
+      '<div class="stat"><div class="n">'+num(le.length)+'</div><div class="l">Listings with activity</div></div>';
+
+    // discovery funnel (real stages we have: viewed, saved)
+    var totViews = sumOf(le,'views'), totPlans = sumOf(le,'plan_adds');
+    var fmax = Math.max(totViews,1);
+    function fstage(lab, v, col, pend){
+      var w = Math.round((v||0)/fmax*100);
+      var right = pend ? 'pending scans' : num(v);
+      return '<div class="fstage"><div class="row"><span class="k" style="color:'+(pend?'var(--mut)':'var(--tx)')+'">'+lab+'</span><span class="v">'+right+'</span></div>'+
+             '<div class="fbar"><span style="width:'+(pend?12:Math.max(w,4))+'%;background:'+col+(pend?';opacity:.35':'')+'"></span></div></div>';
+    }
+    document.getElementById('funnel').innerHTML =
+      fstage('Viewed a profile', totViews, 'linear-gradient(90deg,#ff6b35,#ff6b35bb)', false)+
+      fstage('Saved to My Plan', totPlans, 'linear-gradient(90deg,#ff3ea0,#ff3ea0bb)', false)+
+      fstage('Came to the booth', 0, '#9b59f6', true);
+
     document.getElementById('engagement').innerHTML = le.length ?
-      '<table><tr><th>Listing</th><th>Views</th><th>Social</th><th>Plan adds</th></tr>'+
+      '<table><tr><th>Listing</th><th>Views</th><th>Social</th><th>Saved</th></tr>'+
       le.slice(0,10).map(function(r){
         return '<tr><td>'+esc(r.vendor_name||('#'+r.vendor_id))+'<span class="cat">'+esc(r.category||'')+'</span></td>'+
                '<td>'+num(r.views)+'</td><td>'+num(r.social_taps)+'</td><td>'+num(r.plan_adds)+'</td></tr>';
-      }).join('')+'</table>' : '<div class="empty">No data yet.</div>';
+      }).join('')+'</table>' : '<div class="empty">No data yet — collecting.</div>';
 
-    // category interest
-    document.getElementById('category').innerHTML = bars(d.category_taps||[], 'category', 'taps', false);
+    document.getElementById('category').innerHTML = bars(d.category_taps||[], 'category', 'taps', '');
+    document.getElementById('social').innerHTML = bars(d.social_by_platform||[], 'platform', 'taps', 'pink');
 
-    // social by platform
-    document.getElementById('social').innerHTML = bars(d.social_by_platform||[], 'platform', 'taps', true);
-
-    // favorites
     var ps = (d.performance_scores||[]).filter(function(r){ return Number(r.votes)>0; });
     document.getElementById('favorites').innerHTML = ps.length ?
       ps.slice(0,8).map(function(r){
         return '<div class="fav"><span>'+esc(r.vendor_name||('#'+r.vendor_id))+'</span>'+
-               '<span><span class="s">'+Number(r.avg_stars).toFixed(1)+'</span>'+
-               '<span class="votes">'+num(r.votes)+' ratings</span></span></div>';
-      }).join('') : '<div class="empty">No ratings yet.</div>';
+               '<span><span class="s">'+Number(r.avg_stars).toFixed(1)+'</span><span class="votes">'+num(r.votes)+' ratings</span></span></div>';
+      }).join('') : '<div class="empty">No ratings yet — collecting.</div>';
 
-    // searches + demand gaps
     var st = d.search_terms || [], dg = d.demand_gaps || [];
     var html = st.length ?
       '<div class="chips">'+st.slice(0,12).map(function(r){ return '<span class="chip">'+esc(r.term)+'<span class="c">'+num(r.searches)+'</span></span>'; }).join('')+'</div>'
-      : '<div class="empty">No searches yet.</div>';
+      : '<div class="empty">No searches yet — collecting.</div>';
     if(dg.length){
       html += '<div class="gaplabel">Searched, not found</div><div class="chips gap">'+
               dg.slice(0,12).map(function(r){ return '<span class="chip">'+esc(r.term)+'</span>'; }).join('')+'</div>';
@@ -206,7 +290,6 @@
       }
     });
   }
-
   document.getElementById('gatebtn').addEventListener('click', function(){
     KEY = document.getElementById('gatepass').value.trim();
     document.getElementById('gateerr').textContent='';
@@ -215,8 +298,6 @@
   document.getElementById('gatepass').addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('gatebtn').click(); });
   document.getElementById('refresh').addEventListener('click', load);
   document.getElementById('prog').addEventListener('change', load);
-
-  // try a saved passcode from this browser session
   try{ var saved = sessionStorage.getItem('nmf_dash_key'); if(saved){ KEY=saved; load(); } }catch(e){}
 </script>
 </body>
