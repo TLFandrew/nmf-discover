@@ -14794,6 +14794,20 @@ function SponsorWall({ t, onClose }) {
               : Array.from({ length: tier.ph }).map(function (_, i) { return /*#__PURE__*/React.createElement("div", { key: i, style: { width: Math.round(tier.h * 2.4), height: tier.h, maxWidth: "44%", border: "1px dashed #3f3f55", borderRadius: 10, background: "#ffffff05" } }); })));
       })));
 }
+function ActSurveyCard({ t }) {
+  const [code, setCode] = useState("");
+  const [msg, setMsg] = useState("");
+  return /*#__PURE__*/React.createElement("div", { style: { border: "1px solid #2a2a40", borderRadius: 14, padding: "14px 16px", margin: "0 0 14px", background: "#1a1a2e" } },
+    /*#__PURE__*/React.createElement("div", { style: { fontSize: 14, fontWeight: 700, color: "#f0ebe3", marginBottom: 5 } }, t.actTitle || "Austin Creates Together Survey"),
+    /*#__PURE__*/React.createElement("div", { style: { fontSize: 12.5, color: "#a7a3b5", lineHeight: 1.5, marginBottom: 12 } }, t.actBody || "The Lunar Foundation's community survey, in partnership with Nielsen. Your feedback helps create more fun programming and directs funds to local artists. Anonymous, about 15 minutes, open to all Greater Austin residents."),
+    /*#__PURE__*/React.createElement("a", { href: "https://globalsurveys.nielsen.com/survey/selfserve/540/260393?list=2", target: "_blank", rel: "noopener noreferrer", style: { display: "block", textAlign: "center", padding: "11px", borderRadius: 12, background: "#ff6b35", color: "#1a1a2e", fontSize: 14, fontWeight: 700, textDecoration: "none" } }, (t.actCta || "Take the survey") + " \u2192"),
+    /*#__PURE__*/React.createElement("div", { style: { marginTop: 14, paddingTop: 12, borderTop: "1px solid #2a2a40" } },
+      /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "#a7a3b5", lineHeight: 1.45, marginBottom: 8 } }, t.actClaimLabel || "Finished? Enter the codeword from the survey to claim bonus points."),
+      /*#__PURE__*/React.createElement("div", { style: { display: "flex", gap: 8 } },
+        /*#__PURE__*/React.createElement("input", { type: "text", value: code, onChange: function (e) { setCode(e.target.value); if (msg) setMsg(""); }, placeholder: t.actCodePlaceholder || "Codeword", "aria-label": t.actCodePlaceholder || "Codeword", style: { flex: 1, minWidth: 0, padding: "10px 12px", borderRadius: 10, border: "1px solid #2a2a40", background: "#24243c", color: "#f0ebe3", fontSize: 16, boxSizing: "border-box", fontFamily: "inherit" } }),
+        /*#__PURE__*/React.createElement("button", { onClick: function () { setMsg(t.actClaimSoon || "Bonus points are coming soon. Thanks for taking part!"); }, style: { flexShrink: 0, padding: "0 18px", borderRadius: 10, border: "none", background: "#7fe3d6", color: "#12121f", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" } }, t.actClaim || "Claim")),
+      msg && /*#__PURE__*/React.createElement("div", { style: { marginTop: 8, fontSize: 12, color: "#7fe3d6", textAlign: "center" } }, msg)));
+}
 function IntroCover({ t, lang, onSelectLang, onEnter, onAbout }) {
   const partners = [{ src: TLF_LOGO, alt: "The Lunar Foundation", tile: false, h: 34 }, { src: GAACC_LOGO, alt: "Greater Austin Asian Chamber of Commerce", tile: false, h: 40 }, { src: CEDARPARK_LOGO, alt: "City of Cedar Park", tile: false, h: 30 }];
   const LANGS = [["en", "English"], ["es", "Espa\u00f1ol"], ["zh", "\u4e2d\u6587"], ["ko", "\ud55c\uad6d\uc5b4"], ["vi", "Ti\u1ebfng Vi\u1ec7t"], ["ja", "\u65e5\u672c\u8a9e"]];
@@ -16213,7 +16227,7 @@ function NMFDiscover() {
     style: {
       paddingBottom: 12
     }
-  }, /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement(ActSurveyCard, { t: t }), /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 13,
       color: "#f0ebe3",
