@@ -13202,7 +13202,7 @@ const SHELL_STRINGS = {
     inPlan: "In your plan",
     follow: "Follow",
     comingSoon: "Coming soon",
-    mapTitle: "Festival Map",
+    mapTitle: "Find your way around.",
     mapDesc: "An interactive festival map will live here.",
     passportTitle: "Passport",
     passportDesc: "Collect a stamp at every booth you visit.",
@@ -14467,7 +14467,7 @@ function SchedulePanel({
       color: "#f0ebe3",
       textAlign: "center"
     }
-  }, "Schedule"), /*#__PURE__*/React.createElement("div", {
+  }, "Plan around the shows."), /*#__PURE__*/React.createElement("div", {
     style: {
       textAlign: "center",
       fontSize: 11,
@@ -14944,6 +14944,18 @@ function PlanList({ vendors, onOpen, onRemove, t }) {
       }
       return /*#__PURE__*/React.createElement(React.Fragment, { key: sec.cat }, hdr(CATLABEL(sec.cat)), sec.items.map(row));
     }));
+}
+function PlanEmpty({ t, onExplore }) {
+  return /*#__PURE__*/React.createElement("div", { style: { textAlign: "center", padding: "20px 20px 28px" } },
+    /*#__PURE__*/React.createElement("div", { style: { fontSize: 24, fontWeight: 700, color: "#f0ebe3", marginBottom: 10 } }, t.planEmptyTitle || "Build your night"),
+    /*#__PURE__*/React.createElement("div", { style: { fontSize: 14, color: "#a7a3b5", lineHeight: 1.5, maxWidth: 300, margin: "0 auto 20px" } }, t.planEmptyBody || "Browse food, art, music, and performances, and add the ones you love."),
+    /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "#a7a3b5", marginBottom: 12 } }, t.planEmptyLook || "Look for the glowing button on any listing:"),
+    /*#__PURE__*/React.createElement("div", { style: { textAlign: "left", background: "#1e1e30", borderRadius: 12, padding: 14, borderLeft: "3px solid #ff6b35", maxWidth: 300, margin: "0 auto 24px" } },
+      /*#__PURE__*/React.createElement("div", { style: { fontSize: 11, fontWeight: 600, color: "#ff6b35", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 } }, "\uD83C\uDF5C " + (t.planEmptySampleTag || "Food · Example listing")),
+      /*#__PURE__*/React.createElement("div", { style: { fontSize: 17, fontWeight: 700, color: "#f0ebe3", marginBottom: 4 } }, t.planEmptySampleName || "A booth you'll love"),
+      /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "#a7a3b5", lineHeight: 1.4, marginBottom: 12 } }, t.planEmptySampleDesc || "Tap the highlighted button to save it to your night."),
+      /*#__PURE__*/React.createElement("div", { style: { display: "inline-block", padding: "8px 12px", borderRadius: 8, border: "1px solid #ff6b35", background: "rgba(255,107,53,0.10)", color: "#f0ebe3", fontSize: 13, fontWeight: 600, boxShadow: "0 0 0 2px rgba(255,107,53,0.35), 0 0 16px rgba(255,107,53,0.55)" } }, "+ " + (t.addToPlan || "Add to plan"))),
+    /*#__PURE__*/React.createElement("button", { onClick: onExplore, style: { padding: "13px 30px", borderRadius: 12, border: "none", background: "#ff6b35", color: "#1a1a2e", fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" } }, t.planEmptyCta || "Explore the festival"));
 }
 function IntroCover({ t, lang, onSelectLang, onEnter, onAbout }) {
   const partners = [{ src: TLF_LOGO, alt: "The Lunar Foundation", tile: false, h: 34 }, { src: GAACC_LOGO, alt: "Greater Austin Asian Chamber of Commerce", tile: false, h: 40 }, { src: CEDARPARK_LOGO, alt: "City of Cedar Park", tile: false, h: 30 }];
@@ -16088,7 +16100,7 @@ function NMFDiscover() {
       color: "#f0ebe3",
       opacity: 0.55
     }
-  }, t.createdBy)), tab === "plan" && /*#__PURE__*/React.createElement(React.Fragment, null, sharedPlan.length > 0 && /*#__PURE__*/React.createElement(SharedPlanCard, { t: t, ids: sharedPlan, plan: plan, onAdd: function (id) { setPlan(function (p) { return p.indexOf(id) === -1 ? p.concat([id]) : p; }); }, onAddAll: function () { setPlan(function (p) { var m = p.slice(); sharedPlan.forEach(function (id) { if (m.indexOf(id) === -1) m.push(id); }); return m; }); setSharedPlan([]); }, onDismiss: function () { setSharedPlan([]); } }), /*#__PURE__*/React.createElement("h1", {
+  }, t.createdBy)), tab === "plan" && /*#__PURE__*/React.createElement(React.Fragment, null, sharedPlan.length > 0 && /*#__PURE__*/React.createElement(SharedPlanCard, { t: t, ids: sharedPlan, plan: plan, onAdd: function (id) { setPlan(function (p) { return p.indexOf(id) === -1 ? p.concat([id]) : p; }); }, onAddAll: function () { setPlan(function (p) { var m = p.slice(); sharedPlan.forEach(function (id) { if (m.indexOf(id) === -1) m.push(id); }); return m; }); setSharedPlan([]); }, onDismiss: function () { setSharedPlan([]); } }), planVendors.length > 0 && /*#__PURE__*/React.createElement("h1", {
     style: {
       fontSize: 22,
       fontWeight: 800,
@@ -16096,16 +16108,7 @@ function NMFDiscover() {
       color: "#f0ebe3",
       textAlign: "center"
     }
-  }, t.planTitle), planVendors.length === 0 ? /*#__PURE__*/React.createElement("div", {
-    style: {
-      textAlign: "center",
-      padding: "40px 20px",
-      color: "#f0ebe3",
-      opacity: 0.6,
-      fontSize: 14,
-      lineHeight: 1.6
-    }
-  }, t.planEmpty) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+  }, t.planTitle), planVendors.length === 0 ? /*#__PURE__*/React.createElement(PlanEmpty, { t: t, onExplore: function () { setTab("discover"); } }) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
     onClick: sharePlan,
     style: {
       display: "block",
