@@ -52,7 +52,8 @@ export default async function handler(req, res) {
   const views = [
     "reach_summary", "performance_scores", "listing_engagement",
     "category_taps", "search_terms", "demand_gaps", "social_by_platform",
-    "funnel_summary", "feature_usage"
+    "funnel_summary", "feature_usage", "language_mix",
+    "demo_first", "demo_geo", "demo_age", "demo_heard"
   ];
   const out = { program: program, year: year };
   await Promise.all(views.map(async function (v) { out[v] = await sbSelect(v, program, year); }));

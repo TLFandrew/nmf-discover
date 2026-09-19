@@ -146,6 +146,19 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true });
     }
 
+    if (type === "language") {
+      const lang = String(body.lang || "").slice(0, 8);
+      if (!lang) return res.status(200).json({ ok: false, skipped: "empty" });
+      if (!program || !year) return res.status(200).json({ ok: false, skipped: "no-program" });
+      // One row per device per program: upsert so each visitor counts once by their latest language.
+      await sbInsert(
+        "device_language",
+        { device_id: device, lang: lang, program: program, year: year, updated_at: new Date().toISOString() },
+        { upsert: true, onConflict: "device_id,program,year" }
+      );
+      return res.status(200).json({ ok: true });
+    }
+
     // Unknown event types are accepted and ignored, so future client versions
     // can add events without ever erroring against an older function.
     return res.status(200).json({ ok: false, skipped: "unknown-type" });
