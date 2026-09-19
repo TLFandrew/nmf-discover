@@ -14808,6 +14808,143 @@ function ActSurveyCard({ t }) {
         /*#__PURE__*/React.createElement("button", { onClick: function () { setMsg(t.actClaimSoon || "Bonus points are coming soon. Thanks for taking part!"); }, style: { flexShrink: 0, padding: "0 18px", borderRadius: 10, border: "none", background: "#7fe3d6", color: "#12121f", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" } }, t.actClaim || "Claim")),
       msg && /*#__PURE__*/React.createElement("div", { style: { marginTop: 8, fontSize: 12, color: "#7fe3d6", textAlign: "center" } }, msg)));
 }
+function RaffleForm({ t, onClose }) {
+  const [email, setEmail] = useState("");
+  const [zip, setZip] = useState("");
+  const [age, setAge] = useState("");
+  const [ft, setFt] = useState("");
+  const [heard, setHeard] = useState("");
+  const [news, setNews] = useState(false);
+  const [status, setStatus] = useState("");
+  const AGES = ["Under 18", "18-24", "25-34", "35-44", "45-54", "55+"];
+  const FT = ["First time", "Been before"];
+  const HEARD = ["Instagram", "Friend", "GAACC", "Cedar Park", "Flyer", "Other"];
+  const valid = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim());
+  function submit() {
+    if (!valid) { setStatus("bademail"); return; }
+    setStatus("sending");
+    fetch("/api/raffle", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email.trim(), newsletter: news, program: "nmf", year: 2026, demographics: { zip: zip.trim() || null, age: age || null, first_time: ft || null, how_heard: heard || null } }) })
+      .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+      .then(function () { setStatus("done"); })
+      .catch(function () { setStatus("error"); });
+  }
+  function chipRow(label, opts, val, setter) {
+    return /*#__PURE__*/React.createElement("div", { style: { marginBottom: 16 } },
+      /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "#a7a3b5", marginBottom: 8 } }, label),
+      /*#__PURE__*/React.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 8 } },
+        opts.map(function (o) {
+          var on = val === o;
+          return /*#__PURE__*/React.createElement("button", { key: o, onClick: function () { setter(on ? "" : o); }, style: { background: on ? "#7fe3d6" : "#ffffff0d", color: on ? "#12121f" : "#e6e2ee", border: "1px solid " + (on ? "#7fe3d6" : "#3a3a52"), borderRadius: 18, padding: "8px 14px", fontSize: 13, fontWeight: on ? 700 : 500, cursor: "pointer", fontFamily: "inherit" } }, o);
+        })));
+  }
+  var header = /*#__PURE__*/React.createElement("div", { style: { flex: "0 0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "calc(env(safe-area-inset-top) + 16px) 18px 12px", borderBottom: "1px solid #24243a" } },
+    /*#__PURE__*/React.createElement("div", { style: { fontSize: 18, fontWeight: 800 } }, t.raffleTitle || "Enter the raffle"),
+    /*#__PURE__*/React.createElement("button", { onClick: onClose, "aria-label": "Close", style: { width: 34, height: 34, borderRadius: "50%", border: "1px solid #2a2a40", background: "transparent", color: "#a7a3b5", fontSize: 16, cursor: "pointer", fontFamily: "inherit", flexShrink: 0 } }, "\u2715"));
+  if (status === "done") {
+    return /*#__PURE__*/React.createElement("div", { role: "dialog", "aria-label": "Raffle", style: { position: "fixed", inset: 0, height: "100dvh", zIndex: 66, background: "#16162a", color: "#f0ebe3", display: "flex", flexDirection: "column" } }, header,
+      /*#__PURE__*/React.createElement("div", { style: { flex: "1 1 auto", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "24px" } },
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: 44, marginBottom: 12 } }, "\uD83C\uDF89"),
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: 18, fontWeight: 800, marginBottom: 8 } }, t.raffleDoneTitle || "You're in!"),
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: 14, color: "#a7a3b5", maxWidth: 300, lineHeight: 1.5 } }, t.raffleDoneBody || "Good luck. The winner is emailed after the event. Thanks for helping us learn who's here."),
+        /*#__PURE__*/React.createElement("button", { onClick: onClose, style: { marginTop: 22, padding: "12px 28px", borderRadius: 12, border: "none", background: "#ff6b35", color: "#1a1a2e", fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" } }, t.raffleDoneBtn || "Done")));
+  }
+  var body = /*#__PURE__*/React.createElement("div", { style: { flex: "1 1 auto", overflowY: "auto", WebkitOverflowScrolling: "touch", padding: "18px 18px calc(env(safe-area-inset-bottom) + 24px)" } },
+    /*#__PURE__*/React.createElement("div", { style: { fontSize: 13, color: "#a7a3b5", lineHeight: 1.5, marginBottom: 18 } }, t.raffleIntro || "Drop your email to enter the prize raffle. The quick questions below are optional and help us bring you better programming and send more support to local artists. Answers are anonymous and never tied to your email."),
+    /*#__PURE__*/React.createElement("div", { style: { marginBottom: 18 } },
+      /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "#a7a3b5", marginBottom: 8 } }, t.raffleEmailLabel || "Email (so we can reach you if you win)"),
+      /*#__PURE__*/React.createElement("input", { type: "email", inputMode: "email", autoCapitalize: "none", autoCorrect: "off", value: email, onChange: function (e) { setEmail(e.target.value); if (status) setStatus(""); }, placeholder: "you@example.com", "aria-label": "Email", style: { width: "100%", padding: "12px 14px", borderRadius: 10, border: "1px solid " + (status === "bademail" ? "#ff8f8f" : "#2a2a40"), background: "#24243c", color: "#f0ebe3", fontSize: 16, boxSizing: "border-box", fontFamily: "inherit" } }),
+      status === "bademail" && /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "#ff8f8f", marginTop: 6 } }, t.raffleBadEmail || "Please enter a valid email.")),
+    /*#__PURE__*/React.createElement("div", { style: { fontSize: 11, color: "#7a7688", textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 700, margin: "6px 0 14px" } }, t.raffleOptional || "Optional and anonymous"),
+    /*#__PURE__*/React.createElement("div", { style: { marginBottom: 16 } },
+      /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "#a7a3b5", marginBottom: 8 } }, t.raffleZip || "Zip code"),
+      /*#__PURE__*/React.createElement("input", { type: "text", inputMode: "numeric", value: zip, onChange: function (e) { setZip(e.target.value); }, placeholder: "e.g. 78613", "aria-label": "Zip code", style: { width: "100%", padding: "12px 14px", borderRadius: 10, border: "1px solid #2a2a40", background: "#24243c", color: "#f0ebe3", fontSize: 16, boxSizing: "border-box", fontFamily: "inherit" } })),
+    chipRow(t.raffleAge || "Age", AGES, age, setAge),
+    chipRow(t.raffleFirst || "First time at NightMarket.fun?", FT, ft, setFt),
+    chipRow(t.raffleHeard || "How did you hear about us?", HEARD, heard, setHeard),
+    /*#__PURE__*/React.createElement("label", { style: { display: "flex", alignItems: "flex-start", gap: 10, marginTop: 6, marginBottom: 20, cursor: "pointer" } },
+      /*#__PURE__*/React.createElement("input", { type: "checkbox", checked: news, onChange: function (e) { setNews(e.target.checked); }, style: { width: 18, height: 18, marginTop: 1, flexShrink: 0, accentColor: "#ff6b35" } }),
+      /*#__PURE__*/React.createElement("span", { style: { fontSize: 13, color: "#e6e2ee", lineHeight: 1.4 } }, t.raffleNews || "Send me occasional NightMarket.fun updates.")),
+    /*#__PURE__*/React.createElement("button", { onClick: submit, disabled: status === "sending", style: { width: "100%", padding: "15px", borderRadius: 12, border: "none", background: "#ff6b35", color: "#1a1a2e", fontSize: 16, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: status === "sending" ? 0.6 : 1 } }, status === "sending" ? (t.raffleSending || "Entering...") : (t.raffleSubmit || "Enter the raffle")),
+    status === "error" && /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "#ff8f8f", marginTop: 10, textAlign: "center" } }, t.raffleError || "Something went wrong. Please try again."));
+  return /*#__PURE__*/React.createElement("div", { role: "dialog", "aria-label": "Raffle", style: { position: "fixed", inset: 0, height: "100dvh", zIndex: 66, background: "#16162a", color: "#f0ebe3", display: "flex", flexDirection: "column" } }, header, body);
+}
+function SharedPlanCard({ t, ids, plan, onAdd, onAddAll, onDismiss }) {
+  var byId = {};
+  VENDORS.forEach(function (v) { byId[v.id] = v; });
+  var items = ids.map(function (id) { return byId[id]; }).filter(Boolean);
+  if (!items.length) return null;
+  var allIn = items.every(function (v) { return plan.indexOf(v.id) !== -1; });
+  var CATLABEL = function (c) { return (t.categories && t.categories[c]) || c; };
+  var row = function (v) {
+    var inp = plan.indexOf(v.id) !== -1;
+    var s = planSub(v, t);
+    return /*#__PURE__*/React.createElement("div", { key: v.id, style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "8px 0", borderTop: "1px solid #ffffff12" } },
+      /*#__PURE__*/React.createElement("div", { style: { minWidth: 0 } },
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: 13, color: "#f0ebe3", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" } }, v.name),
+        s ? /*#__PURE__*/React.createElement("div", { style: { fontSize: 11, color: "#a7a3b5", marginTop: 1 } }, s) : null),
+      /*#__PURE__*/React.createElement("button", { onClick: function () { if (!inp) onAdd(v.id); }, disabled: inp, style: { flexShrink: 0, padding: "6px 12px", borderRadius: 16, border: "1px solid " + (inp ? "#3a3a52" : "#ff6b35"), background: inp ? "transparent" : "#ff6b35", color: inp ? "#a7a3b5" : "#1a1a2e", fontSize: 12, fontWeight: 700, cursor: inp ? "default" : "pointer", fontFamily: "inherit" } }, inp ? (t.sharedPlanAdded || "In your plan") : (t.sharedPlanAdd || "Add")));
+  };
+  var secHdr = function (txt) { return /*#__PURE__*/React.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: "#7fe3d6", textTransform: "uppercase", letterSpacing: "0.06em", margin: "12px 0 2px" } }, txt); };
+  return /*#__PURE__*/React.createElement("div", { style: { border: "1px solid #7fe3d6", borderRadius: 14, padding: "14px 16px", margin: "0 0 18px", background: "rgba(127,227,214,0.06)" } },
+    /*#__PURE__*/React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 } },
+      /*#__PURE__*/React.createElement("div", { style: { fontSize: 14, fontWeight: 800, color: "#f0ebe3" } }, t.sharedPlanTitle || "A shared plan"),
+      /*#__PURE__*/React.createElement("button", { onClick: onDismiss, "aria-label": "Dismiss", style: { background: "none", border: "none", color: "#a7a3b5", fontSize: 18, cursor: "pointer", fontFamily: "inherit", lineHeight: 1 } }, "\u2715")),
+    /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "#a7a3b5", lineHeight: 1.5, marginBottom: 6 } }, t.sharedPlanNote || "Someone shared these with you. Add any you like to your own plan, or just browse."),
+    planSections(items).map(function (sec) {
+      return /*#__PURE__*/React.createElement(React.Fragment, { key: sec.cat }, secHdr(CATLABEL(sec.cat)), sec.items.map(row));
+    }),
+    /*#__PURE__*/React.createElement("div", { style: { display: "flex", gap: 8, marginTop: 14 } },
+      /*#__PURE__*/React.createElement("button", { onClick: onAddAll, disabled: allIn, style: { flex: 1, padding: "11px", borderRadius: 10, border: "none", background: allIn ? "#2a2a40" : "#7fe3d6", color: allIn ? "#a7a3b5" : "#12121f", fontSize: 13, fontWeight: 700, cursor: allIn ? "default" : "pointer", fontFamily: "inherit" } }, allIn ? (t.sharedPlanAllIn || "All added") : (t.sharedPlanAddAll || "Add all to my plan")),
+      /*#__PURE__*/React.createElement("button", { onClick: onDismiss, style: { flexShrink: 0, padding: "11px 16px", borderRadius: 10, border: "1px solid #2a2a40", background: "transparent", color: "#a7a3b5", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" } }, t.sharedPlanDismiss || "Dismiss")));
+}
+var PLAN_ORDER = ["Performance", "Food", "Activity", "Artist", "Vendor", "Contest", "Film"];
+function planSections(vendors) {
+  var byCat = {};
+  vendors.forEach(function (v) { var c = v.category || "Other"; (byCat[c] = byCat[c] || []).push(v); });
+  return Object.keys(byCat).sort(function (a, b) {
+    var ia = PLAN_ORDER.indexOf(a); ia = ia < 0 ? 99 : ia;
+    var ib = PLAN_ORDER.indexOf(b); ib = ib < 0 ? 99 : ib;
+    return ia - ib || a.localeCompare(b);
+  }).map(function (c) {
+    var items = byCat[c].slice();
+    if (c === "Performance") {
+      items.sort(function (a, b) {
+        var at = a.startMin, bt = b.startMin;
+        if (at == null && bt == null) return 0;
+        if (at == null) return 1;
+        if (bt == null) return -1;
+        return at - bt;
+      });
+    }
+    return { cat: c, items: items };
+  });
+}
+function planSub(v, t) {
+  if (v.category === "Performance") return v.startMin != null ? (fmtTime(v.startMin) + (v.stage ? " \u00b7 " + v.stage : "")) : ((t && t.timeTBA) || "Time TBA");
+  return v.subcategory || "";
+}
+function PlanList({ vendors, onOpen, onRemove, t }) {
+  var CATLABEL = function (c) { return (t.categories && t.categories[c]) || c; };
+  var row = function (v) {
+    var s = planSub(v, t);
+    return /*#__PURE__*/React.createElement("div", { key: v.id, onClick: function () { onOpen(v); }, style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "10px 12px", marginBottom: 8, borderRadius: 10, background: "#1b1b2b", border: "1px solid #2a2a40", cursor: "pointer" } },
+      /*#__PURE__*/React.createElement("div", { style: { minWidth: 0 } },
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: 14, fontWeight: 600, color: "#f0ebe3", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" } }, v.name),
+        s ? /*#__PURE__*/React.createElement("div", { style: { fontSize: 11, color: "#a7a3b5", marginTop: 2 } }, s) : null),
+      /*#__PURE__*/React.createElement("button", { onClick: function (e) { e.stopPropagation(); onRemove(v.id); }, "aria-label": "Remove", style: { flexShrink: 0, background: "none", border: "none", color: "#a7a3b5", fontSize: 18, cursor: "pointer", fontFamily: "inherit", lineHeight: 1, padding: 4 } }, "\u2715"));
+  };
+  var hdr = function (txt) { return /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, fontWeight: 700, color: "#f0ebe3", opacity: 0.55, textTransform: "uppercase", letterSpacing: "0.06em", margin: "16px 0 10px" } }, txt); };
+  var subhdr = function (txt) { return /*#__PURE__*/React.createElement("div", { style: { fontSize: 11, fontWeight: 600, color: "#a7a3b5", margin: "10px 0 8px" } }, txt); };
+  return /*#__PURE__*/React.createElement(React.Fragment, null,
+    planSections(vendors).map(function (sec) {
+      if (sec.cat === "Performance") {
+        var timed = sec.items.filter(function (v) { return v.startMin != null; });
+        var untimed = sec.items.filter(function (v) { return v.startMin == null; });
+        return /*#__PURE__*/React.createElement(React.Fragment, { key: sec.cat }, hdr(CATLABEL("Performance")), timed.map(row), untimed.length > 0 && subhdr(t.timeTBA || "Time TBA"), untimed.map(row));
+      }
+      return /*#__PURE__*/React.createElement(React.Fragment, { key: sec.cat }, hdr(CATLABEL(sec.cat)), sec.items.map(row));
+    }));
+}
 function IntroCover({ t, lang, onSelectLang, onEnter, onAbout }) {
   const partners = [{ src: TLF_LOGO, alt: "The Lunar Foundation", tile: false, h: 34 }, { src: GAACC_LOGO, alt: "Greater Austin Asian Chamber of Commerce", tile: false, h: 40 }, { src: CEDARPARK_LOGO, alt: "City of Cedar Park", tile: false, h: 30 }];
   const LANGS = [["en", "English"], ["es", "Espa\u00f1ol"], ["zh", "\u4e2d\u6587"], ["ko", "\ud55c\uad6d\uc5b4"], ["vi", "Ti\u1ebfng Vi\u1ec7t"], ["ja", "\u65e5\u672c\u8a9e"]];
@@ -15165,6 +15302,7 @@ function NMFDiscover() {
   const [navLift, setNavLift] = useState(0);
   const [showCover, setShowCover] = useState(true);
   const [showSponsors, setShowSponsors] = useState(false);
+  const [showRaffle, setShowRaffle] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(function () { try { return !localStorage.getItem("nmf_onboarded"); } catch (e) { return true; } });
   const [showAbout, setShowAbout] = useState(false);
   const [query, setQuery] = useState("");
@@ -15173,6 +15311,7 @@ function NMFDiscover() {
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [error, setError] = useState(null);
   const [plan, setPlan] = useState([]);
+  const [sharedPlan, setSharedPlan] = useState([]);
   const [activeListing, setActiveListing] = useState(null);
   const [shareMsg, setShareMsg] = useState("");
   const [showRules, setShowRules] = useState(false);
@@ -15290,18 +15429,16 @@ function NMFDiscover() {
 
   // Load a saved plan from a shared URL (?plan=) or this device, once on mount.
   useEffect(() => {
-    let ids = [];
-    try {
-      const p = new URLSearchParams(window.location.search).get("plan");
-      if (p) ids = p.split(",").map(Number).filter(n => !isNaN(n));
-    } catch (e) {}
-    if (ids.length === 0) {
-      try {
-        const saved = JSON.parse(localStorage.getItem("nmf_plan") || "[]");
-        if (Array.isArray(saved)) ids = saved;
-      } catch (e) {}
+    // Load THIS device's own saved plan.
+    try { const s = JSON.parse(localStorage.getItem("nmf_plan") || "[]"); if (Array.isArray(s) && s.length) setPlan(s.map(Number).filter(n => !isNaN(n))); } catch (e) {}
+    // A shared plan (?plan=) is shown separately for viewing. It is NOT added to My Plan unless the person chooses to add it.
+    let shared = [];
+    try { const p = new URLSearchParams(window.location.search).get("plan"); if (p) shared = p.split(",").map(Number).filter(n => !isNaN(n)); } catch (e) {}
+    if (shared.length) {
+      setSharedPlan(shared);
+      setTab("plan");
+      try { const u = new URL(window.location.href); u.searchParams.delete("plan"); window.history.replaceState({}, "", u.pathname + u.search + u.hash); } catch (e) {}
     }
-    if (ids.length) setPlan(ids);
   }, []);
 
   // Accessibility: tell the browser and screen readers which language the page is in,
@@ -15951,7 +16088,7 @@ function NMFDiscover() {
       color: "#f0ebe3",
       opacity: 0.55
     }
-  }, t.createdBy)), tab === "plan" && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", {
+  }, t.createdBy)), tab === "plan" && /*#__PURE__*/React.createElement(React.Fragment, null, sharedPlan.length > 0 && /*#__PURE__*/React.createElement(SharedPlanCard, { t: t, ids: sharedPlan, plan: plan, onAdd: function (id) { setPlan(function (p) { return p.indexOf(id) === -1 ? p.concat([id]) : p; }); }, onAddAll: function () { setPlan(function (p) { var m = p.slice(); sharedPlan.forEach(function (id) { if (m.indexOf(id) === -1) m.push(id); }); return m; }); setSharedPlan([]); }, onDismiss: function () { setSharedPlan([]); } }), /*#__PURE__*/React.createElement("h1", {
     style: {
       fontSize: 22,
       fontWeight: 800,
@@ -15983,33 +16120,7 @@ function NMFDiscover() {
       fontWeight: 700,
       cursor: "pointer"
     }
-  }, shareMsg || "🔗 " + t.planShare), (() => {
-    const timed = planVendors.filter(v => v.startMin != null).slice().sort((a, b) => a.startMin - b.startMin);
-    const untimed = planVendors.filter(v => v.startMin == null);
-    const card = v => /*#__PURE__*/React.createElement(VendorCard, {
-      key: v.id,
-      vendor: v,
-      freeLabel: t.free,
-      lang: lang,
-      onOpen: setActiveListing,
-      inPlan: true,
-      onTogglePlan: togglePlan,
-      addLabel: t.addToPlan,
-      inPlanLabel: t.inPlan
-    });
-    const label = txt => /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontSize: 12,
-        fontWeight: 700,
-        color: "#f0ebe3",
-        opacity: 0.55,
-        textTransform: "uppercase",
-        letterSpacing: "0.06em",
-        margin: "4px 0 10px"
-      }
-    }, txt);
-    return /*#__PURE__*/React.createElement(React.Fragment, null, timed.length > 0 && label("Your day"), timed.map(card), untimed.length > 0 && label("Booths to visit"), untimed.map(card));
-  })())), tab === "map" && /*#__PURE__*/React.createElement("div", {
+  }, shareMsg || "🔗 " + t.planShare), React.createElement(PlanList, { vendors: planVendors, onOpen: setActiveListing, onRemove: togglePlan, t: t }))), tab === "map" && /*#__PURE__*/React.createElement("div", {
     style: {
       paddingTop: 12
     }
@@ -16227,7 +16338,9 @@ function NMFDiscover() {
     style: {
       paddingBottom: 12
     }
-  }, /*#__PURE__*/React.createElement(ActSurveyCard, { t: t }), /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement(ActSurveyCard, { t: t }), /*#__PURE__*/React.createElement("button", { onClick: function () { setShowRaffle(true); }, style: { display: "block", width: "100%", textAlign: "left", border: "1px solid #2a2a40", borderRadius: 14, padding: "14px 16px", margin: "0 0 14px", background: "#1a1a2e", cursor: "pointer", fontFamily: "inherit" } },
+  /*#__PURE__*/React.createElement("div", { style: { fontSize: 14, fontWeight: 700, color: "#f0ebe3", marginBottom: 4 } }, (t.raffleCardTitle || "Enter the prize raffle") + " \u2192"),
+  /*#__PURE__*/React.createElement("div", { style: { fontSize: 12.5, color: "#a7a3b5", lineHeight: 1.5 } }, t.raffleCardBody || "Drop your email for a chance to win. Optional quick questions help us bring you better programming.")), /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 13,
       color: "#f0ebe3",
@@ -16423,7 +16536,7 @@ function NMFDiscover() {
     onSelect: setTab,
     t: t,
     lift: navLift
-  }), showAdbf && /*#__PURE__*/React.createElement(AdbfFullscreen, { t: t, onClose: function () { setShowAdbf(false); } }), (!showCover && showOnboarding) && /*#__PURE__*/React.createElement(Onboarding, { t: t, lang: lang, onSelectLang: setLang, onDone: function () { setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} }, onGoto: function (tab) { setTab(tab); setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} } }), showSponsors && /*#__PURE__*/React.createElement(SponsorWall, { t: t, onClose: function () { setShowSponsors(false); } }), /*#__PURE__*/React.createElement(ProfileOverlay, {
+  }), showAdbf && /*#__PURE__*/React.createElement(AdbfFullscreen, { t: t, onClose: function () { setShowAdbf(false); } }), (!showCover && showOnboarding) && /*#__PURE__*/React.createElement(Onboarding, { t: t, lang: lang, onSelectLang: setLang, onDone: function () { setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} }, onGoto: function (tab) { setTab(tab); setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} } }), showSponsors && /*#__PURE__*/React.createElement(SponsorWall, { t: t, onClose: function () { setShowSponsors(false); } }), showRaffle && /*#__PURE__*/React.createElement(RaffleForm, { t: t, onClose: function () { setShowRaffle(false); } }), /*#__PURE__*/React.createElement(ProfileOverlay, {
     vendor: activeListing,
     lang: lang,
     t: t,
