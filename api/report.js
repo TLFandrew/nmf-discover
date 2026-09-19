@@ -51,7 +51,8 @@ export default async function handler(req, res) {
   const year = String(req.query.year || "2026");
   const views = [
     "reach_summary", "performance_scores", "listing_engagement",
-    "category_taps", "search_terms", "demand_gaps", "social_by_platform"
+    "category_taps", "search_terms", "demand_gaps", "social_by_platform",
+    "funnel_summary", "feature_usage"
   ];
   const out = { program: program, year: year };
   await Promise.all(views.map(async function (v) { out[v] = await sbSelect(v, program, year); }));
