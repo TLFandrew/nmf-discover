@@ -15661,6 +15661,7 @@ function NMFDiscover() {
     ...SHELL_STRINGS[lang],
     ...COVER_STRINGS[lang]
   };
+  useEffect(function () { track("language", { lang: lang }); }, [lang]);
 
   // Live collection state, built from tiles claimed by scanning booth QR codes.
   const tilesBySuit = {};
