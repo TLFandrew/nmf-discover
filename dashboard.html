@@ -32,6 +32,7 @@ h1{font-size:22px;font-weight:800;margin:0}
 .b-live{color:var(--te);background:rgba(127,227,214,.09);border:1px solid rgba(127,227,214,.35)}.b-live i{background:var(--te)}
 .b-soon{color:var(--or);background:rgba(255,107,53,.09);border:1px solid rgba(255,107,53,.35)}.b-soon i{background:var(--or)}
 .stats{display:flex;gap:26px;flex-wrap:wrap}.stat .n{font-size:30px;font-weight:800;line-height:1}.stat .n .u{font-size:14px;font-weight:600;color:var(--mut)}.stat .s{font-size:12px;color:var(--mut);margin-top:6px}
+.hl{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-bottom:1px solid var(--bd);font-size:14px}.hl:last-child{border-bottom:none}.hll{color:var(--mut)}.hlv{color:var(--tx);font-weight:700;text-align:right}.hlsub{color:var(--mut);font-weight:400;font-size:12px;margin-left:6px}
 .bar{margin-bottom:9px}.brow{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}.bv{color:var(--mut)}
 .trk{height:8px;background:#ffffff0d;border-radius:6px;overflow:hidden}.fil{height:100%;border-radius:6px}
 .fst{margin-bottom:8px}.fbar{height:24px;background:#ffffff0d;border-radius:8px;overflow:hidden}.fbar span{display:block;height:100%;border-radius:8px;min-width:22px}
@@ -96,11 +97,26 @@ function renderOverview(d){
   var rs=first(d.reach_summary), fn=first(d.funnel_summary);
   var html=card(head("People reached",bLive(),"Unique devices that used the Passport, and the total actions they took")+
     '<div class="stats">'+dual(num(rs.people),"people","used the Passport")+dual(num(rs.actions),"actions","taps, searches, saves, ratings")+dual(num(rs.listings_active),"listings","had at least one interaction")+'</div>',true);
-  html+=card(head("Discovery funnel",bLive(),"How many people moved from finding a listing to acting on it (people, not taps)")+
-    funnel([["Used the Passport",Number(fn.reached||0),false],["Viewed a profile",Number(fn.viewed||0),false],["Saved to My Plan",Number(fn.saved||0),false],["Came to the booth",0,true]]),true);
-    html+=card(head("How people heard about us",bLive(),"From the optional raffle question \u2014 where your audience actually comes from")+bars((d.demo_heard||[]).slice().sort(function(a,b){return Number(b.n)-Number(a.n);}),"how_heard","n","people","#f6c453"),true);
+  function topBy(rows,f){ if(!rows||!rows.length) return null; return rows.slice().sort(function(a,b){return Number(b[f])-Number(a[f]);})[0]; }
+  var ppl=Number(rs.people||0), acts=Number(rs.actions||0), saved=Number(fn.saved||0);
+  var tb=topBy(d.listing_engagement||[],"views_people");
+  var tr=topBy((d.performance_scores||[]).filter(function(r){return Number(r.votes)>0;}),"avg_stars");
+  var tl=topBy(d.language_mix||[],"people");
+  var tc=topBy(d.demo_heard||[],"n");
+  function hl(label,val){ return '<div class="hl"><span class="hll">'+label+'</span><span class="hlv">'+val+'</span></div>'; }
+  var C='<span class="hlsub">collecting</span>';
+  var hls='';
+  hls+=hl("Most-discovered booth", tb?(vname(tb.vendor_id)+' <span class="hlsub">'+num(tb.views_people)+' people</span>'):C);
+  hls+=hl("Top-rated show", tr?(vname(tr.vendor_id)+' <span class="hlsub">'+Number(tr.avg_stars).toFixed(1)+'\u2605</span>'):'<span class="hlsub">opens on show day</span>');
+  hls+=hl("Most-used language", tl?((LANG_NAMES[tl.lang]||tl.lang)+' <span class="hlsub">'+num(tl.people)+' people</span>'):C);
+  hls+=hl("Top channel", tc?(esc(tc.how_heard)+' <span class="hlsub">'+num(tc.n)+' people</span>'):C);
+  hls+=hl("Engagement depth", ppl?((acts/ppl).toFixed(1)+' <span class="hlsub">actions / person</span>'):C);
+  hls+=hl("Save rate", ppl?(Math.round(saved/ppl*100)+'% <span class="hlsub">saved something</span>'):C);
+  html+=card(head("Highlights",bLive(),"The standout number from each area, at a glance")+hls,true);
+  html+=card(head("How people heard about us",bLive(),"From the optional raffle question \u2014 where your audience actually comes from")+bars((d.demo_heard||[]).slice().sort(function(a,b){return Number(b.n)-Number(a.n);}),"how_heard","n","people","#f6c453"),true);
   document.getElementById('g-overview').innerHTML=html;
 }
+
 function renderVendors(d){
   var le=(d.listing_engagement||[]).slice().sort(function(a,b){return Number(b.views_people)-Number(a.views_people);});
   var rows=le.map(function(r){return '<tr data-pv="'+Number(r.views_people||0)+'" data-tv="'+Number(r.views_total||0)+'" data-sb="'+Number(r.saved_by||0)+'" data-fo="'+Number(r.follows||0)+'" data-name="'+vname(r.vendor_id)+'"><td>'+vname(r.vendor_id)+' <span class="cat">'+vcat(r.vendor_id)+'</span></td><td>'+num(r.views_people)+'</td><td>'+num(r.views_total)+'</td><td>'+num(r.saved_by)+'</td><td>'+num(r.follows)+'</td></tr>';}).join('');
