@@ -1,304 +1,172 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NightMarket.fun Passport — Insights</title>
 <style>
-  :root{ --bg:#16162a; --card:#1b1b2b; --bd:#2a2a40; --tx:#f0ebe3; --mut:#a7a3b5; --or:#ff6b35; --te:#7fe3d6; --pk:#ff3ea0; --go:#f6c453; --vi:#9b59f6; --bl:#3498db; }
-  *{ box-sizing:border-box; }
-  body{ margin:0; background:var(--bg); color:var(--tx); font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif; }
-  .wrap{ max-width:1080px; margin:0 auto; padding:20px 16px 70px; }
-  /* gate */
-  #gate{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
-  #gate .box{ width:100%; max-width:340px; background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:24px; text-align:center; }
-  #gate h1{ font-size:18px; margin:0 0 4px; }
-  #gate p{ font-size:13px; color:var(--mut); margin:0 0 18px; }
-  #gate input{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--bd); background:#24243c; color:var(--tx); font-size:16px; }
-  #gate button{ width:100%; margin-top:10px; padding:12px; border-radius:10px; border:none; background:var(--or); color:#1a1a2e; font-weight:700; font-size:15px; cursor:pointer; }
-  #gateerr{ color:#ff8f8f; font-size:12px; margin-top:10px; min-height:14px; }
-  /* header */
-  .top{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
-  .top h1{ font-size:22px; font-weight:800; margin:0; }
-  .ctrl{ display:flex; gap:8px; align-items:center; }
-  .ctrl select,.ctrl button{ background:var(--card); border:1px solid var(--bd); color:var(--tx); border-radius:10px; padding:8px 12px; font-size:13px; font-family:inherit; cursor:pointer; }
-  .sub{ font-size:13px; color:var(--mut); margin-top:2px; }
-  .legend{ display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--mut); margin-top:12px; }
-  .legend span{ display:flex; align-items:center; gap:6px; }
-  .dot{ width:8px; height:8px; border-radius:50%; flex:0 0 auto; }
-  #banner{ display:none; background:#20203a; border:1px solid var(--bd); border-radius:12px; padding:12px 14px; font-size:13px; color:var(--mut); margin-top:14px; }
-  /* grid + cards */
-  .grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:18px; }
-  .card{ grid-column:span 1; background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:16px 18px; min-width:0; }
-  .card.wide{ grid-column:span 2; }
-  .card.soon{ border-style:dashed; background:#191828; }
-  .chead{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:14px; }
-  .ctitle{ font-size:14px; font-weight:800; }
-  .cnote{ font-size:11px; color:var(--mut); margin-top:3px; }
-  .badge{ font-size:10px; font-weight:700; letter-spacing:.04em; border-radius:20px; padding:2px 8px; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
-  .badge .d{ width:6px; height:6px; border-radius:50%; }
-  .b-live{ color:var(--te); background:rgba(127,227,214,.09); border:1px solid rgba(127,227,214,.35); }
-  .b-live .d{ background:var(--te); }
-  .b-soon{ color:var(--or); background:rgba(255,107,53,.09); border:1px solid rgba(255,107,53,.35); }
-  .b-soon .d{ background:var(--or); }
-  /* stat tiles */
-  .stats{ display:flex; gap:22px; flex-wrap:wrap; }
-  .stat .n{ font-size:32px; font-weight:800; line-height:1; }
-  .stat .l{ font-size:11px; color:var(--mut); text-transform:uppercase; letter-spacing:.07em; font-weight:700; margin-top:6px; }
-  .stat.accent .n{ color:var(--te); }
-  /* bars */
-  .bar{ margin-bottom:9px; }
-  .bar .row{ display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; }
-  .bar .k{ color:var(--tx); } .bar .v{ color:var(--mut); }
-  .track{ height:8px; background:#ffffff0d; border-radius:6px; overflow:hidden; }
-  .fill{ height:100%; border-radius:6px; background:var(--or); }
-  .fill.teal{ background:var(--te); } .fill.pink{ background:var(--pk); } .fill.vi{ background:var(--vi); }
-  /* table */
-  table{ width:100%; border-collapse:collapse; font-size:13px; }
-  th{ text-align:right; color:var(--mut); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; padding:6px 0; border-bottom:1px solid var(--bd); }
-  th:first-child{ text-align:left; }
-  td{ padding:8px 0; border-bottom:1px solid var(--bd); text-align:right; }
-  td:first-child{ text-align:left; color:var(--tx); }
-  td .cat{ font-size:10px; color:var(--mut); margin-left:8px; }
-  /* favorites */
-  .fav{ display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid var(--bd); font-size:13px; }
-  .fav .s{ color:var(--go); font-weight:700; margin-right:8px; } .fav .votes{ color:var(--mut); font-size:11px; }
-  /* chips */
-  .chips{ display:flex; flex-wrap:wrap; gap:7px; }
-  .chip{ font-size:13px; color:var(--tx); background:#ffffff0d; border:1px solid var(--bd); border-radius:20px; padding:4px 11px; }
-  .chip .c{ color:var(--mut); font-size:11px; margin-left:4px; }
-  .chips.gap .chip{ color:var(--go); border-color:rgba(246,196,83,.3); }
-  .gaplabel{ font-size:11px; color:var(--mut); font-weight:700; margin:12px 0 8px; text-transform:uppercase; letter-spacing:.05em; }
-  /* funnel */
-  .fstage{ margin-bottom:8px; } .fstage .row{ display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; }
-  .fbar{ height:24px; background:#ffffff0d; border-radius:8px; overflow:hidden; }
-  .fbar span{ display:block; height:100%; border-radius:8px; min-width:22px; }
-  /* empty + soon placeholders */
-  .empty{ font-size:12px; color:var(--mut); padding:8px 0; }
-  .phrow{ height:10px; background:#ffffff08; border:1px dashed #3a3a52; border-radius:6px; margin-bottom:9px; }
-  .phrow.w80{ width:80%; } .phrow.w60{ width:60%; } .phrow.w45{ width:45%; }
-  .unlock{ font-size:11px; color:var(--or); margin-top:10px; font-weight:600; }
-  .footer{ text-align:center; font-size:11px; color:var(--mut); margin-top:26px; }
-  @media(max-width:720px){ .grid{ grid-template-columns:1fr; } .card.wide{ grid-column:span 1; } }
-</style>
-</head>
-<body>
-
-<div id="gate">
-  <div class="box">
-    <h1>Passport Insights</h1>
-    <p>Enter the staff passcode.</p>
-    <input id="gatepass" type="password" placeholder="Passcode" autocomplete="off">
-    <button id="gatebtn">View dashboard</button>
-    <div id="gateerr"></div>
-  </div>
-</div>
-
+:root{--bg:#16162a;--card:#1b1b2b;--bd:#2a2a40;--tx:#f0ebe3;--mut:#a7a3b5;--or:#ff6b35;--te:#7fe3d6;--pk:#ff3ea0;--go:#f6c453;--vi:#9b59f6;--bl:#3498db}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif}
+#gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+#gate .box{width:100%;max-width:340px;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:24px;text-align:center}
+#gate h1{font-size:18px;margin:0 0 4px}#gate p{font-size:13px;color:var(--mut);margin:0 0 18px}
+#gate input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--bd);background:#24243c;color:var(--tx);font-size:16px}
+#gate button{width:100%;margin-top:10px;padding:12px;border-radius:10px;border:none;background:var(--or);color:#1a1a2e;font-weight:700;font-size:15px;cursor:pointer}
+#gateerr{color:#ff8f8f;font-size:12px;margin-top:10px;min-height:14px}
+.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 60px}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+h1{font-size:22px;font-weight:800;margin:0}
+.ctrl{display:flex;gap:8px}.ctrl select,.ctrl button{background:var(--card);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit;cursor:pointer}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--mut);margin-top:12px;flex-wrap:wrap}.legend span{display:flex;align-items:center;gap:6px}.legend i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.howcount{font-size:12px;color:var(--mut);line-height:1.5;background:#191828;border:1px solid var(--bd);border-radius:10px;padding:10px 12px;margin-top:12px}
+#banner{display:none;background:#20203a;border:1px solid var(--bd);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--mut);margin-top:14px}
+.tabbar{display:flex;gap:6px;margin:18px 0 4px;border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.tab{background:none;border:none;color:var(--mut);font-family:inherit;font-size:14px;font-weight:700;padding:10px 16px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab.on{color:var(--tx);border-bottom-color:var(--or)}
+.panel{display:none}.panel.on{display:block}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px}
+.card{grid-column:span 1;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px 18px;min-width:0}
+.card.wide{grid-column:span 2}.card.soon{border-style:dashed;background:#191828}
+.chead{display:flex;justify-content:space-between;gap:10px;margin-bottom:14px}
+.ctitle{font-size:14px;font-weight:800}.cdesc{font-size:12px;color:var(--mut);margin-top:3px;line-height:1.4;max-width:480px}
+.bdg{font-size:10px;font-weight:700;border-radius:20px;padding:2px 8px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;height:fit-content}.bdg i{width:6px;height:6px;border-radius:50%}
+.b-live{color:var(--te);background:rgba(127,227,214,.09);border:1px solid rgba(127,227,214,.35)}.b-live i{background:var(--te)}
+.b-soon{color:var(--or);background:rgba(255,107,53,.09);border:1px solid rgba(255,107,53,.35)}.b-soon i{background:var(--or)}
+.stats{display:flex;gap:26px;flex-wrap:wrap}.stat .n{font-size:30px;font-weight:800;line-height:1}.stat .n .u{font-size:14px;font-weight:600;color:var(--mut)}.stat .s{font-size:12px;color:var(--mut);margin-top:6px}
+.bar{margin-bottom:9px}.brow{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}.bv{color:var(--mut)}
+.trk{height:8px;background:#ffffff0d;border-radius:6px;overflow:hidden}.fil{height:100%;border-radius:6px}
+.fst{margin-bottom:8px}.fbar{height:24px;background:#ffffff0d;border-radius:8px;overflow:hidden}.fbar span{display:block;height:100%;border-radius:8px;min-width:22px}
+table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:right;color:var(--mut);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:6px 0;border-bottom:1px solid var(--bd)}th:first-child{text-align:left}
+td{padding:8px 0;border-bottom:1px solid var(--bd);text-align:right;color:var(--mut)}td:first-child{text-align:left;color:var(--tx)}.cat{font-size:10px;color:var(--mut);margin-left:6px}
+.sorth{cursor:pointer;user-select:none}.sorth.sorted{color:var(--or)}#vtable td:nth-child(2){color:var(--te);font-weight:700}
+.thint{font-size:11px;color:var(--mut);margin-bottom:8px}
+.dwrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap}.legs{flex:1;min-width:120px}.lg{display:flex;align-items:center;gap:7px;font-size:12px;margin-bottom:5px}.lg i{width:9px;height:9px;border-radius:2px}.lg span{flex:1}.lg b{color:var(--mut)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}.chip{font-size:13px;background:#ffffff0d;border:1px solid var(--bd);border-radius:20px;padding:4px 11px}.chip b{color:var(--mut);font-weight:600;font-size:11px}
+.chips.gap .chip{color:var(--go);border-color:rgba(246,196,83,.3)}.gl{font-size:11px;color:var(--mut);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin:12px 0 8px}
+.fav{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd);font-size:13px}.fav .s{color:var(--go);font-weight:700;margin-right:8px}.fav .votes{color:var(--mut);font-size:11px}
+.empty{font-size:12px;color:var(--mut);padding:8px 0}
+.ph{height:12px;background:#ffffff08;border:1px dashed #3a3a52;border-radius:6px;margin-bottom:9px}.ph.w60{width:60%}.ph.w45{width:45%}
+.unlock{font-size:11px;color:var(--or);margin-top:10px;font-weight:600}
+.footer{text-align:center;font-size:11px;color:var(--mut);margin-top:26px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.card.wide{grid-column:span 1}}
+</style></head><body>
+<div id="gate"><div class="box"><h1>Passport Insights</h1><p>Enter the staff passcode.</p>
+<input id="gatepass" type="password" placeholder="Passcode" autocomplete="off"><button id="gatebtn">View dashboard</button><div id="gateerr"></div></div></div>
 <div id="dash" style="display:none"><div class="wrap">
-  <div class="top">
-    <div>
-      <h1>NightMarket.fun 2026 · Passport Insights</h1>
-      <div class="sub">Live where data is flowing. In progress everywhere else — nothing here is invented.</div>
-    </div>
-    <div class="ctrl">
-      <select id="prog"><option value="nmf|2026">NMF 2026</option><option value="adbf|2027">ADBF 2027</option></select>
-      <button id="refresh">Refresh</button>
-    </div>
-  </div>
-  <div class="legend">
-    <span><span class="dot" style="background:var(--te)"></span>Live — collecting from the app now</span>
-    <span><span class="dot" style="background:var(--or)"></span>Not yet — unlocks as we build QR scans, the raffle, and cross-referencing</span>
-  </div>
-  <div id="banner"></div>
-
-  <div class="grid">
-
-    <!-- LIVE: reach -->
-    <div class="card wide">
-      <div class="chead"><div><div class="ctitle">Engagement so far</div><div class="cnote">Everyone who has opened and used the Passport</div></div><span class="badge b-live"><span class="d"></span>LIVE</span></div>
-      <div class="stats" id="stats"></div>
-    </div>
-
-    <!-- LIVE: discovery funnel (partial) -->
-    <div class="card wide">
-      <div class="chead"><div><div class="ctitle">Discovery funnel</div><div class="cnote">Did people find and connect with listings</div></div><span class="badge b-live"><span class="d"></span>LIVE (partial)</span></div>
-      <div id="funnel"></div>
-      <div class="cnote" style="margin-top:8px">Viewed and saved are live. “Came to the booth” lights up with on-site booth QR scans.</div>
-    </div>
-
-    <!-- LIVE: most-engaged -->
-    <div class="card wide">
-      <div class="chead"><div class="ctitle">Most-engaged listings</div><span class="badge b-live"><span class="d"></span>LIVE</span></div>
-      <div id="engagement"></div>
-    </div>
-
-    <!-- LIVE: interests -->
-    <div class="card">
-      <div class="chead"><div class="ctitle">Top interests explored</div><span class="badge b-live"><span class="d"></span>LIVE</span></div>
-      <div id="category"></div>
-    </div>
-
-    <!-- LIVE: social -->
-    <div class="card">
-      <div class="chead"><div class="ctitle">Follows &amp; social taps</div><span class="badge b-live"><span class="d"></span>LIVE</span></div>
-      <div id="social"></div>
-    </div>
-
-    <!-- LIVE: favorites -->
-    <div class="card">
-      <div class="chead"><div class="ctitle">Audience favorites</div><span class="badge b-live"><span class="d"></span>LIVE</span></div>
-      <div id="favorites"></div>
-    </div>
-
-    <!-- LIVE: searches -->
-    <div class="card">
-      <div class="chead"><div class="ctitle">What people searched</div><span class="badge b-live"><span class="d"></span>LIVE</span></div>
-      <div id="searches"></div>
-    </div>
-
-    <!-- ================= NOT YET ================= -->
-
-    <div class="card soon wide">
-      <div class="chead"><div><div class="ctitle">Confirmed attendance &amp; reach</div><div class="cnote">Bodies actually in the park, from on-site QR scans — counts the workforce ticketing can’t see</div></div><span class="badge b-soon"><span class="d"></span>NOT YET</span></div>
-      <div class="phrow w80"></div><div class="phrow w60"></div><div class="phrow w45"></div>
-      <div class="unlock">Unlocks with: the on-site QR scan system (bar, booths, hunt) + TicketSpice cross-reference</div>
-    </div>
-
-    <div class="card soon">
-      <div class="chead"><div class="ctitle">Language mix</div><span class="badge b-soon"><span class="d"></span>NOT YET</span></div>
-      <div class="phrow w80"></div><div class="phrow w60"></div>
-      <div class="unlock">Unlocks with: logging the language each visitor picks (small change, wiring next)</div>
-    </div>
-
-    <div class="card soon">
-      <div class="chead"><div class="ctitle">Where they came from</div><span class="badge b-soon"><span class="d"></span>NOT YET</span></div>
-      <div class="phrow w80"></div><div class="phrow w45"></div>
-      <div class="unlock">Unlocks with: the optional zip question at the raffle</div>
-    </div>
-
-    <div class="card soon">
-      <div class="chead"><div class="ctitle">Scan activity by type</div><span class="badge b-soon"><span class="d"></span>NOT YET</span></div>
-      <div class="phrow w80"></div><div class="phrow w60"></div><div class="phrow w45"></div>
-      <div class="unlock">Unlocks with: the typed QR scan system (bar, booth, hunt, VIP, block)</div>
-    </div>
-
-    <div class="card soon">
-      <div class="chead"><div class="ctitle">Opt-in capture</div><span class="badge b-soon"><span class="d"></span>NOT YET</span></div>
-      <div class="phrow w60"></div><div class="phrow w45"></div>
-      <div class="unlock">Unlocks with: the raffle email flow + ACT survey redemption</div>
-    </div>
-
-  </div>
-  <div class="footer">NightMarket.fun is a joint program of The Lunar Foundation and the Greater Austin Asian Chamber of Commerce</div>
+<div class="top"><h1>NightMarket.fun 2026 · Passport Insights</h1>
+<div class="ctrl"><select id="prog"><option value="nmf|2026">NMF 2026</option><option value="adbf|2027">ADBF 2027</option></select><button id="refresh">Refresh</button></div></div>
+<div class="legend"><span><i style="background:var(--te)"></i>Live — collecting now</span><span><i style="background:var(--or)"></i>Needs the QR system or raffle first</span></div>
+<div class="howcount"><b>How we count.</b> <b style="color:#f0ebe3">People</b> = anyone who used the Passport, before or during the event. <b style="color:#f0ebe3">Attendees</b> = people confirmed on-site by scanning a code at the bar, a booth, or the hunt (available once QR is live). We lead with people because that's the number we can stand behind today.</div>
+<div id="banner"></div>
+<div class="tabbar"><button class="tab on" data-t="overview">Overview</button><button class="tab" data-t="vendors">Vendors</button><button class="tab" data-t="funders">Funders</button><button class="tab" data-t="app">App</button></div>
+<div class="panel on" id="p-overview"><div class="grid" id="g-overview"></div></div>
+<div class="panel" id="p-vendors"><div class="grid" id="g-vendors"></div></div>
+<div class="panel" id="p-funders"><div class="grid" id="g-funders"></div></div>
+<div class="panel" id="p-app"><div class="grid" id="g-app"></div></div>
+<div class="footer">NightMarket.fun is a joint program of The Lunar Foundation and the Greater Austin Asian Chamber of Commerce</div>
 </div></div>
-
 <script>
-  var KEY = null;
-  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
-  function num(n){ n = Number(n||0); return n.toLocaleString(); }
-  function maxOf(rows,f){ var m=0; rows.forEach(function(r){ if(Number(r[f])>m) m=Number(r[f]); }); return m||1; }
-  function sumOf(rows,f){ var s=0; rows.forEach(function(r){ s+=Number(r[f]||0); }); return s; }
+var VMAP = {"1": ["K-Mama's Kitchen", "Food"], "2": ["SpicyZest Cater", "Food"], "3": ["Si Baby-Q", "Food"], "4": ["Gati Ice Cream", "Food"], "5": ["Sai Revathi Malikireddy", "Food"], "6": ["Tso Chinese Takeout & Delivery", "Food"], "7": ["Asahi Imports", "Food"], "8": ["Ottoman Foods", "Food"], "9": ["Sharetea Round Rock", "Food"], "10": ["The Cultured Chefs", "Food"], "11": ["Kona Ice of Cedar Park", "Food"], "12": ["Uncle Tetsu", "Food"], "13": ["Camino Alamo BBQ", "Food"], "14": ["YAYAS", "Food"], "15": ["Bake Your Feels", "Food"], "16": ["Purple Rice Korean Grab & Go", "Food"], "17": ["Yellow Ranger", "Food"], "18": ["Steamies Dumplings", "Food"], "19": ["ROLLIE ROLLS", "Food"], "20": ["Sweets n Treats Alchemy", "Food"], "21": ["Sip Munch Cafe", "Food"], "22": ["Blue Apsara Kitchen", "Food"], "23": ["Kessho", "Food"], "24": ["The Peached Tortilla", "Food"], "25": ["Kuchisabishii ATX", "Food"], "26": ["Two Sisters Kimchi", "Food"], "27": ["Wild Bloom Kitchen", "Food"], "28": ["Sate Texas Indonesian BBQ", "Food"], "29": ["Junbi Matcha & Tea", "Food"], "30": ["Gem's Sweets", "Food"], "31": ["Happy Lemon", "Food"], "32": ["Dosa Shack", "Food"], "33": ["P'Z Candiez", "Food"], "34": ["Garbo's Lobster", "Food"], "35": ["Bug & Bear's Kitchen", "Food"], "36": ["Pippa's Homebakery", "Food"], "37": ["Bake'n Bite ATX", "Food"], "38": ["Red Dragon Bao", "Food"], "39": ["Auntie Tsuki's", "Food"], "40": ["Briebluedotcom", "Artist"], "41": ["Kandlery", "Artist"], "42": ["Alin and Chloe Design", "Artist"], "43": ["Marielle Laya", "Artist"], "44": ["By Akki", "Artist"], "45": ["WitchyCrafts", "Artist"], "46": ["My Creative Bookmarks", "Artist"], "47": ["The Meditative Home", "Artist"], "48": ["APIECE", "Artist"], "49": ["Eman's Zines", "Artist"], "50": ["Ark & Gold", "Artist"], "51": ["Keiko Hayner Illustrations", "Artist"], "52": ["Good AM", "Artist"], "53": ["Austin's Candles", "Artist"], "54": ["NGANSEQUITUR", "Artist"], "55": ["Girl and Cat Crochet", "Artist"], "56": ["WiggleWorks Ceramics", "Artist"], "57": ["Justine Shih", "Artist"], "58": ["An Made Ceramics", "Artist"], "59": ["stephanie coto", "Artist"], "60": ["Mimi's Origamis", "Artist"], "61": ["Tak Tak", "Artist"], "62": ["LorDefiance", "Artist"], "63": ["Ina'ilau Shop", "Artist"], "64": ["Solid Soaps", "Artist"], "65": ["M Squared Jewelry", "Artist"], "66": ["Decopon", "Artist"], "67": ["Beibeibear Design", "Artist"], "68": ["Hanle's Clay Flowers", "Artist"], "69": ["Zoee Xiao Artworks", "Artist"], "70": ["Always Sonny Candle Company", "Artist"], "71": ["Lauren Hua Art", "Artist"], "72": ["Amy Huang (Momofugu Co)", "Artist"], "73": ["Girlyne White", "Artist"], "74": ["Sue Ren", "Artist"], "75": ["BT Bio Therapeutics", "Vendor"], "76": ["HeartSpace Collective", "Vendor"], "77": ["Taylor'd & Crafted Co.", "Vendor"], "78": ["Champion Window", "Vendor"], "79": ["Plushymaniacs", "Vendor"], "80": ["Beyond the Above", "Vendor"], "81": ["The Precious Canine", "Vendor"], "82": ["Asian American Resource Center", "Vendor"], "83": ["Sandy Lam", "Vendor"], "84": ["Indigo Mystic Studio", "Vendor"], "85": ["Manhattan Mandarin", "Vendor"], "86": ["PaddleOn Pickleball Wares", "Vendor"], "87": ["Next Chapter Books & Bookmobile", "Vendor"], "88": ["Rest and Rise Counseling", "Vendor"], "89": ["Erti Matcha Ceremony", "Vendor"], "90": ["Deli Aroma", "Vendor"], "91": ["Anahata Yoga Sanctuary", "Vendor"], "92": ["iDance Performing Arts Group", "Performance"], "93": ["Austin Moonflower Performing Arts Group", "Performance"], "94": ["ATX Artists for Social Impact", "Performance"], "95": ["Tam Le-Nguyen", "Performance"], "96": ["Rumah Budaya di Austin", "Performance"], "97": ["Cassio Stella", "Performance"], "98": ["DJ Ard", "Performance"], "99": ["AuroraZ", "Performance"], "100": ["Ramiro Brave", "Performance"], "101": ["Debbie's Kpop Dance Team", "Performance"], "102": ["Austin Filipino Cultural Dance Troupe", "Performance"], "103": ["Ruan Sisters", "Performance"], "104": ["KhushATX Queer Desi Dancers", "Performance"], "105": ["Austin Taiko", "Performance"], "106": ["Habang Buhay", "Performance"], "107": ["QiLi Dance", "Performance"], "108": ["Team Phoenix", "Performance"], "109": ["Community Art Wall", "Activity"], "110": ["Origami Workshop", "Activity"], "111": ["Hanbok & Ao Dai Photo Station", "Activity"], "112": ["Chopstick Challenge", "Activity"], "113": ["Lantern Decorating", "Activity"], "114": ["Boba Garden Lounge", "Activity"], "115": ["AANHPI Trivia", "Activity"], "116": ["Night Market Eating Championship", "Contest"], "117": ["Cosplay Contest & Runway", "Contest"], "118": ["Cinema by the Lake: AANHPI Shorts", "Film"], "119": ["Feature Film Under the Stars", "Film"], "120": ["Kaiju Hunt", "Activity"], "121": ["Trading Card Vendor 1", "Vendor"], "122": ["Trading Card Vendor 2", "Vendor"], "123": ["Trading Card Vendor 3", "Vendor"], "124": ["Trading Card Vendor 4", "Vendor"], "125": ["Trading Card Vendor 5", "Vendor"], "126": ["Trading Card Vendor 6", "Vendor"]};
+var KEY=null, CATC={Food:"#ff6b35",Artist:"#9b59f6",Performance:"#ff3ea0",Activity:"#2ecc71",Film:"#3498db",Vendor:"#a7a3b5",Contest:"#e74c3c"};
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function num(n){return Number(n||0).toLocaleString();}
+function vname(id){var v=VMAP[id];return v?esc(v[0]):("#"+id);}
+function vcat(id){var v=VMAP[id];return v?esc(v[1]):"";}
+function first(a){return (a&&a[0])||{};}
+function maxOf(rows,f){var m=0;rows.forEach(function(r){if(Number(r[f])>m)m=Number(r[f]);});return m||1;}
+function sumOf(rows,f){var s=0;rows.forEach(function(r){s+=Number(r[f]||0);});return s;}
+function bLive(){return '<span class="bdg b-live"><i></i>LIVE</span>';}
+function bSoon(){return '<span class="bdg b-soon"><i></i>NEEDS QR / RAFFLE</span>';}
+function head(t,badge,desc){return '<div class="chead"><div><div class="ctitle">'+t+'</div><div class="cdesc">'+desc+'</div></div>'+badge+'</div>';}
+function dual(big,unit,sub){return '<div class="stat"><div class="n">'+big+' <span class="u">'+unit+'</span></div><div class="s">'+sub+'</div></div>';}
+function bars(rows,keyf,valf,unit,color){
+  if(!rows.length) return '<div class="empty">No data yet — collecting.</div>';
+  var mx=maxOf(rows,valf);
+  return rows.slice(0,10).map(function(r){var c=(typeof color==="function")?color(r[keyf]):color;var w=Math.round(Number(r[valf]||0)/mx*100);
+    return '<div class="bar"><div class="brow"><span>'+esc(r[keyf]||"—")+'</span><span class="bv">'+num(r[valf])+' '+unit+'</span></div><div class="trk"><div class="fil" style="width:'+w+'%;background:'+c+'"></div></div></div>';}).join('');
+}
+function funnel(stages){var mx=stages[0][1]||1,cols=["#ff6b35","#ff3ea0","#9b59f6","#7fe3d6"];
+  return stages.map(function(s,i){var lab=s[0],v=s[1],pend=s[2];var w=pend?12:Math.max(Math.round((v||0)/mx*100),5);var r=pend?"needs QR":(num(v)+" people");
+    return '<div class="fst"><div class="brow"><span style="color:'+(pend?"var(--mut)":"var(--tx)")+'">'+lab+'</span><span class="bv">'+r+'</span></div><div class="fbar"><span style="width:'+w+'%;background:'+cols[i%4]+(pend?";opacity:.35":"")+'"></span></div></div>';}).join('');
+}
+function card(inner,wide,soon){return '<div class="card'+(wide?" wide":"")+(soon?" soon":"")+'">'+inner+'</div>';}
+function soonCard(title,desc,unlock){return card(head(title,bSoon(),desc)+'<div class="ph"></div><div class="ph w60"></div>'+(unlock?'<div class="unlock">Unlocks with: '+unlock+'</div>':''),false,true);}
 
-  function bars(rows, keyField, valField, cls){
-    if(!rows.length) return '<div class="empty">No data yet — collecting.</div>';
-    var mx = maxOf(rows, valField);
-    return rows.slice(0,8).map(function(r){
-      var w = Math.round(Number(r[valField]||0)/mx*100);
-      return '<div class="bar"><div class="row"><span class="k">'+esc(r[keyField]||'—')+'</span><span class="v">'+num(r[valField])+'</span></div>'+
-             '<div class="track"><div class="fill '+(cls||'')+'" style="width:'+w+'%"></div></div></div>';
-    }).join('');
-  }
-
-  function render(d){
-    var totalRows = ["performance_scores","listing_engagement","category_taps","search_terms","demand_gaps","social_by_platform"]
-      .reduce(function(a,k){ return a + (d[k]?d[k].length:0); }, 0);
-    var banner = document.getElementById('banner');
-    if(totalRows === 0){ banner.style.display='block'; banner.textContent='No app events recorded yet for this program. The live panels populate as soon as people use the Passport — the plumbing is connected and waiting.'; }
-    else { banner.style.display='none'; }
-
-    var reach = (d.reach_summary && d.reach_summary[0]) || { devices:0, interactions:0 };
-    var le = d.listing_engagement || [];
-    document.getElementById('stats').innerHTML =
-      '<div class="stat accent"><div class="n">'+num(reach.devices)+'</div><div class="l">Devices engaged</div></div>'+
-      '<div class="stat"><div class="n">'+num(reach.interactions)+'</div><div class="l">Total interactions</div></div>'+
-      '<div class="stat"><div class="n">'+num(le.length)+'</div><div class="l">Listings with activity</div></div>';
-
-    // discovery funnel (real stages we have: viewed, saved)
-    var totViews = sumOf(le,'views'), totPlans = sumOf(le,'plan_adds');
-    var fmax = Math.max(totViews,1);
-    function fstage(lab, v, col, pend){
-      var w = Math.round((v||0)/fmax*100);
-      var right = pend ? 'pending scans' : num(v);
-      return '<div class="fstage"><div class="row"><span class="k" style="color:'+(pend?'var(--mut)':'var(--tx)')+'">'+lab+'</span><span class="v">'+right+'</span></div>'+
-             '<div class="fbar"><span style="width:'+(pend?12:Math.max(w,4))+'%;background:'+col+(pend?';opacity:.35':'')+'"></span></div></div>';
-    }
-    document.getElementById('funnel').innerHTML =
-      fstage('Viewed a profile', totViews, 'linear-gradient(90deg,#ff6b35,#ff6b35bb)', false)+
-      fstage('Saved to My Plan', totPlans, 'linear-gradient(90deg,#ff3ea0,#ff3ea0bb)', false)+
-      fstage('Came to the booth', 0, '#9b59f6', true);
-
-    document.getElementById('engagement').innerHTML = le.length ?
-      '<table><tr><th>Listing</th><th>Views</th><th>Social</th><th>Saved</th></tr>'+
-      le.slice(0,10).map(function(r){
-        return '<tr><td>'+esc(r.vendor_name||('#'+r.vendor_id))+'<span class="cat">'+esc(r.category||'')+'</span></td>'+
-               '<td>'+num(r.views)+'</td><td>'+num(r.social_taps)+'</td><td>'+num(r.plan_adds)+'</td></tr>';
-      }).join('')+'</table>' : '<div class="empty">No data yet — collecting.</div>';
-
-    document.getElementById('category').innerHTML = bars(d.category_taps||[], 'category', 'taps', '');
-    document.getElementById('social').innerHTML = bars(d.social_by_platform||[], 'platform', 'taps', 'pink');
-
-    var ps = (d.performance_scores||[]).filter(function(r){ return Number(r.votes)>0; });
-    document.getElementById('favorites').innerHTML = ps.length ?
-      ps.slice(0,8).map(function(r){
-        return '<div class="fav"><span>'+esc(r.vendor_name||('#'+r.vendor_id))+'</span>'+
-               '<span><span class="s">'+Number(r.avg_stars).toFixed(1)+'</span><span class="votes">'+num(r.votes)+' ratings</span></span></div>';
-      }).join('') : '<div class="empty">No ratings yet — collecting.</div>';
-
-    var st = d.search_terms || [], dg = d.demand_gaps || [];
-    var html = st.length ?
-      '<div class="chips">'+st.slice(0,12).map(function(r){ return '<span class="chip">'+esc(r.term)+'<span class="c">'+num(r.searches)+'</span></span>'; }).join('')+'</div>'
-      : '<div class="empty">No searches yet — collecting.</div>';
-    if(dg.length){
-      html += '<div class="gaplabel">Searched, not found</div><div class="chips gap">'+
-              dg.slice(0,12).map(function(r){ return '<span class="chip">'+esc(r.term)+'</span>'; }).join('')+'</div>';
-    }
-    document.getElementById('searches').innerHTML = html;
-  }
-
-  function load(){
-    var sel = document.getElementById('prog').value.split('|');
-    document.getElementById('banner').style.display='none';
-    fetch('/api/report?program='+encodeURIComponent(sel[0])+'&year='+encodeURIComponent(sel[1]), {
-      headers: { 'x-dashboard-key': KEY }
-    }).then(function(r){
-      if(r.status===401){ throw new Error('unauthorized'); }
-      if(!r.ok){ throw new Error('server'); }
-      return r.json();
-    }).then(function(d){
-      document.getElementById('gate').style.display='none';
-      document.getElementById('dash').style.display='block';
-      try{ sessionStorage.setItem('nmf_dash_key', KEY); }catch(e){}
-      render(d);
-    }).catch(function(err){
-      if(String(err.message)==='unauthorized'){
-        KEY=null; try{ sessionStorage.removeItem('nmf_dash_key'); }catch(e){}
-        document.getElementById('gate').style.display='flex';
-        document.getElementById('dash').style.display='none';
-        document.getElementById('gateerr').textContent='Wrong passcode. Try again.';
-      } else {
-        document.getElementById('gateerr').textContent='Could not load. Check the connection and try again.';
-      }
-    });
-  }
-  document.getElementById('gatebtn').addEventListener('click', function(){
-    KEY = document.getElementById('gatepass').value.trim();
-    document.getElementById('gateerr').textContent='';
-    if(KEY) load();
-  });
-  document.getElementById('gatepass').addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('gatebtn').click(); });
-  document.getElementById('refresh').addEventListener('click', load);
-  document.getElementById('prog').addEventListener('change', load);
-  try{ var saved = sessionStorage.getItem('nmf_dash_key'); if(saved){ KEY=saved; load(); } }catch(e){}
-</script>
-</body>
-</html>
+function renderOverview(d){
+  var rs=first(d.reach_summary), fn=first(d.funnel_summary);
+  var html=card(head("People reached",bLive(),"Unique devices that used the Passport, and the total actions they took")+
+    '<div class="stats">'+dual(num(rs.people),"people","used the Passport")+dual(num(rs.actions),"actions","taps, searches, saves, ratings")+dual(num(rs.listings_active),"listings","had at least one interaction")+'</div>',true);
+  html+=card(head("Discovery funnel",bLive(),"How many people moved from finding a listing to acting on it (people, not taps)")+
+    funnel([["Used the Passport",Number(fn.reached||0),false],["Viewed a profile",Number(fn.viewed||0),false],["Saved to My Plan",Number(fn.saved||0),false],["Came to the booth",0,true]]),true);
+  document.getElementById('g-overview').innerHTML=html;
+}
+function renderVendors(d){
+  var le=(d.listing_engagement||[]).slice().sort(function(a,b){return Number(b.views_people)-Number(a.views_people);});
+  var rows=le.map(function(r){return '<tr data-pv="'+Number(r.views_people||0)+'" data-tv="'+Number(r.views_total||0)+'" data-sb="'+Number(r.saved_by||0)+'" data-fo="'+Number(r.follows||0)+'" data-name="'+vname(r.vendor_id)+'"><td>'+vname(r.vendor_id)+' <span class="cat">'+vcat(r.vendor_id)+'</span></td><td>'+num(r.views_people)+'</td><td>'+num(r.views_total)+'</td><td>'+num(r.saved_by)+'</td><td>'+num(r.follows)+'</td></tr>';}).join('');
+  var tbl=le.length?('<div class="thint">Sorted by people viewed. Click any heading to re-sort.</div><table id="vtable"><tr><th class="sorth" data-k="name">Listing</th><th class="sorth sorted" data-k="pv">People viewed \u25be</th><th class="sorth" data-k="tv">Total views</th><th class="sorth" data-k="sb">Saved by</th><th class="sorth" data-k="fo">Follows</th></tr>'+rows+'</table>'):'<div class="empty">No booth activity yet — collecting.</div>';
+  var html=card(head("All booths",bLive(),"Every vendor with activity. Tap a column heading to sort. People = unique visitors; totals include repeats.")+tbl,true);
+  html+=card(head("Interest by category",bLive(),"Unique people who browsed each part of the market")+bars(d.category_taps||[],"category","people","people",function(c){return CATC[c]||"#ff6b35";}));
+  html+=card(head("Follows & social taps",bLive(),"Total taps sent to makers' pages (an action; a person may tap several)")+bars(d.social_by_platform||[],"platform","taps","taps","#ff3ea0"));
+  var ps=(d.performance_scores||[]).filter(function(r){return Number(r.votes)>0;}).sort(function(a,b){return Number(b.avg_stars)-Number(a.avg_stars)||Number(b.votes)-Number(a.votes);});
+  var fav=ps.length?ps.slice(0,8).map(function(r){return '<div class="fav"><span>'+vname(r.vendor_id)+'</span><span><span class="s">'+Number(r.avg_stars).toFixed(1)+'</span><span class="votes">'+num(r.votes)+' ratings</span></span></div>';}).join(''):'<div class="empty">No ratings yet — collecting.</div>';
+  html+=card(head("Audience favorites",bLive(),"Top-rated performances, by average stars")+fav);
+  var st=d.search_terms||[], dg=d.demand_gaps||[];
+  var sh=st.length?('<div class="chips">'+st.slice(0,14).map(function(r){return '<span class="chip">'+esc(r.term)+' <b>'+num(r.searches)+'</b></span>';}).join('')+'</div>'):'<div class="empty">No searches yet — collecting.</div>';
+  if(dg.length) sh+='<div class="gl">Searched, not found</div><div class="chips gap">'+dg.slice(0,14).map(function(r){return '<span class="chip">'+esc(r.term)+'</span>';}).join('')+'</div>';
+  html+=card(head("What people searched",bLive(),"Demand in their own words, plus searches that returned nothing")+sh,true);
+  document.getElementById('g-vendors').innerHTML=html;
+  wireSort();
+}
+function renderFunders(d){
+  var rs=first(d.reach_summary), fn=first(d.funnel_summary);
+  var html=card(head("Community reached",bLive(),"The headline reach number: unique people, not taps")+
+    '<div class="stats">'+dual(num(rs.people),"people","engaged with the festival through the app")+dual(num(rs.listings_active),"listings","discovered by attendees")+'</div>',true);
+  html+=soonCard("Language representation","Share of people by the language they chose — an equity and access signal","logging the language each visitor picks (small app change)");
+  html+=soonCard("First-time vs returning","New reach vs loyal audience","the optional raffle question (collects on event day)");
+  html+=card(head("Mission funnel: discover → connect",bLive(),"Did people actually discover and connect with AANHPI artists (people)")+
+    funnel([["Discovered a maker",Number(fn.reached||0),false],["Opened their profile",Number(fn.viewed||0),false],["Saved them",Number(fn.saved||0),false],["Visited their booth",0,true]]),true);
+  html+=soonCard("Where they came from","Zip / neighborhood reach — validates the NW-suburb thesis","the raffle zip question (collects on event day)");
+  document.getElementById('g-funders').innerHTML=html;
+}
+function renderApp(d){
+  var rs=first(d.reach_summary);
+  var ppl=Number(rs.people||0), acts=Number(rs.actions||0);
+  var perPerson=ppl?(acts/ppl).toFixed(1):"0";
+  var fu=(d.feature_usage||[]).filter(function(r){return r.type;}).map(function(r){return {label:({view:"Profile views",search:"Searches",plan_add:"Plan saves",social:"Follows",rating:"Ratings",filter:"Category browses",partner_follow:"Partner follows",search_empty:"Empty searches"})[r.type]||r.type, actions:Number(r.actions||0)};}).sort(function(a,b){return b.actions-a.actions;});
+  var html=card(head("Adoption",bLive(),"How many people used the app and how deeply")+
+    '<div class="stats">'+dual(num(ppl),"people","used the Passport")+dual(perPerson,"actions","per person, on average")+dual(num(acts),"actions","total in-app")+'</div>',true);
+  html+=card(head("Feature usage",bLive(),"Total actions per feature — what the app is actually used for")+bars(fu,"label","actions","actions","#7fe3d6"),true);
+  html+=card(head("Reach → attendance",bSoon(),"Warmed audience vs bodies in the park — the funnel funders love")+
+    funnel([["Used the Passport",Number(first(d.funnel_summary).reached||0),false],["Present on-site",0,true]]),true);
+  document.getElementById('g-app').innerHTML=html;
+}
+function wireSort(){var tbl=document.getElementById('vtable');if(!tbl)return;var dir={};
+  tbl.querySelectorAll('.sorth').forEach(function(h){h.addEventListener('click',function(){
+    var k=h.dataset.k;var dd=dir[k]=-(dir[k]||1);
+    tbl.querySelectorAll('.sorth').forEach(function(x){x.classList.remove('sorted');x.textContent=x.textContent.replace(/ [\u25be\u25b4]/,'');});
+    h.classList.add('sorted');h.textContent+=(dd<0?' \u25be':' \u25b4');
+    var rows=[].slice.call(tbl.querySelectorAll('tr')).slice(1);
+    rows.sort(function(a,b){var av=k==='name'?a.dataset.name:+a.dataset[k],bv=k==='name'?b.dataset.name:+b.dataset[k];return av<bv?dd:av>bv?-dd:0;});
+    rows.forEach(function(r){tbl.appendChild(r);});
+  });});
+}
+function render(d){
+  var total=["listing_engagement","category_taps","search_terms","social_by_platform","performance_scores","feature_usage"].reduce(function(a,k){return a+((d[k]&&d[k].length)||0);},0);
+  var b=document.getElementById('banner');
+  if(total===0){b.style.display='block';b.textContent='No app events recorded yet for this program. The live panels fill as soon as people use the Passport — the pipeline is connected and waiting.';}
+  else b.style.display='none';
+  renderOverview(d);renderVendors(d);renderFunders(d);renderApp(d);
+}
+function load(){
+  var sel=document.getElementById('prog').value.split('|');
+  fetch('/api/report?program='+encodeURIComponent(sel[0])+'&year='+encodeURIComponent(sel[1]),{headers:{'x-dashboard-key':KEY}})
+  .then(function(r){if(r.status===401)throw new Error('unauthorized');if(!r.ok)throw new Error('server');return r.json();})
+  .then(function(d){document.getElementById('gate').style.display='none';document.getElementById('dash').style.display='block';try{sessionStorage.setItem('nmf_dash_key',KEY);}catch(e){}render(d);})
+  .catch(function(err){if(String(err.message)==='unauthorized'){KEY=null;try{sessionStorage.removeItem('nmf_dash_key');}catch(e){}document.getElementById('gate').style.display='flex';document.getElementById('dash').style.display='none';document.getElementById('gateerr').textContent='Wrong passcode. Try again.';}else{document.getElementById('gateerr').textContent='Could not load. Check the connection and try again.';}});
+}
+document.getElementById('gatebtn').addEventListener('click',function(){KEY=document.getElementById('gatepass').value.trim();document.getElementById('gateerr').textContent='';if(KEY)load();});
+document.getElementById('gatepass').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('gatebtn').click();});
+document.getElementById('refresh').addEventListener('click',load);
+document.getElementById('prog').addEventListener('change',load);
+document.querySelectorAll('.tab').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on');});b.classList.add('on');document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});document.getElementById('p-'+b.dataset.t).classList.add('on');});});
+try{var saved=sessionStorage.getItem('nmf_dash_key');if(saved){KEY=saved;load();}}catch(e){}
+</script></body></html>
