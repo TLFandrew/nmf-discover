@@ -15323,6 +15323,36 @@ function FestivalMap({ t, src, booths, onBoothTap }) {
       zbtn("\u2212", function () { btnZoom(1 / 1.6); }, "Zoom out"),
       zbtn("\u21ba", function () { setScale(1); var p = clampPan(0, 0, 1); setTx(p.x); setTy(p.y); }, "Reset view")));
 }
+function BeatBoxChallenge({ t, tick, onRefresh }) {
+  var N = 3;
+  const [visited, setVisited] = useState(function () { try { return localStorage.getItem("nmf_bb_visited") === "1"; } catch (e) { return false; } });
+  var perfIds = {};
+  VENDORS.forEach(function (v) { if (v.category === "Performance") perfIds[v.id] = 1; });
+  var rated = 0;
+  try { var rr = JSON.parse(localStorage.getItem("nmf_ratings") || "{}"); rated = Object.keys(rr).filter(function (id) { return perfIds[id] && rr[id] > 0; }).length; } catch (e) {}
+  rated = Math.min(rated, N);
+  var done = rated >= N && visited;
+  var BB2 = "#7b2ff7";
+  function visit() { setVisited(true); try { localStorage.setItem("nmf_bb_visited", "1"); } catch (e) {} }
+  function step(label, ok, sub) {
+    return /*#__PURE__*/React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderTop: "1px solid rgba(255,255,255,0.14)" } },
+      /*#__PURE__*/React.createElement("div", { style: { width: 24, height: 24, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 800, background: ok ? "#2ecc71" : "rgba(255,255,255,0.18)", color: ok ? "#0d2b17" : "#fff" } }, ok ? "\u2713" : ""),
+      /*#__PURE__*/React.createElement("div", { style: { flex: 1, minWidth: 0 } },
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: 14, fontWeight: 700, color: "#fff" } }, label),
+        sub ? /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "rgba(255,255,255,0.78)", marginTop: 1 } }, sub) : null));
+  }
+  return /*#__PURE__*/React.createElement("div", { style: { position: "relative", borderRadius: 16, padding: "16px 18px", marginBottom: 16, background: "linear-gradient(135deg,#ff2e88,#7b2ff7)", color: "#fff", overflow: "hidden" } },
+    /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, fontWeight: 800, letterSpacing: "0.06em", opacity: 0.92 } }, "BEATBOX \u00d7 NIGHTMARKET.FUN"),
+    /*#__PURE__*/React.createElement("div", { style: { fontSize: 20, fontWeight: 800, margin: "3px 0 6px" } }, "The BeatBox Challenge"),
+    /*#__PURE__*/React.createElement("div", { style: { fontSize: 13, lineHeight: 1.5, opacity: 0.95, marginBottom: 8 } }, "Rate any 3 live performances, then visit BeatBox at the bar to complete the challenge and win a prize."),
+    step("Rate 3 performances", rated >= N, rated + " of " + N + " rated" + (rated < N ? "  \u00b7  open any performance and tap the stars" : "")),
+    step("Visit BeatBox at the bar", visited, visited ? "Checked in" : "Scan the BeatBox QR at the bar"),
+    !visited ? /*#__PURE__*/React.createElement("button", { onClick: visit, style: { width: "100%", marginTop: 12, padding: "12px", borderRadius: 10, border: "none", background: "#fff", color: BB2, fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: "inherit" } }, "Scan BeatBox at the bar") : null,
+    done ? /*#__PURE__*/React.createElement("div", { style: { marginTop: 12, padding: "12px 14px", borderRadius: 10, background: "rgba(255,255,255,0.16)", textAlign: "center" } },
+      /*#__PURE__*/React.createElement("div", { style: { fontSize: 16, fontWeight: 800 } }, "\uD83C\uDF89 Challenge complete!"),
+      /*#__PURE__*/React.createElement("div", { style: { fontSize: 12.5, marginTop: 4, opacity: 0.95 } }, "Show this to the BeatBox team at the bar to claim your prize.")) : null,
+    /*#__PURE__*/React.createElement("button", { onClick: onRefresh, style: { display: "block", margin: "10px auto 0", background: "none", border: "none", color: "rgba(255,255,255,0.85)", fontSize: 12, textDecoration: "underline", cursor: "pointer", fontFamily: "inherit" } }, "Refresh progress"));
+}
 function IntroCover({ t, lang, onSelectLang, onEnter, onAbout }) {
   const partners = [{ src: TLF_LOGO, alt: "The Lunar Foundation", tile: false, h: 34 }, { src: GAACC_LOGO, alt: "Greater Austin Asian Chamber of Commerce", tile: false, h: 40 }, { src: CEDARPARK_LOGO, alt: "City of Cedar Park", tile: false, h: 30 }];
   const LANGS = [["en", "English"], ["es", "Espa\u00f1ol"], ["zh", "\u4e2d\u6587"], ["ko", "\ud55c\uad6d\uc5b4"], ["vi", "Ti\u1ebfng Vi\u1ec7t"], ["ja", "\u65e5\u672c\u8a9e"]];
@@ -15682,6 +15712,7 @@ function NMFDiscover() {
   const [showSponsors, setShowSponsors] = useState(false);
   const [showRaffle, setShowRaffle] = useState(false);
   const [showMapFull, setShowMapFull] = useState(false);
+  const [bbTick, setBbTick] = useState(0);
   const [showOnboarding, setShowOnboarding] = useState(function () { try { return !localStorage.getItem("nmf_onboarded"); } catch (e) { return true; } });
   const [showAbout, setShowAbout] = useState(false);
   const [query, setQuery] = useState("");
@@ -16516,7 +16547,7 @@ function NMFDiscover() {
     style: {
       paddingTop: 12
     }
-  }, /*#__PURE__*/React.createElement(PassportToggle, {
+  }, /*#__PURE__*/React.createElement(BeatBoxChallenge, { t: t, tick: bbTick, onRefresh: function () { setBbTick(function (x) { return x + 1; }); } }), /*#__PURE__*/React.createElement(PassportToggle, {
     view: passportView,
     onSelect: setPassportView,
     t: t
