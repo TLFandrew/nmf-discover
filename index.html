@@ -14539,6 +14539,7 @@ function PassportToggle({
     }, tb.label);
   }));
 }
+const KAIJU_URL = "https://www.memoria.directory/map?lat=30.488052&lng=-97.814051";
 function ScavengerHuntPanel({
   t
 }) {
@@ -14566,19 +14567,17 @@ function ScavengerHuntPanel({
       margin: "0 0 18px"
     }
   }, "Like Pokémon GO, but with one-of-a-kind kaiju designed by local kids and adults. Explore Lakeline Park with your phone to find them hidden in augmented reality, then complete your set to win a prize."), /*#__PURE__*/React.createElement("button", {
-    disabled: true,
-    "aria-disabled": "true",
+    onClick: function () { track("kaiju_launch"); window.open(KAIJU_URL, "_blank", "noopener,noreferrer"); },
     style: {
       width: "100%",
       padding: 15,
       borderRadius: 14,
       border: "none",
-      background: "#2a2a40",
-      color: "#f0ebe3",
-      opacity: 0.55,
+      background: "linear-gradient(135deg,#ff6b35,#ff3d7f)",
+      color: "#fff",
       fontSize: 15,
       fontWeight: 800,
-      cursor: "not-allowed",
+      cursor: "pointer",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -14587,14 +14586,6 @@ function ScavengerHuntPanel({
   }, /*#__PURE__*/React.createElement("span", {
     "aria-hidden": "true"
   }, "\u26A1"), " Start the hunt"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      textAlign: "center",
-      marginTop: 9,
-      fontSize: 12,
-      color: "#f0ebe3",
-      opacity: 0.5
-    }
-  }, t.linkSoon || "Link coming soon"), /*#__PURE__*/React.createElement("div", {
     style: {
       textAlign: "center",
       marginTop: 16,
