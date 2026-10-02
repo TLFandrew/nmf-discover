@@ -159,6 +159,11 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true });
     }
 
+    if (type === "kaiju_launch") {
+      await sbInsert("events", { type: "kaiju_launch", device_id: device, program: program, year: year }, {});
+      return res.status(200).json({ ok: true });
+    }
+
     // Unknown event types are accepted and ignored, so future client versions
     // can add events without ever erroring against an older function.
     return res.status(200).json({ ok: false, skipped: "unknown-type" });
