@@ -151,7 +151,7 @@ function renderApp(d){
   var rs=first(d.reach_summary);
   var ppl=Number(rs.people||0), acts=Number(rs.actions||0);
   var perPerson=ppl?(acts/ppl).toFixed(1):"0";
-  var fu=(d.feature_usage||[]).filter(function(r){return r.type;}).map(function(r){return {label:({view:"Profile views",search:"Searches",plan_add:"Plan saves",social:"Follows",rating:"Ratings",filter:"Category browses",partner_follow:"Partner follows",search_empty:"Empty searches"})[r.type]||r.type, actions:Number(r.actions||0)};}).sort(function(a,b){return b.actions-a.actions;});
+  var fu=(d.feature_usage||[]).filter(function(r){return r.type;}).map(function(r){return {label:({view:"Profile views",search:"Searches",plan_add:"Plan saves",social:"Follows",rating:"Ratings",filter:"Category browses",partner_follow:"Partner follows",search_empty:"Empty searches",kaiju_launch:"Kaiju Hunt launches"})[r.type]||r.type, actions:Number(r.actions||0)};}).sort(function(a,b){return b.actions-a.actions;});
   var html=card(head("Adoption",bLive(),"How many people used the app and how deeply")+
     '<div class="stats">'+dual(num(ppl),"people","used the Passport")+dual(perPerson,"actions","per person, on average")+dual(num(acts),"actions","total in-app")+'</div>',true);
   html+=card(head("Feature usage",bLive(),"Total actions per feature — what the app is actually used for")+bars(fu,"label","actions","actions","#7fe3d6"),true);
