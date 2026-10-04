@@ -12909,17 +12909,17 @@ const LANGS = [{
   code: "zh",
   label: "中文"
 }, {
-  code: "ko",
-  label: "한국어"
-}, {
   code: "vi",
   label: "Tiếng Việt"
 }, {
-  code: "ja",
-  label: "日本語"
+  code: "ko",
+  label: "한국어"
 }, {
   code: "hi",
   label: "हिन्दी"
+}, {
+  code: "ja",
+  label: "日本語"
 }];
 
 // Tiny status label shown while listing text is being translated on demand.
@@ -15530,7 +15530,7 @@ function ChampionsHandCard({ t }) {
 }
 function IntroCover({ t, lang, onSelectLang, onEnter, onAbout }) {
   const partners = [{ src: TLF_LOGO, alt: "The Lunar Foundation", tile: false, h: 34 }, { src: GAACC_LOGO, alt: "Greater Austin Asian Chamber of Commerce", tile: false, h: 40 }, { src: CEDARPARK_LOGO, alt: "City of Cedar Park", tile: false, h: 30 }];
-  const LANGS = [["en", "English"], ["es", "Espa\u00f1ol"], ["zh", "\u4e2d\u6587"], ["ko", "\ud55c\uad6d\uc5b4"], ["vi", "Ti\u1ebfng Vi\u1ec7t"], ["ja", "\u65e5\u672c\u8a9e"], ["hi", "\u0939\u093f\u0928\u094d\u0926\u0940"]];
+  const LANGS = [["en", "English"], ["es", "Espa\u00f1ol"], ["zh", "\u4e2d\u6587"], ["vi", "Ti\u1ebfng Vi\u1ec7t"], ["ko", "\ud55c\uad6d\uc5b4"], ["hi", "\u0939\u093f\u0928\u094d\u0926\u0940"], ["ja", "\u65e5\u672c\u8a9e"]];
   return /*#__PURE__*/React.createElement("div", { style: { position: "fixed", inset: 0, height: "100dvh", zIndex: 60, background: "linear-gradient(180deg, #12121f 0%, #1a1a2e 45%, #16162a 100%)", color: "#f0ebe3", display: "flex", flexDirection: "column", alignItems: "center", padding: "56px 22px calc(env(safe-area-inset-bottom) + 34px)", overflowY: "auto", boxSizing: "border-box", textAlign: "center" } },
     /*#__PURE__*/React.createElement("div", { style: { width: "100%", maxWidth: 380, flex: "1 1 auto", display: "flex", flexDirection: "column", alignItems: "center" } },
       /*#__PURE__*/React.createElement("div", null,
