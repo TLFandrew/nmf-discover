@@ -75,6 +75,7 @@ export default async function handler(req, res) {
       const zrows = await sbGet("jollibee_zip_counts?select=zip,votes&order=votes.desc&limit=8");
       const count = (summary && summary[0] && summary[0].votes) || 0;
       const zips = (summary && summary[0] && summary[0].zips) || 0;
+      res.setHeader("Cache-Control", "public, s-maxage=10, stale-while-revalidate=30");
       return res.status(200).json({ count: count, zips: zips, topZips: Array.isArray(zrows) ? zrows : [] });
     } catch (e) {
       return res.status(200).json({ count: 0, topZips: [], skipped: "error" });
