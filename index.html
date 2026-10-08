@@ -12917,6 +12917,9 @@ const LANGS = [{
   code: "ko",
   label: "한국어"
 }, {
+  code: "tl",
+  label: "Tagalog"
+}, {
   code: "hi",
   label: "हिन्दी"
 }, {
@@ -12932,7 +12935,8 @@ const TRANSLATING_LABEL = {
   ko: "번역 중…",
   vi: "Đang dịch…",
   ja: "翻訳中…",
-  hi: "अनुवाद हो रहा है…"
+  hi: "अनुवाद हो रहा है…",
+  tl: "Isinasalin…"
 };
 
 // These fixed interface strings are translated by hand. Listing subcategories and
@@ -12941,6 +12945,33 @@ const TRANSLATING_LABEL = {
 // Have a native speaker review the hand-written strings before public launch,
 // since machine-quality copy can read awkwardly.
 const TRANSLATIONS = {
+  tl: {
+    title: "Tuklasin. Makilala. Kumonekta.",
+    subtitle: "Sabihin kung ano ang hinahanap mo",
+    placeholder: "hal. gusto ko ng maanghang na pagkain...",
+    go: "Hanapin",
+    loading: "Hinahanap ang pinakamagagandang pagpipilian para sa iyo...",
+    browseAll: "Tingnan lahat ng vendor at programa",
+    footer: "Ang NightMarket.fun ay programa ng The Lunar Foundation",
+    free: "LIBRE",
+    categories: {
+      All: "Lahat",
+      Food: "Pagkain",
+      Artist: "Artista",
+      Vendor: "Vendor",
+      Performance: "Pagtatanghal",
+      Activity: "Aktibidad",
+      Contest: "Paligsahan",
+      Film: "Pelikula"
+    },
+    resultsFor: (n, q) => `${n} resulta para sa "${q}"`,
+    listings: n => `${n} listing`,
+    fallbackGeneric: "Narito ang ilang pagpipiliang maaaring bagay sa iyo.",
+    fallbackBusy: "Abala ang aming smart guide, kaya narito ang ilang tugma sa keyword.",
+    rateLimit: "Maraming paghahanap ngayon. Narito muna ang ilang mabilisang pagpipilian habang humuhupa, subukan ulit mamaya para sa buong sagot.",
+    errorNoMatch: "Walang nahanap na tugma. Subukang ibahin ang pagkakasulat, o tingnan lahat ng vendor sa ibaba.",
+    suggested: ["Gusto ko ng maanghang", "Ano ang maganda para sa mga bata?", "Gusto kong makakita ng tradisyonal na sayaw", "Saan makakabili ng mga handmade na regalo?", "Ano ang nangyayari sa entablado?", "Vegan ako, ano ang pwede kong kainin?", "Isang bagay na masaya at interactive", "Mahilig ako sa kulturang Korean"]
+  },
   hi: {
     title: "खोजें। मिलें। जुड़ें।",
     subtitle: "हमें बताएं आप क्या ढूँढ रहे हैं",
@@ -13215,6 +13246,106 @@ function keywordFallback(q) {
   };
 }
 const SHELL_STRINGS = {
+  tl: {
+      coverSelectLang: "Piliin ang iyong wika",
+      actEnglishOnly: "Ang survey ay nasa Ingles lamang.",
+      betaTag: "Beta",
+      aiSearchNote: "Paghahanap na pinapagana ng AI. Maaaring hindi palaging tama ang resulta.",
+      aiTransNote: "Ang mga pagsasalin ay gawa ng AI at maaaring may mali.",
+      navSponsors: "Mga Sponsor",
+      mapTitle: "Hanapin ang iyong daan.",
+      scheduleAction: "Magplano base sa mga palabas.",
+      sponsorsTitle: "Aming mga Sponsor",
+      sponsorsSub: "Naisakatuparan sa tulong ng mga partner na ito",
+      goldSponsor: "Gold Sponsor",
+      actTitle: "Austin Creates Together Survey",
+      actBody: "Survey ng komunidad ng The Lunar Foundation, kasama ang Nielsen. Tumutulong ang iyong puna para makalikha ng mas masasayang programa at makapagpadala ng pondo sa mga lokal na artista. Anonymous, mga 5 minuto, o 15 para sa mga artista, bukas sa lahat ng residente ng Greater Austin.",
+      actCta: "Sagutan ang survey",
+      actClaimLabel: "Tapos na? Ilagay ang codeword mula sa survey para makakuha ng bonus points.",
+      actCodePlaceholder: "Codeword",
+      actClaimSoon: "Malapit nang dumating ang bonus points. Salamat sa pakikilahok!",
+      actClaim: "Kunin",
+      raffleCardTitle: "Sumali sa raffle ng premyo",
+      raffleCardBody: "Ibigay ang iyong email para magkaroon ng pagkakataong manalo. May ilang opsyonal na tanong na tumutulong sa amin na mapabuti ang programa para sa iyo.",
+      raffleTitle: "Sumali sa raffle",
+      raffleIntro: "Ibigay ang iyong email para sumali sa raffle ng premyo. Opsyonal ang mga mabilisang tanong sa ibaba at tumutulong ito para mapabuti ang programa at makapagpadala ng mas maraming suporta sa mga lokal na artista. Anonymous ang mga sagot at hindi kailanman iniuugnay sa iyong email.",
+      raffleEmailLabel: "Email (para maabot ka namin kapag nanalo)",
+      raffleBadEmail: "Mangyaring maglagay ng wastong email.",
+      raffleOptional: "Opsyonal at anonymous",
+      raffleZip: "Zip code",
+      raffleAge: "Edad",
+      raffleFirst: "Unang beses sa NightMarket.fun?",
+      raffleHeard: "Paano mo kami nalaman?",
+      raffleNews: "Padalhan ako paminsan-minsan ng balita tungkol sa iba pang events ng The Lunar Foundation, ang nonprofit na namumuno sa NightMarket.fun.",
+      raffleSubmit: "Sumali sa raffle",
+      raffleSending: "Sumasali...",
+      raffleError: "May nangyaring mali. Pakisubukan ulit.",
+      raffleDoneTitle: "Kasali ka na!",
+      raffleDoneBody: "Good luck. Ang panalo ay ie-email pagkatapos ng event. Salamat sa pagtulong na malaman kung sino ang narito.",
+      raffleDoneBtn: "Tapos",
+      sharedPlanTitle: "Isang shared na plano",
+      sharedPlanNote: "May nag-share nito sa iyo. Idagdag ang gusto mo sa sarili mong plano, o mag-browse lang.",
+      sharedPlanAdd: "Idagdag",
+      sharedPlanAdded: "Nasa plano mo na",
+      sharedPlanAddAll: "Idagdag lahat sa plano ko",
+      sharedPlanAllIn: "Naidagdag na lahat",
+      sharedPlanDismiss: "I-dismiss",
+      planEmptyTitle: "Buuin ang iyong gabi",
+      planEmptyBody: "Mag-browse ng pagkain, sining, musika, at pagtatanghal, at idagdag ang mga gusto mo.",
+      planEmptyLook: "May 'Idagdag sa plano' na button ang bawat listing, ganito:",
+      planEmptySampleTag: "Pagkain · Halimbawang listing",
+      planEmptySampleName: "Isang booth na magugustuhan mo",
+      planEmptySampleDesc: "Pindutin ang naka-highlight na button para i-save ito sa iyong gabi.",
+      planEmptyCta: "Tuklasin ang festival",
+      timeTBA: "Oras: TBA",
+      resetTiles: "I-reset ang mga nakolekta kong tile",
+      demoQr: "Demo QR codes",
+      linkSoon: "Malapit nang dumating ang link",
+      placeholderLineup: "Pansamantalang lineup. Ang mga pinal na palabas at oras ay TBA.",
+    adbfAlso: "Mula rin sa The Lunar Foundation",
+    adbfName: "Austin Dragon Boat Festival",
+    adbfReturns: "Babalik sa tagsibol 2027",
+    adbfStat1: "mga dumalo",
+    adbfStat2: "AANHPI na artista at pagkain",
+    adbfStat3: "sa tubig",
+    adbfWatch: "Panoorin ang 2026 recap",
+    adbfPhotos: "Tingnan ang 2026 photo album",
+    adbfLearn: "Matuto pa",
+    obHead: "Maligayang pagdating sa iyong NightMarket.fun Passport",
+    obIntro: "Isang gabi ng Asian na pagkain, sining, at kultura, gawa ng mga lokal na artista at maker. Narito ang makikita mo sa ibaba ng iyong screen.",
+    obDiscoverD: "Hanapin o i-browse ang pagkain, sining, at mga maker, at i-follow ang mga paborito mo.",
+    obGuideD: "Hanapin ang iyong daan sa mapa, at tingnan ang buong iskedyul: dalawang stage ng palabas, at mga pelikula sa tabi ng lawa.",
+    obQuestsD: "Mangolekta ng mga mahjong tile sa mga booth at maghanap ng mga nakatagong kaiju sa buong parke. Kumpletuhin ang mga ito para manalo ng premyo.",
+    obPlanD: "I-save ang mga palabas at booth na ayaw mong makaligtaan, at i-rate ang mga paborito mong palabas.",
+    obSupport: "Karamihan sa mga booth ay mga lokal na artista at maker, kasama ang mga partner at karanasan sa buong lugar. Huwag magmadali, makilala ang mga maker, at maghanap ng maiuuwi.",
+    obStart: "Simulan ang paggalugad",
+    obReplay: "Tingnan ulit ang pagsalubong",
+    obFoot: "Isang programa ng The Lunar Foundation",
+    navDiscover: "Tuklasin",
+    navPlan: "Plano Ko",
+    navMap: "Mapa",
+    navGuide: "Gabay",
+    navPassport: "Passport",
+    navQuests: "Quests",
+    navMahjong: "Mahjong",
+    planTitle: "Plano Ko",
+    planEmpty: "Walang laman ang plano mo. Buksan ang anumang listing at pindutin ang “Idagdag sa plano.”",
+    planShare: "I-share ang plano ko",
+    planShared: "Nakopya ang link!",
+    addToPlan: "Idagdag sa plano",
+    inPlan: "Nasa plano mo na",
+    follow: "I-follow",
+    comingSoon: "Malapit na",
+    mapDesc: "Mabubuhay dito ang isang interactive na mapa ng festival.",
+    passportTitle: "Passport",
+    passportDesc: "Mangolekta ng stamp sa bawat booth na bisitahin mo.",
+    profileConnect: "Kumonekta",
+    profileBooth: "Hanapin sila sa",
+    profilePhotos: "Mga Larawan",
+    profileProducts: "Ano ang alok nila",
+    close: "Isara",
+    clear: "I-clear ang paghahanap"
+  },
   hi: {
       coverSelectLang: "अपनी भाषा चुनें",
       actEnglishOnly: "यह सर्वे केवल अंग्रेज़ी में उपलब्ध है।",
@@ -13929,6 +14060,37 @@ const SHELL_STRINGS = {
   }
 };
 const COVER_STRINGS = {
+  tl: {
+    coverPresented: "Ipinakikita ng",
+    coverTitleSponsor: "Title Sponsor",
+    coverPartners: "Kasama ang",
+    coverEnter: "Pumasok",
+    coverYourLogo: "Ang logo mo rito",
+    createdBy: "Passport na ginawa ng The Lunar Foundation",
+    aboutPartners: "Tungkol sa aming mga partner",
+    passportMahjong: "Mangolekta ng mahjong tile sa bawat hinto, pagkatapos kumpletuhin ang mga run at set para sa bonus points.",
+    legendTitle: "Ano ang ibig sabihin ng bawat tile",
+    legendVendors: "Mga vendor at nonprofit",
+    howTitle: "Paano ito gumagana",
+    rulesClaimH: "Kunin ang mga tile habang naglilibot", rulesClaim: ["Mga booth: i-scan ang QR code sa anumang pagkain, sining, vendor, o aktibidad na hinto.", "Mga palabas: i-rate ang isang stage act sa loob ng 30 minuto matapos ito.", "Pelikula: sagutin ang mabilis na tanong sa screen.", "Mga paligsahan: lumahok, at ichi-check in ka ng host."], rulesPointsH: "Paano dumarami ang puntos", rulesPoints: ["Bawat tile ay may puntos, at mas mataas ang halaga ng mas bihirang tile.", "Tatlo ng iisang suit nang magkakasunod (isang run) o tatlong magkakatugmang tile (isang set) ay awtomatikong nabubuo at nagdaragdag ng bonus points.", "Mangolekta ng puntos para manalo ng premyo, at bawat tile para sa pinakamataas na karangalan."],
+    pointsLabel: "puntos",
+    setsLabel: "Mga kumpletong set",
+    collectionLabel: "Ang iyong koleksyon",
+    headStartTitle: "Mauna nang kumilos",
+    headStartBody: "I-follow ang aming mga partner at sumali sa kanilang newsletter para kumita ng unang puntos bago ka pa dumating.",
+    subscribe: "Mag-subscribe",
+    beforeEvent: "Bago ang event",
+    nextReward: "Susunod na gantimpala",
+    mahjongTitle: "Maglaro ng Mahjong. Manalo ng Premyo.",
+    labelRun: "Run",
+    labelTriplet: "Triplet",
+    setsEmpty: "Mangolekta ng tatlong magkakasunod o tatlong magkakapareho para kumpletuhin ang isang set at kumita ng bonus points.",
+    tileGet: "Nakolekta ang tile",
+    tileDup: "Nasa koleksyon mo na",
+    scanCta: "Mag-scan ng booth code",
+    scanHint: "Itutok sa QR code ng booth",
+    scanError: "Kailangan namin ng camera access para mag-scan. I-on ito sa iyong browser settings, o gamitin ang demo codes."
+  },
   hi: {
     coverPresented: "प्रस्तुतकर्ता",
     coverTitleSponsor: "शीर्षक प्रायोजक",
@@ -15621,7 +15783,7 @@ function ChampionsHandCard({ t }) {
 }
 function IntroCover({ t, lang, onSelectLang, onEnter, onAbout }) {
   const partners = [{ src: TLF_LOGO, alt: "The Lunar Foundation", tile: false, h: 34 }, { src: GAACC_LOGO, alt: "Greater Austin Asian Chamber of Commerce", tile: false, h: 40 }, { src: CEDARPARK_LOGO, alt: "City of Cedar Park", tile: false, h: 30 }];
-  const LANGS = [["en", "English"], ["es", "Espa\u00f1ol"], ["zh", "\u4e2d\u6587"], ["vi", "Ti\u1ebfng Vi\u1ec7t"], ["ko", "\ud55c\uad6d\uc5b4"], ["hi", "\u0939\u093f\u0928\u094d\u0926\u0940"], ["ja", "\u65e5\u672c\u8a9e"]];
+  const LANGS = [["en", "English"], ["es", "Espa\u00f1ol"], ["zh", "\u4e2d\u6587"], ["vi", "Ti\u1ebfng Vi\u1ec7t"], ["ko", "\ud55c\uad6d\uc5b4"], ["tl", "Tagalog"], ["hi", "\u0939\u093f\u0928\u094d\u0926\u0940"], ["ja", "\u65e5\u672c\u8a9e"]];
   return /*#__PURE__*/React.createElement("div", { style: { position: "fixed", inset: 0, height: "100dvh", zIndex: 60, background: "linear-gradient(180deg, #12121f 0%, #1a1a2e 45%, #16162a 100%)", color: "#f0ebe3", display: "flex", flexDirection: "column", alignItems: "center", padding: "56px 22px calc(env(safe-area-inset-bottom) + 34px)", overflowY: "auto", boxSizing: "border-box", textAlign: "center" } },
     /*#__PURE__*/React.createElement("div", { style: { width: "100%", maxWidth: 380, flex: "1 1 auto", display: "flex", flexDirection: "column", alignItems: "center" } },
       /*#__PURE__*/React.createElement("div", null,
