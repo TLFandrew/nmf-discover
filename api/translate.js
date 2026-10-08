@@ -18,6 +18,8 @@ const LANG_NAMES = {
   ko: "Korean",
   vi: "Vietnamese",
   ja: "Japanese",
+  hi: "Hindi",
+  tl: "Tagalog",
 };
 
 // Best-effort in-memory per-IP rate limit. Resets when the instance cycles. The client
