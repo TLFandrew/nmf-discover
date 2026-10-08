@@ -124,8 +124,8 @@
   </div></div>
 
 <script>
-var CITY={"78613":"Cedar Park","78630":"Cedar Park","78641":"Leander","78645":"Leander","78664":"Round Rock","78665":"Round Rock","78681":"Round Rock","78660":"Pflugerville","78717":"NW Austin","78727":"Austin","78729":"Austin","78750":"Austin","78759":"Austin","78626":"Georgetown","78628":"Georgetown","78634":"Hutto","78745":"Austin","78701":"Austin","75024":"Plano"};
-function cityOf(z){return CITY[z]||"ZIP "+z;}
+var CITY={"78610":"Buda","78613":"Cedar Park","78616":"Cedar Creek","78617":"Del Valle","78620":"Dripping Springs","78621":"Elgin","78626":"Georgetown","78628":"Georgetown","78633":"Georgetown","78634":"Hutto","78640":"Kyle","78641":"Leander","78642":"Liberty Hill","78645":"Leander","78653":"Manor","78660":"Pflugerville","78664":"Round Rock","78665":"Round Rock","78666":"San Marcos","78669":"Spicewood","78681":"Round Rock","78691":"Pflugerville","78734":"Lakeway","78738":"Bee Cave","75024":"Plano"};
+function cityOf(z){return CITY[z]||(/^787/.test(z)?"Austin":(/^786/.test(z)?"Greater Austin":"Out of area"));}
 function isMetro(z){return /^78[67]/.test(z);}
 function fmt(n){return (n||0).toLocaleString();}
 
