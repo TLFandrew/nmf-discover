@@ -33,7 +33,6 @@ async function sbGet(path) {
 }
 
 export default async function handler(req, res) {
-  res.setHeader("Cache-Control", "no-store");
   if (req.method !== "GET") { res.status(405).json({ error: "method not allowed" }); return; }
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) { res.status(500).json({ error: "server not configured" }); return; }
 
@@ -43,6 +42,7 @@ export default async function handler(req, res) {
   const zips = await sbGet("jollibee_zip_counts?select=zip,votes&order=votes.desc");
   const daily = await sbGet("jollibee_daily?select=day,votes&order=day.asc");
 
+  res.setHeader("Cache-Control", "public, s-maxage=20, stale-while-revalidate=60");
   res.status(200).json({
     count: (summary && summary[0] && summary[0].votes) || 0,
     distinctZips: (summary && summary[0] && summary[0].zips) || 0,
