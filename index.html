@@ -14817,7 +14817,7 @@ function BottomNav({
     }
   }, items.map(it => {
     const active = tab === it.key;
-    if (it.center) { return /*#__PURE__*/React.createElement("button", { key: it.key, onClick: () => onSelect(it.key), "aria-label": it.label, "aria-current": active ? "page" : undefined, style: { flex: 1, padding: "0 4px 10px", background: "transparent", border: "none", cursor: "pointer", color: "#ff6b35", display: "flex", flexDirection: "column", alignItems: "center", gap: 4 } }, /*#__PURE__*/React.createElement("span", { "aria-hidden": "true", style: { width: 48, height: 48, borderRadius: "50%", background: "#ff6b35", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, marginTop: -20, boxShadow: "0 6px 14px rgba(255,107,53,.5)", border: "3px solid #16162a" } }, it.icon), /*#__PURE__*/React.createElement("span", { style: { fontSize: 12, fontWeight: 700 } }, it.label)); }
+    if (it.center) { return /*#__PURE__*/React.createElement("button", { key: it.key, onClick: () => onSelect(it.key), "aria-label": it.label, "aria-current": active ? "page" : undefined, style: { flex: 1, padding: "0 4px 10px", background: "transparent", border: "none", cursor: "pointer", color: "#ff6b35", display: "flex", flexDirection: "column", alignItems: "center", gap: 4 } }, /*#__PURE__*/React.createElement("span", { "aria-hidden": "true", style: { width: 58, height: 58, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 34, marginTop: -24, boxShadow: "0 7px 18px rgba(255,107,53,.55)", border: "2px solid #ff6b35" } }, it.icon), /*#__PURE__*/React.createElement("span", { style: { fontSize: 12, fontWeight: 700 } }, it.label)); }
     return /*#__PURE__*/React.createElement("button", {
       key: it.key,
       onClick: () => onSelect(it.key),
@@ -14853,7 +14853,7 @@ function BottomNav({
 var TICKETS_URL = "https://www.nightmarket.fun/tix";          // TicketSpice buy link
 var UMO_URL = "https://www.capmetro.org/appfaq";              // CapMetro / UMO app info
 var LINK_URL = "https://www.cedarparktexas.gov/LiNK";             // Cedar Park LiNK info
-var HOTEL_HYATT_URL = "";      // Hyatt Place booking link (pending)
+var HOTEL_HYATT_URL = "https://www.hyatt.com/events/en-US/group-booking/AUSZC/G-LUNA";      // Hyatt Place booking link (pending)
 var HOTEL_CANDLEWOOD_URL = "https://www.ihg.com/redirect?path=rates&brandCode=CW&regionCode=1&localeCode=en&checkInMonthYear=102026&checkInDate=13&checkOutDate=15&checkOutMonthYear=102026&hotelCode=AUSCP&GPC=A7M&numberOfAdults=1&numberOfRooms=1&adjustMonth=false&showApp=true&monthIndex=00"; // Candlewood IHG link (live per tracker)
 var HOTEL_HIE_URL = "https://www.ihg.com/redirect?path=rates&brandCode=EX&regionCode=1&localeCode=en&checkInMonthYear=102026&checkInDate=13&checkOutDate=15&checkOutMonthYear=102026&hotelCode=AUSCD&GPC=AD4&numberOfAdults=1&numberOfRooms=1&adjustMonth=false&showApp=true&monthIndex=00";        // Holiday Inn Express IHG link (live per tracker)
 
