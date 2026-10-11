@@ -98,14 +98,14 @@ async function getFacts() {
 function templated(f) {
   const lead = f.cities[0], second = f.cities[1];
   const ticker = [
-    lead ? (lead.area + " leads with " + lead.votes + " votes") : (f.count + " fans want " + f.brand + " in " + f.city),
-    f.remaining ? (f.remaining + " to the next unlock") : "Goal unlocked, keep the votes coming!",
-    (lead && second) ? (lead.area + " vs " + second.area + ": " + lead.votes + " to " + second.votes) : null,
-    f.momentum ? (f.momentum + " votes in the last hour") : null
+    lead ? ("Anak, " + lead.area + " leads with " + lead.votes + " - tap to keep up!") : (f.count + " fans want " + f.brand + " in " + f.city + " - add yours na!"),
+    f.remaining ? (f.remaining + " to the next unlock - don't be shy, tap!") : "Goal unlocked - keep going, ha!",
+    (lead && second) ? (second.area + ", you gonna let " + lead.area + " win? " + lead.votes + " to " + second.votes) : null,
+    f.momentum ? (f.momentum + " votes this hour - bring a friend!") : null
   ].filter(Boolean);
-  const board = f.count + " fans and counting. "
-    + (lead ? (lead.area + " is out front" + (second ? ", " + second.area + " right behind. " : ". ") ) : "")
-    + (f.remaining ? (f.remaining + " votes to the next unlock.") : "Next goal unlocked.");
+  const board = "Ay, " + f.count + " fans and counting! "
+    + (lead ? (lead.area + " is out front" + (second ? ", but " + second.area + " is close - don't get lazy, ha. " : " - keep it up! ") ) : "")
+    + (f.remaining ? ("Only " + f.remaining + " to the next unlock, so tap and bring your friends!") : "Next goal unlocked - salamat!");
   const report = f.count + " people have voted \"" + f.want + "\". "
     + (lead ? ("Demand is strongest in " + lead.area + (second ? " and " + second.area : "") + ". ") : "")
     + (f.remaining ? ("The campaign is " + f.remaining + " votes from its next milestone" + (f.momentum ? ", with " + f.momentum + " votes in the last hour" : "") + ".") : "The latest milestone has been reached.");
@@ -114,14 +114,14 @@ function templated(f) {
 
 async function generate(f) {
   if (!ANTHROPIC_API_KEY) return templated(f);
-  const sys = "You are the live hype announcer for a fan-demand campaign where people vote that they want a brand to open in their city. "
-    + "From the FACTS JSON you are given, write upbeat color commentary in three forms. Return ONLY valid JSON, no code fences, with keys:\n"
-    + "  \"ticker\": array of 3 to 5 short punchy lines (max ~55 characters each) for a live ticker,\n"
-    + "  \"board\": one or two sentences of play-by-play for a big live board,\n"
-    + "  \"report\": one persuasive executive paragraph (2 to 4 sentences) for a report shown to the brand's decision-makers.\n"
-    + "RULES: Use ONLY the numbers and place names in FACTS; never invent figures or cities. Friendly, energetic hype. "
-    + "Light city-vs-city rivalry is fine but never insult a place or a person. No personal data, no individual names. "
-    + "Reference the next milestone and momentum when present to drive urgency.";
+  const sys = "You are Tita/Kuya, the warm and playful Filipino auntie-and-kuya voice hyping a live fan-demand campaign where people vote that they want " + BRAND.name + " to open in " + BRAND.city + ". "
+    + "You have loving, familial, slightly cheeky energy: you cheer people on, you gently nag them to vote, and you tell them to pull their friends and family in too, like a Tita at a family party who will lovingly guilt you into helping. "
+    + "From the FACTS JSON, return ONLY valid JSON with no code fences, an object with exactly these keys: ticker, board, report. "
+    + "ticker is an array of 3 to 5 short punchy lines, max about 55 characters each, in the Tita/Kuya voice, each one egging people on to vote or to bring someone in. "
+    + "board is one or two sentences of Tita/Kuya play-by-play that celebrates the momentum, names the next target, and tells people to act. "
+    + "report is ONE professional, persuasive executive paragraph of 2 to 4 sentences for the brand decision-makers. The report is NOT in the Tita/Kuya voice: keep it warm but credible and data-forward, suitable for a marketing or real-estate team. "
+    + "VOICE for ticker and board: warm Filipino Tita/Kuya energy; light Taglish is welcome but keep it understandable, occasional anak, na, ha, tara; always include a nudge to act such as tap, vote, bring a friend, or beat the rival city. "
+    + "RULES: use ONLY the numbers and place names in FACTS, never invent figures or cities. Playful city rivalry is fine but never insult a place or a person, keep it family-friendly. No personal data, no individual names. Reference the next milestone and momentum to drive urgency.";
   try {
     const r = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
