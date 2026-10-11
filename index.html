@@ -57,6 +57,7 @@
 @keyframes jbgallopC{from{background-position:0 0}to{background-position:-368px 0}}
 @keyframes jbgallopL{from{background-position:0 0}to{background-position:-427px 0}}
 @media (prefers-reduced-motion:reduce){.nmf-gallop{animation-duration:.72s!important;animation-iteration-count:infinite!important}}
+@keyframes nmftickerin{from{opacity:.25}to{opacity:1}}
 </style>
   <script>/**
  * @license React
@@ -14068,7 +14069,7 @@ const COVER_STRINGS = {
     coverPresented: "Ipinakikita ng",
     coverTitleSponsor: "Title Sponsor",
     coverPartners: "Kasama ang",
-    coverEnter: "Pumasok",
+    coverEnter: "Tayo na!",
     coverYourLogo: "Ang logo mo rito",
     createdBy: "Passport na ginawa ng The Lunar Foundation",
     aboutPartners: "Tungkol sa aming mga partner",
@@ -14099,7 +14100,7 @@ const COVER_STRINGS = {
     coverPresented: "प्रस्तुतकर्ता",
     coverTitleSponsor: "शीर्षक प्रायोजक",
     coverPartners: "साझेदारी में",
-    coverEnter: "प्रवेश करें",
+    coverEnter: "चलो चलें!",
     coverYourLogo: "आपका लोगो यहाँ",
     createdBy: "पासपोर्ट द लूनर फ़ाउंडेशन द्वारा बनाया गया",
     aboutPartners: "हमारे साझेदारों के बारे में",
@@ -14161,7 +14162,7 @@ const COVER_STRINGS = {
     coverPresented: "Presentado por",
     coverTitleSponsor: "Patrocinador principal",
     coverPartners: "En colaboración con",
-    coverEnter: "Entrar",
+    coverEnter: "¡Vamos!",
     coverYourLogo: "Tu logo aquí",
     createdBy: "Pasaporte creado por The Lunar Foundation",
     aboutPartners: "Sobre nuestros socios",
@@ -14192,7 +14193,7 @@ const COVER_STRINGS = {
     coverPresented: "呈献",
     coverTitleSponsor: "冠名赞助商",
     coverPartners: "合作伙伴",
-    coverEnter: "进入",
+    coverEnter: "出发！",
     coverYourLogo: "您的标志",
     createdBy: "护照由 The Lunar Foundation 创建",
     aboutPartners: "关于我们的合作伙伴",
@@ -14223,7 +14224,7 @@ const COVER_STRINGS = {
     coverPresented: "주최",
     coverTitleSponsor: "타이틀 스폰서",
     coverPartners: "파트너",
-    coverEnter: "들어가기",
+    coverEnter: "가자!",
     coverYourLogo: "로고 위치",
     createdBy: "패스포트 제작: The Lunar Foundation",
     aboutPartners: "파트너 소개",
@@ -14254,7 +14255,7 @@ const COVER_STRINGS = {
     coverPresented: "Trình bày bởi",
     coverTitleSponsor: "Nhà tài trợ chính",
     coverPartners: "Hợp tác cùng",
-    coverEnter: "Vào",
+    coverEnter: "Đi thôi!",
     coverYourLogo: "Logo của bạn",
     createdBy: "Hộ chiếu được tạo bởi The Lunar Foundation",
     aboutPartners: "Về các đối tác",
@@ -14285,7 +14286,7 @@ const COVER_STRINGS = {
     coverPresented: "主催",
     coverTitleSponsor: "冠スポンサー",
     coverPartners: "パートナー",
-    coverEnter: "入る",
+    coverEnter: "行こう！",
     coverYourLogo: "ロゴを掲載",
     createdBy: "パスポート制作：The Lunar Foundation",
     aboutPartners: "パートナーについて",
@@ -15304,20 +15305,25 @@ function JollibeeHero({ zip, setZip, count, onTap, onOpenBoard, leader }) {
     /*#__PURE__*/React.createElement("button", { onClick: onOpenBoard, style: { marginTop: 10, background: "transparent", border: "none", color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", padding: 0, textDecoration: "underline", textUnderlineOffset: "2px" } }, "See the full board"),
     /*#__PURE__*/React.createElement("div", { style: { marginTop: 9, fontSize: 11, opacity: 0.85, lineHeight: 1.4 } }, "Prototype for discussion. Jollibee marks used with permission pending."));
 }
-function JollibeeBanner({ count, expanded, setExpanded, onOpenBoard, leader }) {
+function JollibeeBanner({ count, expanded, setExpanded, onOpenBoard, leader, ticker }) {
   var goal = 5000;
   var pct = Math.min(100, Math.round(count / goal * 100));
+  var tk = Array.isArray(ticker) ? ticker : [];
+  var ti = React.useState(0); var tIdx = ti[0], setTIdx = ti[1];
+  React.useEffect(function () { if (tk.length < 2) return; var id = setInterval(function () { setTIdx(function (n) { return (n + 1) % tk.length; }); }, 4500); return function () { clearInterval(id); }; }, [tk.length]);
+  var tLine = tk.length ? tk[tIdx % tk.length] : "";
   return /*#__PURE__*/React.createElement("div", { style: { borderRadius: 12, marginBottom: 16, background: "linear-gradient(135deg,#c20022,#e4002b)", color: "#fff", border: "1px solid #ff3a57", overflow: "hidden" } },
     /*#__PURE__*/React.createElement("button", { onClick: function () { setExpanded(!expanded); }, "aria-expanded": expanded, style: { width: "100%", display: "flex", alignItems: "center", gap: 9, padding: "10px 13px", background: "transparent", border: "none", color: "#fff", cursor: "pointer", fontFamily: "inherit", textAlign: "left" } },
       /*#__PURE__*/React.createElement("img", { src: JB_ICON, alt: "", "aria-hidden": "true", style: { width: 22, height: 22, flexShrink: 0, display: "block", objectFit: "contain" } }),
       /*#__PURE__*/React.createElement("span", { style: { fontSize: 13, fontWeight: 700, flex: 1 } }, "You voted  \u00b7  Austin wants Jollibee: " + count.toLocaleString()),
       /*#__PURE__*/React.createElement("span", { "aria-hidden": "true", style: { fontSize: 12, opacity: 0.85 } }, expanded ? "\u25B4" : "\u25BE")),
+    tLine ? /*#__PURE__*/React.createElement("div", { style: { padding: "0 13px 9px", display: "flex", alignItems: "center", gap: 7 } }, /*#__PURE__*/React.createElement("span", { "aria-hidden": "true", style: { width: 6, height: 6, borderRadius: "50%", background: "#ffd100", boxShadow: "0 0 6px #ffd100", flexShrink: 0 } }), /*#__PURE__*/React.createElement("span", { key: tIdx, style: { fontSize: 11.5, color: "#fff", opacity: 0.95, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", animation: "nmftickerin .5s ease" } }, tLine)) : null,
     expanded && /*#__PURE__*/React.createElement("div", { style: { padding: "0 13px 13px" } },
       /*#__PURE__*/React.createElement("div", { style: { height: 7, borderRadius: 999, background: "rgba(255,255,255,.25)", overflow: "hidden", marginBottom: 6 } }, /*#__PURE__*/React.createElement("div", { style: { height: "100%", width: pct + "%", background: "#ffd100" } })),
       /*#__PURE__*/React.createElement("div", { style: { fontSize: 11, opacity: 0.9, marginBottom: 10 } }, count.toLocaleString() + " of " + goal.toLocaleString() + " to the next unlock  \u00b7  " + leader),
       /*#__PURE__*/React.createElement("button", { onClick: onOpenBoard, style: { background: "#ffd100", color: "#7a1200", border: "none", borderRadius: 10, padding: "9px 14px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "inherit" } }, "See the full board")));
 }
-function JollibeeBoard({ count, zips, demo, onSimulate, onReset, onClose }) {
+function JollibeeBoard({ count, zips, demo, onSimulate, onReset, onClose, board }) {
   var MS = [
     { at: 1000, title: "Grand-opening celebration", desc: "Unlocks the full opening-day event: mascot, music, and giveaways for the first customers in line." },
     { at: 2500, title: "Opening-day Chickenjoy deal", desc: "A Chickenjoy special for everyone who comes on opening day. No signup, just show up." },
@@ -15343,6 +15349,7 @@ function JollibeeBoard({ count, zips, demo, onSimulate, onReset, onClose }) {
       /*#__PURE__*/React.createElement("p", { style: { fontSize: 14, color: "#ccc3cc", textAlign: "center", margin: "0 0 20px", lineHeight: 1.5 } }, "Every tap tells Jollibee where Greater Austin wants a store."),
       /*#__PURE__*/React.createElement("div", { style: { fontSize: 36, fontWeight: 900, textAlign: "center", color: "#ffd100", lineHeight: 1.05, fontVariantNumeric: "tabular-nums" } }, count.toLocaleString()),
       /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "#ccc3cc", textAlign: "center", marginBottom: 14 } }, "votes and counting"),
+      board ? /*#__PURE__*/React.createElement("div", { style: { fontSize: 13.5, color: "#ffd100", fontWeight: 700, textAlign: "center", margin: "6px auto 2px", maxWidth: 430, lineHeight: 1.4, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 } }, /*#__PURE__*/React.createElement("span", { "aria-hidden": "true", style: { width: 7, height: 7, borderRadius: "50%", background: "#ffd100", boxShadow: "0 0 7px #ffd100", flexShrink: 0 } }), board) : null,
       /*#__PURE__*/React.createElement("div", { style: { position: "relative", margin: "20px 0 22px" } }, /*#__PURE__*/React.createElement("div", { style: { height: 10, borderRadius: 999, background: "#5c3a5e", overflow: "hidden" } }, /*#__PURE__*/React.createElement("div", { style: { height: "100%", width: pct + "%", background: "linear-gradient(90deg,#e4002b,#ffd100)", transition: "width .4s ease" } })), /*#__PURE__*/React.createElement("img", { src: JB_DRUMSTICK, alt: "", "aria-hidden": "true", style: { position: "absolute", top: "50%", left: Math.max(5, Math.min(95, pct)) + "%", transform: "translate(-50%,-50%)", width: 50, height: "auto", filter: "drop-shadow(0 2px 4px rgba(0,0,0,.55))", transition: "left .4s ease", pointerEvents: "none" } })),
       /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "#ccc3cc", textAlign: "center", marginBottom: 24 } }, next ? (count.toLocaleString() + " of " + next.at.toLocaleString() + " to the next unlock") : "All milestones unlocked"),
       /*#__PURE__*/React.createElement("div", { style: { fontSize: 13, fontWeight: 800, color: "#f0ebe3", margin: "0 2px 10px" } }, "Milestone rewards"),
@@ -16279,6 +16286,8 @@ function NMFDiscover() {
   const [jbZips, setJbZips] = useState([]);
   const [jbExpanded, setJbExpanded] = useState(false);
   const [jbBoard, setJbBoard] = useState(false);
+  const [jbTicker, setJbTicker] = useState([]);
+  const [jbBoardMsg, setJbBoardMsg] = useState("");
   const [jbDemo] = useState(true); /* DEMO CONTROLS ON for pitch/testing. Before public release, change true to false to hide "Simulate surge" + "Reset my vote". */
   function fetchJollibee() {
     try {
@@ -16288,8 +16297,9 @@ function NMFDiscover() {
       }).catch(function () {});
     } catch (e) {}
   }
-  React.useEffect(function () { fetchJollibee(); }, []);
-  React.useEffect(function () { if (!jbBoard) return; fetchJollibee(); var _id = setInterval(fetchJollibee, 20000); return function () { clearInterval(_id); }; }, [jbBoard]);
+  function fetchAnnouncer() { try { fetch("/api/jollibee-announcer", { method: "GET" }).then(function (r) { return r.json(); }).then(function (d) { if (d && Array.isArray(d.ticker)) setJbTicker(d.ticker); if (d && typeof d.board === "string") setJbBoardMsg(d.board); }).catch(function () {}); } catch (e) {} }
+  React.useEffect(function () { fetchJollibee(); fetchAnnouncer(); var _a = setInterval(fetchAnnouncer, 60000); return function () { clearInterval(_a); }; }, []);
+  React.useEffect(function () { if (!jbBoard) return; fetchJollibee(); fetchAnnouncer(); var _id = setInterval(function () { fetchJollibee(); fetchAnnouncer(); }, 20000); return function () { clearInterval(_id); }; }, [jbBoard]);
   function jollibeeTap() {
     if (jbTapped) return;
     var z = jbZip.replace(/[^0-9]/g, "");
@@ -17042,7 +17052,7 @@ function NMFDiscover() {
     selected: categoryFilter,
     onSelect: setCategoryFilter,
     t: t
-  })), (!results && !loading) && (jbTapped ? /*#__PURE__*/React.createElement(JollibeeBanner, { count: jbCount, expanded: jbExpanded, setExpanded: setJbExpanded, onOpenBoard: function () { setJbBoard(true); }, leader: (jbZips[0] ? (jbZipLabel(jbZips[0].zip) + " leading") : "Round Rock (78664) leading") }) : /*#__PURE__*/React.createElement(JollibeeHero, { zip: jbZip, setZip: setJbZip, count: jbCount, onTap: jollibeeTap, onOpenBoard: function () { setJbBoard(true); }, leader: (jbZips[0] ? (jbZipLabel(jbZips[0].zip) + " leading") : "Round Rock (78664) leading") })), !loading && /*#__PURE__*/React.createElement("div", {
+  })), (!results && !loading) && (jbTapped ? /*#__PURE__*/React.createElement(JollibeeBanner, { count: jbCount, expanded: jbExpanded, setExpanded: setJbExpanded, ticker: jbTicker, onOpenBoard: function () { setJbBoard(true); }, leader: (jbZips[0] ? (jbZipLabel(jbZips[0].zip) + " leading") : "Round Rock (78664) leading") }) : /*#__PURE__*/React.createElement(JollibeeHero, { zip: jbZip, setZip: setJbZip, count: jbCount, onTap: jollibeeTap, onOpenBoard: function () { setJbBoard(true); }, leader: (jbZips[0] ? (jbZipLabel(jbZips[0].zip) + " leading") : "Round Rock (78664) leading") })), !loading && /*#__PURE__*/React.createElement("div", {
     role: "status",
     "aria-live": "polite",
     style: {
@@ -17506,7 +17516,7 @@ function NMFDiscover() {
     onSelect: setTab,
     t: t,
     lift: navLift
-  }), showAdbf && /*#__PURE__*/React.createElement(AdbfFullscreen, { t: t, onClose: function () { setShowAdbf(false); } }), (!showCover && showOnboarding) && /*#__PURE__*/React.createElement(Onboarding, { t: t, lang: lang, onSelectLang: setLang, onDone: function () { setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} }, onGoto: function (tab) { setTab(tab); setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} } }), showSponsors && /*#__PURE__*/React.createElement(SponsorWall, { t: t, onClose: function () { setShowSponsors(false); } }), showRaffle && /*#__PURE__*/React.createElement(RaffleForm, { t: t, onClose: function () { setShowRaffle(false); } }), jbBoard && /*#__PURE__*/React.createElement(JollibeeBoard, { count: jbCount, zips: jbZips, demo: jbDemo, onSimulate: jollibeeSimulate, onReset: jollibeeResetVote, onClose: function () { setJbBoard(false); } }), showMapFull && /*#__PURE__*/React.createElement("div", { style: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, height: "100dvh", zIndex: 70, background: "#230a24", display: "flex", flexDirection: "column" } }, /*#__PURE__*/React.createElement("div", { style: { flex: "0 0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "calc(env(safe-area-inset-top) + 14px) 16px 10px", borderBottom: "1px solid #5c3a5e" } }, /*#__PURE__*/React.createElement("div", { style: { fontSize: 16, fontWeight: 800, color: "#f0ebe3" } }, t.mapTitle || "Find your way around."), /*#__PURE__*/React.createElement("button", { onClick: function () { setShowMapFull(false); try { if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); } catch (e) {} try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {} }, "aria-label": "Close", style: { width: 40, height: 40, borderRadius: "50%", border: "1px solid #4d2254", background: "transparent", color: "#ccc3cc", fontSize: 16, cursor: "pointer", fontFamily: "inherit", flexShrink: 0 } }, "\u2715")), /*#__PURE__*/React.createElement("div", { style: { flex: "1 1 auto", position: "relative", minHeight: 0 } }, /*#__PURE__*/React.createElement(FestivalMap, { t: t, src: MAP_IMG, booths: MAP_BOOTHS }))), /*#__PURE__*/React.createElement(ProfileOverlay, {
+  }), showAdbf && /*#__PURE__*/React.createElement(AdbfFullscreen, { t: t, onClose: function () { setShowAdbf(false); } }), (!showCover && showOnboarding) && /*#__PURE__*/React.createElement(Onboarding, { t: t, lang: lang, onSelectLang: setLang, onDone: function () { setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} }, onGoto: function (tab) { setTab(tab); setShowOnboarding(false); try { localStorage.setItem("nmf_onboarded", "1"); } catch (e) {} } }), showSponsors && /*#__PURE__*/React.createElement(SponsorWall, { t: t, onClose: function () { setShowSponsors(false); } }), showRaffle && /*#__PURE__*/React.createElement(RaffleForm, { t: t, onClose: function () { setShowRaffle(false); } }), jbBoard && /*#__PURE__*/React.createElement(JollibeeBoard, { count: jbCount, zips: jbZips, demo: jbDemo, board: jbBoardMsg, onSimulate: jollibeeSimulate, onReset: jollibeeResetVote, onClose: function () { setJbBoard(false); } }), showMapFull && /*#__PURE__*/React.createElement("div", { style: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, height: "100dvh", zIndex: 70, background: "#230a24", display: "flex", flexDirection: "column" } }, /*#__PURE__*/React.createElement("div", { style: { flex: "0 0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "calc(env(safe-area-inset-top) + 14px) 16px 10px", borderBottom: "1px solid #5c3a5e" } }, /*#__PURE__*/React.createElement("div", { style: { fontSize: 16, fontWeight: 800, color: "#f0ebe3" } }, t.mapTitle || "Find your way around."), /*#__PURE__*/React.createElement("button", { onClick: function () { setShowMapFull(false); try { if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); } catch (e) {} try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {} }, "aria-label": "Close", style: { width: 40, height: 40, borderRadius: "50%", border: "1px solid #4d2254", background: "transparent", color: "#ccc3cc", fontSize: 16, cursor: "pointer", fontFamily: "inherit", flexShrink: 0 } }, "\u2715")), /*#__PURE__*/React.createElement("div", { style: { flex: "1 1 auto", position: "relative", minHeight: 0 } }, /*#__PURE__*/React.createElement(FestivalMap, { t: t, src: MAP_IMG, booths: MAP_BOOTHS }))), /*#__PURE__*/React.createElement(ProfileOverlay, {
     vendor: activeListing,
     lang: lang,
     t: t,
