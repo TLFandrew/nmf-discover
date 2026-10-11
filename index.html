@@ -56,6 +56,7 @@
 @keyframes jbgallop{from{background-position:0 0}to{background-position:-582px 0}}
 @keyframes jbgallopC{from{background-position:0 0}to{background-position:-368px 0}}
 @keyframes jbgallopL{from{background-position:0 0}to{background-position:-427px 0}}
+@media (prefers-reduced-motion:reduce){.nmf-gallop{animation-duration:.72s!important;animation-iteration-count:infinite!important}}
 </style>
   <script>/**
  * @license React
@@ -15926,7 +15927,7 @@ function IntroCover({ t, lang, onSelectLang, onEnter, onAbout }) {
   return /*#__PURE__*/React.createElement("div", { style: { position: "fixed", inset: 0, height: "100dvh", zIndex: 60, background: "linear-gradient(180deg, #230a24 0%, #42194a 45%, #320f32 100%)", color: "#f0ebe3", display: "flex", flexDirection: "column", alignItems: "center", padding: "56px 22px calc(env(safe-area-inset-bottom) + 34px)", overflowY: "auto", boxSizing: "border-box", textAlign: "center" } },
     /*#__PURE__*/React.createElement("div", { style: { width: "100%", maxWidth: 380, flex: "1 1 auto", display: "flex", flexDirection: "column", alignItems: "center" } },
       /*#__PURE__*/React.createElement("div", null,
-        /*#__PURE__*/React.createElement("div", { style: { position: "relative", width: "82%", maxWidth: 300, margin: "0 auto 8px" } }, /*#__PURE__*/React.createElement("img", { src: LOGO_SRC, alt: "NightMarket.fun", style: { width: "100%", height: "auto", display: "block" } }), /*#__PURE__*/React.createElement("div", { "aria-hidden": "true", style: { position: "absolute", top: "20%", right: "1%", width: 61, height: 38, backgroundImage: "url(" + GALLOP_SPRITE + ")", backgroundSize: "368px 38px", backgroundRepeat: "no-repeat", animation: "jbgallopC 0.7s steps(6) infinite", transform: "scaleX(-1)" } })),
+        /*#__PURE__*/React.createElement("div", { style: { position: "relative", width: "82%", maxWidth: 300, margin: "0 auto 8px" } }, /*#__PURE__*/React.createElement("img", { src: LOGO_SRC, alt: "NightMarket.fun", style: { width: "100%", height: "auto", display: "block" } }), /*#__PURE__*/React.createElement("div", { "aria-hidden": "true", className: "nmf-gallop", style: { position: "absolute", top: "20%", right: "1%", width: 61, height: 38, backgroundImage: "url(" + GALLOP_SPRITE + ")", backgroundSize: "368px 38px", backgroundRepeat: "no-repeat", animation: "jbgallopC 0.7s steps(6) infinite", transform: "scaleX(-1)" } })),
         /*#__PURE__*/React.createElement("div", { style: { fontSize: 14, fontWeight: 700, letterSpacing: "0.2em", color: "#ffcc02", textTransform: "uppercase" } }, "2026 ", t.navPassport, " · ", t.betaTag || "Beta")),
       /*#__PURE__*/React.createElement("div", { style: { marginTop: 46 } },
         /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "#f0ebe3", opacity: 0.55, marginBottom: 16 } }, "\uD83C\uDF10 ", t.coverSelectLang || "Select your language"),
@@ -17033,6 +17034,7 @@ function NMFDiscover() {
     }
   }, /*#__PURE__*/React.createElement("div", {
     "aria-hidden": "true",
+    className: "nmf-gallop",
     style: {
       width: 71,
       height: 44,
