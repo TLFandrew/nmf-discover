@@ -13028,7 +13028,7 @@ const TRANSLATIONS = {
     fallbackBusy: "Our smart guide is busy, so here are some keyword matches.",
     rateLimit: "Lots of searches happening right now. Here are some quick picks while things settle, try again in a moment for a full answer.",
     errorNoMatch: "We couldn't find a match for that. Try rephrasing, or browse all vendors below.",
-    suggested: ["I'm hungry for something spicy", "What's good for kids?", "I want to see traditional dance", "Where can I buy handmade gifts?", "What's happening on stage?", "I'm vegan, what can I eat?", "Something fun and interactive", "I love Korean culture"]
+    suggested: ["I'm hungry for something spicy", "What's good for kids?", "See a performance?", "Need holiday gifts?", "What's happening on stage?", "I'm vegan, what can I eat?", "Something fun and interactive", "I love Korean culture"]
   },
   es: {
     title: "Descubre. Conoce. Conecta.",
@@ -16975,7 +16975,7 @@ function NMFDiscover() {
       cursor: loading ? "default" : "pointer",
       opacity: !query.trim() ? 0.55 : 1
     }
-  }, loading ? "..." : t.go))), /*#__PURE__*/React.createElement("div", { style: { textAlign: "center", marginTop: -4, marginBottom: 16, fontSize: 12, color: "#ccc3cc", lineHeight: 1.45 } }, /*#__PURE__*/React.createElement("div", null, t.aiSearchNote || "AI-powered search. Results may not always be accurate."), lang !== "en" && /*#__PURE__*/React.createElement("div", { style: { marginTop: 2 } }, t.aiTransNote || "Translations are AI-generated and may contain errors.")), (!results && !loading) && /*#__PURE__*/React.createElement("a", { href: TICKETS_URL, target: "_blank", rel: "noopener noreferrer", style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, background: "#ffcc02", color: "#2a0d04", borderRadius: 12, padding: "13px 16px", marginBottom: 14, textDecoration: "none" } }, /*#__PURE__*/React.createElement("span", { style: { fontSize: 14.5, fontWeight: 800 } }, "🎟️  Get your tickets"), /*#__PURE__*/React.createElement("span", { style: { fontSize: 12.5, fontWeight: 700, opacity: 0.85 } }, "Sat Nov 14  →")), !results && !loading && /*#__PURE__*/React.createElement("div", {
+  }, loading ? "..." : t.go))), /*#__PURE__*/React.createElement("div", { style: { textAlign: "center", marginTop: -4, marginBottom: 16, fontSize: 12, color: "#ccc3cc", lineHeight: 1.45 } }, /*#__PURE__*/React.createElement("div", null, t.aiSearchNote || "AI-powered search. Results may not always be accurate."), lang !== "en" && /*#__PURE__*/React.createElement("div", { style: { marginTop: 2 } }, t.aiTransNote || "Translations are AI-generated and may contain errors.")), !results && !loading && /*#__PURE__*/React.createElement("div", {
     style: {
       marginBottom: 20
     }
@@ -16999,7 +16999,7 @@ function NMFDiscover() {
       cursor: "pointer",
       whiteSpace: "nowrap"
     }
-  }, s)))), results?.message && /*#__PURE__*/React.createElement("div", {
+  }, s)))), (!results && !loading) && /*#__PURE__*/React.createElement("a", { href: TICKETS_URL, target: "_blank", rel: "noopener noreferrer", style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, background: "#ffcc02", color: "#2a0d04", borderRadius: 12, padding: "13px 16px", marginBottom: 14, textDecoration: "none" } }, /*#__PURE__*/React.createElement("span", { style: { fontSize: 14.5, fontWeight: 800 } }, "🎟️  Get your tickets"), /*#__PURE__*/React.createElement("span", { style: { fontSize: 12.5, fontWeight: 700, opacity: 0.85 } }, "Sat Nov 14  →")), results?.message && /*#__PURE__*/React.createElement("div", {
     role: "status", "aria-live": "polite",
     style: {
       background: "linear-gradient(135deg, #ed3b9428, #9b59b622)",
