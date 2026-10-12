@@ -82,6 +82,7 @@ async function getFacts() {
   });
   const cities = Object.keys(byArea).map(a => ({ area: a, votes: byArea[a] }))
     .sort((x, y) => y.votes - x.votes).slice(0, 4);
+  cities.forEach(function (c) { c.pct = count ? Math.round(c.votes / count * 100) : 0; });
 
   // Momentum: votes in the last hour (best-effort; 0 if the column/query is unavailable)
   let momentum = 0;
@@ -91,7 +92,9 @@ async function getFacts() {
 
   const nextMilestone = MILESTONES.find(m => m > count) || null;
   const remaining = nextMilestone ? nextMilestone - count : 0;
-  return { brand: BRAND.name, city: BRAND.city, count, cities, momentum, nextMilestone, remaining };
+  var leadShare = cities[0] ? cities[0].pct : 0;
+  var top3Share = cities.slice(0, 3).reduce(function (s, c) { return s + (c.pct || 0); }, 0);
+  return { brand: BRAND.name, city: BRAND.city, count, cities, leadShare, top3Share, momentum, nextMilestone, remaining };
 }
 
 // Deterministic fallback so the feature works with zero AI (unconfigured/errored/credits out).
@@ -112,9 +115,11 @@ function templated(f) {
   const board = "Ay, " + f.count + " fans and counting! "
     + (lead ? (lead.area + " is out front" + (second ? ", but " + second.area + " is close - don't get lazy, ha. " : " - keep it up! ") ) : "")
     + (f.remaining ? ("Only " + f.remaining + " to the next unlock, so tap and bring your friends!") : "Next goal unlocked - salamat!");
-  const report = f.count + " people have voted \"" + f.want + "\". "
-    + (lead ? ("Demand is strongest in " + lead.area + (second ? " and " + second.area : "") + ". ") : "")
-    + (f.remaining ? ("The campaign is " + f.remaining + " votes from its next milestone" + (f.momentum ? ", with " + f.momentum + " votes in the last hour" : "") + ".") : "The latest milestone has been reached.");
+  const report = f.count + " people have voted \"" + f.want + "\", an early but clear signal of appetite for " + f.brand + " in " + f.city + ". "
+    + (lead ? ("Demand is concentrated in " + lead.area + (lead.pct ? " (" + lead.pct + "% of votes)" : "") + (second ? " and " + second.area + (second.pct ? " (" + second.pct + "%)" : "") : "") + ", marking the strongest catchment for a first location. ") : "")
+    + (f.top3Share ? ("The top areas together account for " + f.top3Share + "% of the vote, while the rest spreads across Greater Austin, pointing to trade-area-level interest rather than a single pocket. ") : "")
+    + (f.momentum ? ("Momentum is active, with " + f.momentum + " votes in the past hour. ") : "")
+    + (f.remaining ? ("The campaign sits " + f.remaining + " votes from its next milestone, and the pace and spread together suggest durable local demand worth evaluating for a store.") : "The latest milestone has been reached, underscoring the depth of demand in this market.");
   return { recruit, ticker, board, report };
 }
 
@@ -126,7 +131,7 @@ async function generate(f) {
     + "recruit is an array of 3 to 5 short lines, max about 60 characters each, for people who have NOT voted yet: use social proof such as how many already voted, and warmly pull them to add their vote so " + BRAND.name + " sees the demand. "
     + "ticker is an array of 3 to 5 short lines, max about 55 characters each, for people who HAVE voted: rally them to keep the momentum going and to bring their friends and family in. "
     + "board is one or two sentences of Tita/Kuya play-by-play that celebrates the momentum, names the next target, and tells people to act. "
-    + "report is ONE professional, persuasive executive paragraph of 2 to 4 sentences for the brand decision-makers. The report is NOT in the Tita/Kuya voice, keep it warm but credible and data-forward. "
+    + "report is a professional, persuasive executive summary of 4 to 6 sentences for the brand's site-selection and marketing decision-makers. Cover, in order: the overall scale of demand using the total votes; where demand is geographically concentrated, naming the leading areas and their share of the vote; how quickly it is building, using momentum; and what the pattern signals for opening a store in this market. The report is NOT in the Tita/Kuya voice. Keep it credible and data-forward, cite the real figures from FACTS, and do not pad or exaggerate. "
     + "VOICE for recruit, ticker, and board: warm Filipina Tita energy, light Taglish is welcome but keep it understandable, occasional anak, na, ha, tara, and every line ties back to showing " + BRAND.name + " where " + BRAND.city + " wants a store. "
     + "RULES: use ONLY the numbers and place names in FACTS, never invent figures or cities. Playful city rivalry is fine but never insult a place or a person, keep it family-friendly. No personal data, no individual names. Reference the next milestone and momentum to drive urgency.";
   try {
