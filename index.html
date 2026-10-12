@@ -59,6 +59,7 @@
 @media (prefers-reduced-motion:reduce){.nmf-gallop{animation-duration:.72s!important;animation-iteration-count:infinite!important}}
 @keyframes nmftickerin{from{opacity:.25}to{opacity:1}}
 input, textarea, select { font-size: 16px !important; }
+@media (prefers-reduced-motion:reduce){.nmf-confetti{animation-duration:2.4s!important;animation-iteration-count:1!important}}
 </style>
   <script>/**
  * @license React
@@ -15347,7 +15348,7 @@ function JollibeeBoard({ count, zips, demo, onSimulate, onReset, onClose, board 
   var cf = React.useState(false); var conf = cf[0], setConf = cf[1];
   function sim() { if (onSimulate) onSimulate(); setConf(true); setTimeout(function () { setConf(false); }, 2800); }
   var pieces = [];
-  if (conf) { for (i = 0; i < 28; i++) { var em = ["\uD83C\uDF89", "\u2B50", "\uD83D\uDD34", "\uD83D\uDFE1"][i % 4]; pieces.push(/*#__PURE__*/React.createElement("span", { key: i, style: { position: "absolute", left: (Math.random() * 100) + "%", top: "-24px", fontSize: (13 + Math.random() * 13) + "px", animation: "jbfall " + (1.8 + Math.random() * 1.3) + "s ease-in forwards", animationDelay: (Math.random() * 0.5) + "s" } }, em)); } }
+  if (conf) { for (i = 0; i < 28; i++) { var em = ["\uD83C\uDF89", "\u2B50", "\uD83D\uDD34", "\uD83D\uDFE1"][i % 4]; pieces.push(/*#__PURE__*/React.createElement("span", { key: i, className: "nmf-confetti", style: { position: "absolute", left: (Math.random() * 100) + "%", top: "-24px", fontSize: (13 + Math.random() * 13) + "px", animation: "jbfall " + (1.8 + Math.random() * 1.3) + "s ease-in forwards", animationDelay: (Math.random() * 0.5) + "s" } }, em)); } }
   return /*#__PURE__*/React.createElement("div", { style: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, zIndex: 3000, background: "#230a24", overflowY: "auto" } },
     conf && /*#__PURE__*/React.createElement("div", { "aria-hidden": "true", style: { position: "fixed", inset: 0, pointerEvents: "none", overflow: "hidden", zIndex: 10 } }, pieces),
     /*#__PURE__*/React.createElement("div", { style: { position: "sticky", top: 0, display: "flex", justifyContent: "flex-end", padding: "calc(10px + env(safe-area-inset-top)) 14px 10px", background: "#230a24", zIndex: 5 } }, /*#__PURE__*/React.createElement("button", { onClick: onClose, "aria-label": "Close", style: { width: 40, height: 40, borderRadius: "50%", border: "1px solid #6b4a6d", background: "#42194a", color: "#f0ebe3", fontSize: 16, cursor: "pointer", fontFamily: "inherit" } }, "\u2715")),
