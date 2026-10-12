@@ -94,7 +94,7 @@ async function getFacts() {
   const remaining = nextMilestone ? nextMilestone - count : 0;
   var leadShare = cities[0] ? cities[0].pct : 0;
   var top3Share = cities.slice(0, 3).reduce(function (s, c) { return s + (c.pct || 0); }, 0);
-  return { brand: BRAND.name, city: BRAND.city, count, cities, leadShare, top3Share, momentum, nextMilestone, remaining };
+  return { brand: BRAND.name, city: BRAND.city, want: BRAND.want, count, cities, leadShare, top3Share, momentum, nextMilestone, remaining };
 }
 
 // Deterministic fallback so the feature works with zero AI (unconfigured/errored/credits out).
