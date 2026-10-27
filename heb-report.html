@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>H-E-B at NightMarket.fun — Shopper Insights</title>
+<style>
+:root{color-scheme:dark;--bg:#320f32;--panel:#42194a;--line:#5c3a5e;--ink:#f0ebe3;--mut:#cfc3d0;--heb:#e4002b;--gold:#ffcc02;--green:#98cb66}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:24px 16px calc(40px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:640px;margin:0 auto}
+.kick{color:var(--green);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;text-align:center}
+h1{font-size:26px;font-weight:900;text-align:center;margin:6px 0 2px;line-height:1.15}
+.sub{color:var(--mut);text-align:center;font-size:13px;margin-bottom:20px}
+.hero{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 16px;text-align:center;margin-bottom:18px}
+.big{font-size:52px;font-weight:900;line-height:1;color:#fff}
+.big .pct{color:var(--heb)}
+.herolab{color:var(--mut);font-size:13px;margin-top:6px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px}
+.card h2{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin:0 0 12px}
+.card .note{color:var(--mut);font-size:12px;margin:-6px 0 12px;line-height:1.5}
+.row{margin-bottom:11px}
+.rl{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:4px}
+.rl .n{color:var(--mut)}
+.bar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.bar > i{display:block;height:100%;background:var(--gold);border-radius:999px}
+.bar.heb > i{background:var(--heb)}
+.foot{color:#9a8f9c;font-size:11.5px;text-align:center;margin-top:8px;line-height:1.5}
+.tot{text-align:center;color:var(--mut);font-size:13px;margin-bottom:16px}
+.loading{text-align:center;color:var(--mut);padding:40px 0}
+</style></head>
+<body><div class="wrap">
+  <div class="kick">NightMarket.fun 2026 · Presenting Partner</div>
+  <h1>H-E-B Shopper Insights</h1>
+  <div class="sub">Where our festival audience shops most, and where they are coming from.</div>
+  <div id="content"><div class="loading">Loading live results…</div></div>
+  <div class="foot">Live, anonymized responses from attendees of NightMarket.fun. One response per device. H-E-B family includes H-E-B and Central Market.</div>
+</div>
+<script>
+function bar(label, count, total, isHeb, suffix){
+  var pct = total ? Math.round(count/total*100) : 0;
+  return '<div class="row"><div class="rl"><span>'+label+'</span><span class="n">'+pct+'%'+(suffix||' ('+count+')')+'</span></div>'
+    + '<div class="bar'+(isHeb?' heb':'')+'"><i style="width:'+pct+'%"></i></div></div>';
+}
+function render(d){
+  var c = document.getElementById('content');
+  if(!d || !d.ok){ c.innerHTML = '<div class="loading">Results will appear here once responses come in.</div>'; return; }
+  var fam = {}; (d.hebFamily || ["H-E-B","Central Market"]).forEach(function(s){ fam[s]=1; });
+  var stores = (d.stores || []).slice().sort(function(a,b){ return (d.byStore[b]||0)-(d.byStore[a]||0); });
+  var storeRows = stores.map(function(s){ return bar(s, d.byStore[s]||0, d.total, fam[s]); }).join('');
+  var areas = d.areas || Object.keys(d.byArea || {});
+  var areaRows = areas.map(function(a){ return bar(a, (d.byArea||{})[a]||0, d.total, false); }).join('');
+  var hebAreaRows = areas.map(function(a){
+    var x = (d.hebByArea||{})[a] || {total:0,heb:0};
+    return bar(a, x.heb, x.total, true, ' of '+x.total);
+  }).join('');
+  c.innerHTML =
+    '<div class="hero"><div class="big"><span class="pct">'+d.hebShare+'%</span></div>'
+      +'<div class="herolab">of attendees shop the H-E-B family most</div></div>'
+    +'<div class="tot">'+d.total+' responses so far</div>'
+    +'<div class="card"><h2>Where they shop most</h2>'+storeRows+'</div>'
+    +'<div class="card"><h2>H-E-B family share, by where they are from</h2><div class="note">Share of each group that shops H-E-B or Central Market most. Out-of-area attendees are the ones H-E-B does not already reach every week.</div>'+hebAreaRows+'</div>'
+    +'<div class="card"><h2>Where attendees are coming from</h2>'+areaRows+'</div>';
+}
+fetch('/api/heb-poll').then(function(r){return r.json();}).then(render).catch(function(){
+  document.getElementById('content').innerHTML='<div class="loading">Could not load results right now.</div>';
+});
+</script>
+</body></html>

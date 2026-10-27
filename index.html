@@ -52,6 +52,15 @@
 @keyframes nmfLangPulse{0%{box-shadow:0 0 0 0 rgba(127,227,214,.55)}70%{box-shadow:0 0 0 14px rgba(127,227,214,0)}100%{box-shadow:0 0 0 0 rgba(127,227,214,0)}}
 .ob-langpulse{animation:nmfLangPulse 2.2s ease-out 3;border-radius:999px;display:inline-block}
 @media (prefers-reduced-motion:reduce){.ob-langpulse{animation:none}}
+@keyframes nmfPtsPop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:1}}
+.nmf-ptspop{animation:nmfPtsPop .55s cubic-bezier(.2,.9,.3,1.3) both}
+@keyframes nmfTileIn{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.nmf-tilein{animation:nmfTileIn .28s ease-out both}
+@media (prefers-reduced-motion:reduce){.nmf-ptspop,.nmf-tilein{animation:none}}
+.nmf-confetti{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:4001}
+.nmf-confetti span{position:absolute;top:-24px;display:block;border-radius:2px;opacity:0;will-change:transform,opacity}
+@keyframes nmfShimmer{0%{box-shadow:0 8px 24px rgba(255,204,2,.35)}30%{box-shadow:0 0 0 8px rgba(255,204,2,.35),0 0 48px 16px rgba(255,204,2,.5)}60%{box-shadow:0 8px 24px rgba(255,204,2,.35)}80%{box-shadow:0 0 0 6px rgba(255,204,2,.25),0 0 36px 12px rgba(255,204,2,.4)}100%{box-shadow:0 8px 24px rgba(255,204,2,.35)}}
+.nmf-ptsshimmer{animation:nmfShimmer 1.6s ease-in-out .1s 1 both}
 
 @keyframes jbgallop{from{background-position:0 0}to{background-position:-582px 0}}
 @keyframes jbgallopC{from{background-position:0 0}to{background-position:-368px 0}}
@@ -13324,8 +13333,23 @@ const SHELL_STRINGS = {
     obGuideD: "Hanapin ang iyong daan sa mapa, at tingnan ang buong iskedyul: dalawang stage ng palabas, at mga pelikula sa tabi ng lawa.",
     obQuestsD: "Mangolekta ng mga mahjong tile sa mga booth at maghanap ng mga nakatagong kaiju sa buong parke. Kumpletuhin ang mga ito para manalo ng premyo.",
     obPlanD: "I-save ang mga palabas at booth na ayaw mong makaligtaan, at i-rate ang mga paborito mong palabas.",
-    obSupport: "Karamihan sa mga booth ay mga lokal na artista at maker, kasama ang mga partner at karanasan sa buong lugar. Huwag magmadali, makilala ang mga maker, at maghanap ng maiuuwi.",
+    obSupport: "Karamihan sa mga booth ay mga lokal na artista at maker. Huwag magmadali, makilala sila, at maghanap ng maiuuwi.",
     obStart: "Simulan ang paggalugad",
+    obBody: "Ang gabay mo ngayong gabi: hanapin ang pagkain, sining, at mga maker, tingnan ang palabas sa dalawang stage, at i-save ang ayaw mong makaligtaan. Habang naglilibot, kikita ka ng points sa bawat booth at aktibidad, at **ipapalit mo ang mga ito sa premyo sa prize booth.**",
+    obBodyCta: "Isang tap na lang, may unang points ka na.",
+    obQuestionOf: "Tanong {n} sa 2",
+    obStoreQ: "Saan ka madalas mamili ng grocery?",
+    obAreaQ: "At saan ka galing ngayong gabi?",
+    obAskedBy: "Tanong mula sa H-E-B, ang aming presenting partner.",
+    obAnon: "Anonymous, isang sagot bawat telepono.",
+    obSkip: "Laktawan, ipakita ang app",
+    obFirstPts: "Ang unang points mo ngayong gabi",
+    obContinue: "Ilibot mo ako",
+    obTourHead: "Lahat ng kailangan mo sa limang tab",
+    obRevealMajority: "{pct}% ng mga tao ngayong gabi ay namimili sa H-E-B family. Kasama ka sa nakararami.",
+    obRevealCompany: "{pct}% ng mga tao ngayong gabi ay namimili rin sa {store}. May kasama ka.",
+    obRevealRare: "{pct}% lang ang namimili sa {store}. Bihira ka.",
+    obRevealFirst: "Isa ka sa mga unang sumagot ngayong gabi.",
     obReplay: "Tingnan ulit ang pagsalubong",
     obFoot: "Isang programa ng The Lunar Foundation",
     navDiscover: "Tuklasin",
@@ -13424,8 +13448,23 @@ const SHELL_STRINGS = {
     obGuideD: "नक्शे पर अपना रास्ता खोजें, और पूरा शेड्यूल देखें: दो मंचों के शो, साथ ही झील के किनारे फ़िल्में।",
     obQuestsD: "बूथों पर माहजोंग टाइलें इकट्ठा करें और पूरे पार्क में छिपे कैजू ढूँढें। इन्हें पूरा करके इनाम जीतें।",
     obPlanD: "जिन प्रस्तुतियों और बूथों को आप मिस नहीं करना चाहते उन्हें सहेजें, और अपने पसंदीदा शो को रेट करें।",
-    obSupport: "ज़्यादातर बूथ स्थानीय कलाकार और निर्माता हैं, साथ ही पूरे मेले में साझेदार और अनुभव भी। आराम से समय बिताएँ, निर्माताओं से मिलें, और घर ले जाने के लिए कुछ ढूँढें।",
+    obSupport: "ज़्यादातर बूथ स्थानीय कलाकारों और मेकर्स के हैं। आराम से देखें, उनसे मिलें, और घर ले जाने के लिए कुछ ढूँढें।",
     obStart: "देखना शुरू करें",
+    obBody: "आज रात के लिए आपका गाइड: खाना, कला और मेकर्स ढूँढें, दोनों स्टेज पर क्या चल रहा है देखें, और जो छोड़ना नहीं चाहते उसे सेव करें। रास्ते में हर बूथ और गतिविधि पर पॉइंट्स कमाएँ, और **उन्हें प्राइज़ बूथ पर इनामों से बदलें।**",
+    obBodyCta: "आपके पहले पॉइंट्स बस एक टैप दूर हैं।",
+    obQuestionOf: "सवाल {n} / 2",
+    obStoreQ: "आप सबसे ज़्यादा किराने की खरीदारी कहाँ करते हैं?",
+    obAreaQ: "और आज रात आप कहाँ से आए हैं?",
+    obAskedBy: "हमारे प्रेज़ेंटिंग पार्टनर H-E-B का सवाल।",
+    obAnon: "गुमनाम, हर फ़ोन से एक जवाब।",
+    obSkip: "छोड़ें, मुझे ऐप दिखाएँ",
+    obFirstPts: "आज रात के आपके पहले पॉइंट्स",
+    obContinue: "मुझे घुमाइए",
+    obTourHead: "पाँच टैब में सब कुछ जो आपको चाहिए",
+    obRevealMajority: "आज रात की भीड़ का {pct}% H-E-B परिवार से खरीदारी करता है। आप बहुमत में हैं।",
+    obRevealCompany: "आज रात की भीड़ का {pct}% भी {store} से खरीदारी करता है। आप अकेले नहीं हैं।",
+    obRevealRare: "सिर्फ़ {pct}% ही {store} से खरीदारी करते हैं। आप खास हैं।",
+    obRevealFirst: "आज रात जवाब देने वालों में आप पहले लोगों में हैं।",
     obReplay: "स्वागत फिर से देखें",
     obFoot: "द लूनर फ़ाउंडेशन का एक कार्यक्रम",
     navDiscover: "खोजें",
@@ -13525,8 +13564,23 @@ const SHELL_STRINGS = {
     obGuideD: "Find your way on the map, and see the full schedule: two stages of shows, plus films by the lake.",
     obQuestsD: "Collect mahjong tiles at booths and hunt hidden kaiju across the park. Complete them to win prizes.",
     obPlanD: "Save the acts and booths you don't want to miss, and rate your favorite shows.",
-    obSupport: "Most booths are local artists and makers, plus partners and experiences throughout. Take your time, meet the makers, and find something to bring home.",
+    obSupport: "Most booths are local artists and makers. Take your time, meet them, and find something to bring home.",
     obStart: "Start exploring",
+    obBody: "Your guide to the night: find food, art, and makers, see what's on both stages, and save what you don't want to miss. Along the way you'll earn points at every booth and activity, and **trade them in for prizes at the prize booth.**",
+    obBodyCta: "Your first points are one tap away.",
+    obQuestionOf: "Question {n} of 2",
+    obStoreQ: "Where do you do most of your grocery shopping?",
+    obAreaQ: "And where are you coming from tonight?",
+    obAskedBy: "Asked by H-E-B, our presenting partner.",
+    obAnon: "Anonymous, one answer per phone.",
+    obSkip: "Skip, show me the app",
+    obFirstPts: "Your first points of the night",
+    obContinue: "Show me around",
+    obTourHead: "Everything you need in five tabs",
+    obRevealMajority: "{pct}% of tonight's crowd shops the H-E-B family. You're in the majority.",
+    obRevealCompany: "{pct}% of tonight's crowd shops at {store} too. You're in good company.",
+    obRevealRare: "Only {pct}% shop at {store}. You're a rare breed.",
+    obRevealFirst: "You're one of the first to answer tonight.",
     obReplay: "View the welcome again",
     obFoot: "A program of The Lunar Foundation",
     navDiscover: "Discover",
@@ -13627,8 +13681,23 @@ const SHELL_STRINGS = {
     obGuideD: "Ubícate en el mapa y consulta el programa completo: dos escenarios de espectáculos, además de películas junto al lago.",
     obQuestsD: "Reúne fichas de mahjong en los puestos y busca kaiju escondidos por todo el parque. Complétalos para ganar premios.",
     obPlanD: "Guarda los espectáculos y puestos que no quieras perderte, y califica tus favoritos.",
-    obSupport: "La mayoría de los puestos son artistas y creadores locales, además de socios y experiencias por todo el evento. Tómate tu tiempo, conoce a los creadores y encuentra algo para llevar a casa.",
+    obSupport: "La mayoría de los puestos son artistas y creadores locales. Tómate tu tiempo, conócelos y encuentra algo para llevar a casa.",
     obStart: "Empezar a explorar",
+    obBody: "Tu guía de la noche: encuentra comida, arte y creadores, mira qué hay en los dos escenarios y guarda lo que no te quieres perder. Por el camino ganarás puntos en cada puesto y actividad, y **los cambiarás por premios en el puesto de premios.**",
+    obBodyCta: "Tus primeros puntos están a un toque.",
+    obQuestionOf: "Pregunta {n} de 2",
+    obStoreQ: "¿Dónde haces la mayor parte de tus compras de despensa?",
+    obAreaQ: "¿Y de dónde vienes esta noche?",
+    obAskedBy: "Pregunta de H-E-B, nuestro patrocinador presentador.",
+    obAnon: "Anónimo, una respuesta por teléfono.",
+    obSkip: "Saltar, muéstrame la app",
+    obFirstPts: "Tus primeros puntos de la noche",
+    obContinue: "Muéstrame el lugar",
+    obTourHead: "Todo lo que necesitas en cinco pestañas",
+    obRevealMajority: "El {pct}% del público de esta noche compra en la familia H-E-B. Estás en la mayoría.",
+    obRevealCompany: "El {pct}% del público de esta noche también compra en {store}. Estás en buena compañía.",
+    obRevealRare: "Solo el {pct}% compra en {store}. Eres de los raros.",
+    obRevealFirst: "Eres de los primeros en responder esta noche.",
     obReplay: "Ver la bienvenida otra vez",
     obFoot: "Un programa de The Lunar Foundation",
     navDiscover: "Descubre",
@@ -13729,8 +13798,23 @@ const SHELL_STRINGS = {
     obGuideD: "在地图上找到方向，查看完整日程：两个舞台的演出，以及湖边电影。",
     obQuestsD: "在摊位收集麻将牌，在公园各处寻找隐藏的怪兽，集齐一套即可赢取奖品。",
     obPlanD: "保存你不想错过的演出和摊位，并为你喜爱的演出评分。",
-    obSupport: "大多数摊位都是本地艺术家和创作者，还有合作伙伴和各种体验遍布全场。慢慢逓，认识这些创作者，带一件喜欢的作品回家。",
+    obSupport: "大多数摊位都是本地艺术家和创作者。慢慢逛，认识他们，找点东西带回家。",
     obStart: "开始探索",
+    obBody: "今晚的指南：找到美食、艺术和创作者，看看两个舞台上有什么，收藏你不想错过的内容。一路上，你会在每个摊位和活动中赚取积分，**再到兑奖摊位换取奖品。**",
+    obBodyCta: "你的第一笔积分只差一下点击。",
+    obQuestionOf: "第 {n} 题，共 2 题",
+    obStoreQ: "你平时主要在哪里买菜？",
+    obAreaQ: "那你今晚是从哪里来的？",
+    obAskedBy: "由冠名赞助商 H-E-B 提问。",
+    obAnon: "匿名，每部手机只能回答一次。",
+    obSkip: "跳过，带我看应用",
+    obFirstPts: "今晚的第一笔积分",
+    obContinue: "带我逛逛",
+    obTourHead: "五个标签页，应有尽有",
+    obRevealMajority: "今晚 {pct}% 的人在 H-E-B 家族门店购物。你属于大多数。",
+    obRevealCompany: "今晚也有 {pct}% 的人在 {store} 购物。你不是一个人。",
+    obRevealRare: "只有 {pct}% 的人在 {store} 购物。你很特别。",
+    obRevealFirst: "你是今晚最早回答的人之一。",
     obReplay: "重新查看欢迎介绍",
     obFoot: "由 The Lunar Foundation 主办",
     navDiscover: "探索",
@@ -13831,8 +13915,23 @@ const SHELL_STRINGS = {
     obGuideD: "지도에서 길을 찾고 전체 일정을 확인하세요. 두 개의 무대 공연과 호숫가 영화가 준비되어 있습니다.",
     obQuestsD: "부스에서 마작 타일을 모으고 공원 곳곳에 숨은 카이주를 찾아보세요. 모두 모으면 상품을 받을 수 있습니다.",
     obPlanD: "놓치고 싶지 않은 공연과 부스를 저장하고, 좋아하는 공연을 평가하세요.",
-    obSupport: "대부분의 부스는 지역 예술가와 창작자들이며, 파트너와 다양한 체험도 곳곳에 있습니다. 천천히 둘러보며 창작자들을 만나고, 마음에 드는 것을 가져가세요.",
+    obSupport: "대부분의 부스는 지역 예술가와 메이커입니다. 천천히 둘러보며 만나 보고, 집에 가져갈 무언가를 찾아보세요.",
     obStart: "둘러보기 시작",
+    obBody: "오늘 밤의 가이드: 음식, 예술, 메이커를 찾고, 두 무대의 공연을 확인하고, 놓치고 싶지 않은 것을 저장하세요. 둘러보는 동안 부스와 활동마다 포인트를 모아 **경품 부스에서 상품으로 바꿀 수 있어요.**",
+    obBodyCta: "첫 포인트는 한 번만 누르면 됩니다.",
+    obQuestionOf: "질문 {n} / 2",
+    obStoreQ: "장보기는 주로 어디서 하시나요?",
+    obAreaQ: "그리고 오늘 밤 어디서 오셨나요?",
+    obAskedBy: "프레젠팅 파트너 H-E-B의 질문입니다.",
+    obAnon: "익명, 기기당 한 번만 답할 수 있어요.",
+    obSkip: "건너뛰고 앱 보기",
+    obFirstPts: "오늘 밤 첫 포인트",
+    obContinue: "둘러보기",
+    obTourHead: "필요한 모든 것을 다섯 개의 탭에",
+    obRevealMajority: "오늘 밤 관객의 {pct}%가 H-E-B 패밀리에서 장을 봅니다. 다수에 속하시네요.",
+    obRevealCompany: "오늘 밤 관객의 {pct}%도 {store}에서 장을 봅니다. 혼자가 아니에요.",
+    obRevealRare: "{pct}%만 {store}에서 장을 봅니다. 흔치 않은 분이시네요.",
+    obRevealFirst: "오늘 밤 가장 먼저 답한 분 중 한 명이에요.",
     obReplay: "환영 화면 다시 보기",
     obFoot: "The Lunar Foundation의 프로그램",
     navDiscover: "둘러보기",
@@ -13933,8 +14032,23 @@ const SHELL_STRINGS = {
     obGuideD: "Định vị trên bản đồ và xem lịch trình đầy đủ: hai sân khấu biểu diễn, cùng với phim chiếu bên hồ.",
     obQuestsD: "Thu thập quân mạt chược tại các gian hàng và săn tìm kaiju ẩn giấu khắp công viên. Hoàn thành để giành giải thưởng.",
     obPlanD: "Lưu lại các tiết mục và gian hàng bạn không muốn bỏ lỡ, và đánh giá những tiết mục yêu thích.",
-    obSupport: "Hầu hết các gian hàng là nghệ sĩ và nhà sáng tạo địa phương, cùng các đối tác và trải nghiệm khắp nơi. Hãy thong thả dạo quanh, gặp gỡ những người sáng tạo và tìm một món để mang về.",
+    obSupport: "Hầu hết gian hàng là nghệ sĩ và nhà sáng tạo địa phương. Cứ thong thả, gặp gỡ họ và tìm một món để mang về.",
     obStart: "Bắt đầu khám phá",
+    obBody: "Cẩm nang cho đêm nay: tìm món ăn, nghệ thuật và các nhà sáng tạo, xem gì đang diễn ra trên cả hai sân khấu, và lưu lại những gì bạn không muốn bỏ lỡ. Trên đường đi, bạn sẽ tích điểm ở mỗi gian hàng và hoạt động, rồi **đổi lấy quà tại quầy quà tặng.**",
+    obBodyCta: "Điểm đầu tiên chỉ cách một lần chạm.",
+    obQuestionOf: "Câu hỏi {n} / 2",
+    obStoreQ: "Bạn thường mua thực phẩm ở đâu nhất?",
+    obAreaQ: "Và tối nay bạn đến từ đâu?",
+    obAskedBy: "Câu hỏi từ H-E-B, đối tác trình diễn của chúng tôi.",
+    obAnon: "Ẩn danh, mỗi điện thoại một câu trả lời.",
+    obSkip: "Bỏ qua, cho tôi xem ứng dụng",
+    obFirstPts: "Điểm đầu tiên của bạn tối nay",
+    obContinue: "Dẫn tôi đi xem",
+    obTourHead: "Mọi thứ bạn cần trong năm thẻ",
+    obRevealMajority: "{pct}% khách tối nay mua sắm ở hệ thống H-E-B. Bạn thuộc số đông.",
+    obRevealCompany: "{pct}% khách tối nay cũng mua sắm ở {store}. Bạn không hề đơn độc.",
+    obRevealRare: "Chỉ {pct}% mua sắm ở {store}. Bạn thuộc nhóm hiếm.",
+    obRevealFirst: "Bạn là một trong những người trả lời đầu tiên tối nay.",
     obReplay: "Xem lại lời chào mừng",
     obFoot: "Một chương trình của The Lunar Foundation",
     navDiscover: "Khám phá",
@@ -14035,8 +14149,23 @@ const SHELL_STRINGS = {
     obGuideD: "マップで場所を確認し、全スケジュールをチェック。2つのステージのパフォーマンスと、湖畔での映画上映があります。",
     obQuestsD: "ブースで麻雀牌を集め、公園中に隠れた怪獣を探しましょう。すべて集めると景品がもらえます。",
     obPlanD: "見逃したくないパフォーマンスやブースを保存して、お気に入りの公演を評価しましょう。",
-    obSupport: "ほとんどのブースは地元のアーティストや作り手によるもので、パートナーや体験も会場のあちこちにあります。ゆっくり見て回り、作り手と出会って、お気に入りを持ち帰りましょう。",
+    obSupport: "ほとんどのブースは地元のアーティストや作り手です。ゆっくり回って、彼らに会い、持ち帰るものを見つけてください。",
     obStart: "探索を始める",
+    obBody: "今夜のガイド：フードやアート、作り手を見つけて、2つのステージの出演を確認し、見逃したくないものを保存しましょう。回りながらブースやアクティビティごとにポイントを集めて、**プライズブースで景品と交換できます。**",
+    obBodyCta: "最初のポイントはタップひとつ。",
+    obQuestionOf: "質問 {n} / 2",
+    obStoreQ: "食料品の買い物は主にどこでしますか？",
+    obAreaQ: "それと、今夜はどちらから来ましたか？",
+    obAskedBy: "プレゼンティングパートナー H-E-B からの質問です。",
+    obAnon: "匿名、1台につき1回だけ回答できます。",
+    obSkip: "スキップしてアプリを見る",
+    obFirstPts: "今夜の最初のポイント",
+    obContinue: "案内して",
+    obTourHead: "必要なすべてが5つのタブに",
+    obRevealMajority: "今夜の来場者の{pct}%が H-E-B ファミリーで買い物をしています。あなたは多数派です。",
+    obRevealCompany: "今夜の来場者の{pct}%も {store} で買い物をしています。仲間がいますよ。",
+    obRevealRare: "{store} で買い物をする人は{pct}%だけ。あなたはレアな存在です。",
+    obRevealFirst: "今夜、最初に回答した一人です。",
     obReplay: "ようこそ画面をもう一度見る",
     obFoot: "The Lunar Foundation のプログラム",
     navDiscover: "さがす",
@@ -14894,7 +15023,7 @@ function VisitScreen({ t }) {
   function trow(name, val, free) {
     return React.createElement("div", { style: { display: "flex", justifyContent: "space-between", padding: "7px 0", borderBottom: "1px solid #5c3a5e", fontSize: 14, color: "#f0ebe3" } },
       React.createElement("span", null, name),
-      React.createElement("span", { style: { fontWeight: 800, color: free ? "#98cb66" : "#f0ebe3" } }, val));
+      React.createElement("span", { style: { fontWeight: free ? 800 : 600, color: free ? "#98cb66" : "#ccc3cc", textAlign: "right", marginLeft: 12 } }, val));
   }
   function gline(ic, el) {
     return React.createElement("div", { style: { display: "flex", gap: 9, padding: "5px 0", fontSize: 13, color: "#e9e5dd", lineHeight: 1.45 } },
@@ -14922,12 +15051,14 @@ function VisitScreen({ t }) {
 
     acc("tickets", "Tickets",
       React.createElement("div", null,
-        trow("GA Advance", "$30"),
-        trow("Event Day / Door", "$35"),
-        trow("VIP", "$65"),
+        trow("General Admission", "Full festival access"),
+        trow("VIP", "GA + VIP Lounge"),
         trow("Kids 12 & under", "FREE", true),
-        trow("Parking (per vehicle)", "$15"),
-        cta("Buy tickets", TICKETS_URL))),
+        trow("Parking", "On-site, limited"),
+        trow("Eating contests", "Registration required"),
+        React.createElement("div", { style: { fontSize: 12.5, color: "#ffb38a", lineHeight: 1.5, marginTop: 10 } }, "Advance pricing ends the night before. GA, VIP, and parking all cost more on event day, and parking is limited to one spot per order."),
+        React.createElement("div", { style: { fontSize: 12, color: "#ccc3cc", lineHeight: 1.5, marginTop: 6 } }, "Every child needs a ticket and must be with a ticketed adult. Eating contest registration does not include admission, and spots are capped."),
+        cta("See prices & buy tickets", TICKETS_URL))),
 
     acc("when", "When & where",
       React.createElement("div", null,
@@ -14936,7 +15067,7 @@ function VisitScreen({ t }) {
 
     acc("getting", "Getting there",
       React.createElement("div", null,
-        mode("\uD83D\uDE97", "Parking \u2014 $15", "Reserve in advance to guarantee your spot. Day-of drive-up payment may be available for any spots left, first come, first served."),
+        mode("\uD83D\uDE97", "Parking \u2014 reserve ahead", "On-site spots are limited and cost less when bought in advance (one per order). Any spots left on event day are sold at the gate, first come, first served, and a short wait is possible if the lot is full.", minilink("Reserve parking", TICKETS_URL)),
         mode("\uD83D\uDE86", "CapMetro rail \u2014 free day pass", "Ride the CapMetro Red Line to the Lakeline station. Your ticket email includes a free day-pass code (limited, first come). In the UMO app, create an account, open the menu, choose Redeem Code, and enter it. Each pass is good for 24 hours.", minilink("Get the UMO app", UMO_URL)),
         mode("\uD83D\uDE95", "Cedar Park LiNK \u2014 $5 Uber rides", "Pay just $5 and Cedar Park covers up to $10 of your Uber fare for rides within the city, including to and from the Lakeline station. Rail in, then LiNK the last mile to the park.", minilink("How to use LiNK", LINK_URL)))),
 
@@ -15516,10 +15647,125 @@ function AboutPartners({
     }
   }, it.body)))));
 }
+// Fixed order: named stores alphabetically, then the two catch-alls last.
+var HEB_POLL_STORES = ["Central Market", "Costco or Sam's Club", "H-E-B", "Kroger", "Randalls or Tom Thumb", "Target", "Walmart", "Whole Foods, Trader Joe's, or Sprouts", "Asian or international market", "Other"];
+var HEB_POLL_AREAS = ["Greater Austin", "Elsewhere in Texas", "Outside Texas"];
+var HEB_POLL_FAMILY = ["H-E-B", "Central Market"];
+// REVIEW MODE: true = onboarding (poll + welcome) shows on every load so the team can review it. Set to false before launch.
+var ONBOARD_ALWAYS = true;
+var HEB_POLL_POINTS = 25;
+function hebPollDone() { try { return localStorage.getItem("nmf_heb_poll_done") === "1"; } catch (e) { return false; } }
+function hebPollDevice() { try { var d = localStorage.getItem("nmf_device_id"); if (!d) { d = "d" + Date.now() + Math.random().toString(36).slice(2, 8); localStorage.setItem("nmf_device_id", d); } return d; } catch (e) { return "anon"; } }
+function hebFill(tpl, pct, store) { return String(tpl || "").replace("{pct}", pct).replace("{store}", store); }
+function reducedMotion() { try { return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } }
+// One short burst of festival-color confetti (decorative, aria-hidden, no pointer capture).
+// Motion runs through the Web Animations API so every browser gets per-piece keyframes without CSS-variable quirks. Not rendered under reduced-motion.
+function PointsConfetti() {
+  var vs = React.useState(true), visible = vs[0], setVisible = vs[1];
+  var ref = React.useRef(null);
+  var pieces = React.useMemo(function () {
+    var colors = ["#ffcc02", "#ed3b94", "#e4002b", "#7fe3d6", "#f0ebe3"];
+    var out = [];
+    for (var i = 0; i < 48; i++) {
+      var w = 6 + Math.round(Math.random() * 6);
+      out.push({ left: Math.random() * 100, w: w, h: Math.round(w * (0.5 + Math.random())), c: colors[i % colors.length], dx: Math.round((Math.random() - 0.5) * 180), rot: Math.round(360 + Math.random() * 720) * (Math.random() < 0.5 ? -1 : 1), dur: 1300 + Math.round(Math.random() * 800), delay: Math.round(Math.random() * 450) });
+    }
+    return out;
+  }, []);
+  React.useEffect(function () {
+    var el = ref.current;
+    var spans = el ? el.querySelectorAll("span") : [];
+    var h = (typeof window !== "undefined" && window.innerHeight) ? window.innerHeight + 40 : 900;
+    for (var i = 0; i < spans.length; i++) {
+      var pc = pieces[i], sp = spans[i];
+      if (typeof sp.animate !== "function") { sp.style.opacity = "1"; sp.style.transform = "translate3d(0," + Math.round(h * 0.6) + "px,0)"; continue; }
+      sp.animate([
+        { transform: "translate3d(0,0,0) rotate(0deg)", opacity: 1 },
+        { transform: "translate3d(" + Math.round(pc.dx * 0.5) + "px," + Math.round(h * 0.5) + "px,0) rotate(" + Math.round(pc.rot * 0.5) + "deg)", opacity: 1, offset: 0.55 },
+        { transform: "translate3d(" + pc.dx + "px," + h + "px,0) rotate(" + pc.rot + "deg)", opacity: 0 }
+      ], { duration: pc.dur, delay: pc.delay, easing: "cubic-bezier(.25,.6,.4,1)", fill: "forwards" });
+    }
+    var id = setTimeout(function () { setVisible(false); }, 2800);
+    return function () { clearTimeout(id); };
+  }, []);
+  if (!visible || reducedMotion()) return null;
+  return React.createElement("div", { ref: ref, className: "nmf-confetti", "aria-hidden": "true" }, pieces.map(function (pc, i) {
+    return React.createElement("span", { key: i, style: { left: pc.left + "%", width: pc.w, height: pc.h, background: pc.c } });
+  }));
+}
+// Shared H-E-B poll: team-style store pick, quick method pick, live-tally reveal + points pop.
+// Used by Onboarding (opening beat) and by the Discover card's "answered later" nudge.
+function HebPollFlow(props) {
+  var t = props.t || {};
+  var s = Object.assign({}, SHELL_STRINGS.en, t);
+  var st = React.useState("store"), step = st[0], setStep = st[1];
+  React.useEffect(function () { if (props.onStep) props.onStep(step); }, [step]);
+  var ss = React.useState(""), store = ss[0], setStore = ss[1];
+  var ms = React.useState(""), area = ms[0], setArea = ms[1];
+  var as = React.useState(null), agg = as[0], setAgg = as[1];
+  var aggRef = React.useRef(null);
+  React.useEffect(function () {
+    var alive = true;
+    fetch("/api/heb-poll").then(function (r) { return r.json(); }).then(function (j) { if (alive && j && j.ok) { aggRef.current = j; setAgg(j); } }).catch(function () {});
+    return function () { alive = false; };
+  }, []);
+  function pickStore(v) { if (store) return; setStore(v); setTimeout(function () { setStep("area"); }, 220); }
+  function pickArea(v) {
+    if (area) return;
+    setArea(v);
+    fetch("/api/heb-poll", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ device: hebPollDevice(), store: store, area: v }) })
+      .then(function (r) { return r.json(); }).catch(function () {});
+    try { localStorage.setItem("nmf_heb_poll_done", "1"); } catch (e) {}
+    setTimeout(function () { setStep("reveal"); }, 220);
+  }
+  function tile(val, sel, onPick, i) {
+    var on = sel === val;
+    return React.createElement("button", { key: val, className: "nmf-tilein", onClick: function () { onPick(val); }, style: { animationDelay: (i * 40) + "ms", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 72, padding: "14px 10px", borderRadius: 14, border: "2px solid " + (on ? "#ffcc02" : "#5c3a5e"), background: on ? "rgba(255,204,2,0.16)" : "rgba(255,255,255,0.04)", color: "#f0ebe3", fontSize: 15, fontWeight: on ? 800 : 700, cursor: "pointer", fontFamily: "inherit", lineHeight: 1.2, textAlign: "center", transform: on ? "scale(1.03)" : "none", transition: "transform .15s, border-color .15s, background .15s" } },
+      React.createElement("span", null, val));
+  }
+  var head = props.title ? React.createElement("div", { style: { fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "#ffcc02", marginBottom: 10 } }, props.title) : null;
+  var askedBy = React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 12, fontSize: 13.5, color: "#c4b9c5", lineHeight: 1.4, textAlign: "left" } },
+    HEB_LOGO ? React.createElement("img", { src: HEB_LOGO, alt: "H-E-B", style: { height: 20, width: "auto", display: "block", flexShrink: 0 } }) : React.createElement("span", { style: { fontWeight: 900, color: "#fff", background: "#e4002b", borderRadius: 999, padding: "2px 8px", fontSize: 11, flexShrink: 0 } }, "H-E-B"),
+    React.createElement("span", null, s.obAskedBy + " " + s.obAnon));
+  function qhead(n, text) {
+    return React.createElement("div", { style: { borderTop: "2px solid #ffcc02", paddingTop: 12, margin: "0 0 14px" } },
+      React.createElement("div", { style: { fontSize: 12, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "#ffcc02", marginBottom: 6 } }, String(s.obQuestionOf || "Question {n} of 2").replace("{n}", n)),
+      React.createElement("div", { style: { fontSize: 22, fontWeight: 800, color: "#fff", lineHeight: 1.2 } }, text));
+  }
+  if (step === "store") {
+    return React.createElement("div", null, head,
+      qhead(1, s.obStoreQ),
+      React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 } }, HEB_POLL_STORES.map(function (v, i) { return tile(v, store, pickStore, i); })),
+      askedBy);
+  }
+  if (step === "area") {
+    return React.createElement("div", null, head,
+      qhead(2, s.obAreaQ),
+      React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 9 } }, HEB_POLL_AREAS.map(function (v, i) { return tile(v, area, pickArea, i); })));
+  }
+  // reveal: prefetched tally (before this device answered) plus this answer, so the number is honest even while the API cache catches up
+  var a = aggRef.current || agg;
+  var msg, isFam = HEB_POLL_FAMILY.indexOf(store) >= 0;
+  if (a && typeof a.total === "number") {
+    var total = a.total + 1, byStore = a.byStore || {};
+    var famCount = HEB_POLL_FAMILY.reduce(function (n, k) { return n + (byStore[k] || 0); }, 0) + (isFam ? 1 : 0);
+    var famPct = Math.round(famCount / total * 100);
+    var storePct = Math.round(((byStore[store] || 0) + 1) / total * 100);
+    if (isFam) msg = famPct >= 50 ? hebFill(s.obRevealMajority, famPct, store) : hebFill(s.obRevealCompany, famPct, "H-E-B family");
+    else msg = storePct < 20 ? hebFill(s.obRevealRare, storePct, store) : hebFill(s.obRevealCompany, storePct, store);
+  } else msg = s.obRevealFirst;
+  return React.createElement("div", { style: { textAlign: "center" } }, head, React.createElement(PointsConfetti, null),
+    React.createElement("div", { style: { fontSize: 19, fontWeight: 800, color: "#fff", lineHeight: 1.3, margin: "0 0 16px" } }, msg),
+    React.createElement("div", { className: "nmf-ptspop" + (reducedMotion() ? " nmf-ptsshimmer" : ""), style: { display: "inline-flex", flexDirection: "column", alignItems: "center", background: "#ffcc02", color: "#2a0e2e", borderRadius: 18, padding: "12px 26px", boxShadow: "0 8px 24px rgba(255,204,2,0.35)" } },
+      React.createElement("div", { style: { fontSize: 34, fontWeight: 900, lineHeight: 1 } }, "+" + HEB_POLL_POINTS),
+      React.createElement("div", { style: { fontSize: 13, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", marginTop: 4 } }, s.obFirstPts)),
+    React.createElement("button", { onClick: props.onDone, style: { display: "block", width: "100%", marginTop: 18, padding: 16, border: "none", borderRadius: 14, cursor: "pointer", background: "#ed3b94", color: "#42194a", fontSize: 16, fontWeight: 700, fontFamily: "inherit" } }, s.obContinue));
+}
 function Onboarding(props) {
   var t = props.t, lang = props.lang;
   var s = Object.assign({}, SHELL_STRINGS.en, t);
-  var WELCOME_SPONSORS = [];
+  var ps = React.useState(function () { return (hebPollDone() && !ONBOARD_ALWAYS) ? "welcome" : "poll"; }), phase = ps[0], setPhase = ps[1];
+  var pss = React.useState("store"), pollStep = pss[0], setPollStep = pss[1];
   var brand = "NightMarket.fun";
   var hp = String(s.obHead).split(brand);
   var items = [
@@ -15533,9 +15779,12 @@ function Onboarding(props) {
   return /*#__PURE__*/React.createElement("div", { role: "dialog", "aria-label": "Welcome", style: { position: "fixed", inset: 0, height: "100dvh", zIndex: 70, background: "linear-gradient(180deg,#230a24 0%,#42194a 34%,#320f32 100%)", color: "#f0ebe3", display: "flex", flexDirection: "column" } },
     /*#__PURE__*/React.createElement("div", { style: { flex: "0 0 auto", display: "flex", justifyContent: "flex-end", padding: "22px 22px 6px" } },
       /*#__PURE__*/React.createElement("div", { className: "ob-langpulse" }, /*#__PURE__*/React.createElement(LanguageToggle, { lang: lang, onSelect: props.onSelectLang }))),
-    /*#__PURE__*/React.createElement("div", { style: { flex: "1 1 auto", overflowY: "auto", WebkitOverflowScrolling: "touch", display: "flex", flexDirection: "column", padding: "0 22px 14px" } }, React.createElement("div", { style: { margin: "auto 0", textAlign: "center" } }, React.createElement("h1", { style: { fontSize: 28, fontWeight: 800, lineHeight: 1.15, margin: "6px 0 12px" } }, hp[0], React.createElement("span", { style: { color: "#ff3ea0" } }, brand), hp[1] || ""), React.createElement("p", { style: { color: "#ccc3cc", fontSize: 16, lineHeight: 1.55, margin: 0 } }, s.obSupport))), /*#__PURE__*/React.createElement("div", { style: { flex: "0 0 auto", background: "#230a2499", borderTop: "1px solid #5c3a5e", padding: "18px 22px 14px" } }, /*#__PURE__*/React.createElement("div", { style: { textAlign: "center", color: "#ccc3cc", fontSize: 12, letterSpacing: "0.07em", textTransform: "uppercase", marginBottom: 12 } }, s.obSponsors || "Made possible by"), /*#__PURE__*/React.createElement("div", { style: { display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 18 } }, WELCOME_SPONSORS.length > 0 ? WELCOME_SPONSORS.map(function (sp, i) { return /*#__PURE__*/React.createElement("img", { key: i, src: sp.src, alt: sp.alt, style: { height: sp.h || 30, maxWidth: "48%", objectFit: "contain" } }); }) : /*#__PURE__*/React.createElement("div", { style: { border: "1px dashed #45455c", borderRadius: 10, padding: "20px 48px", color: "#8f8ba0", fontSize: 12, fontWeight: 600, letterSpacing: "0.04em" } }, "Gold Sponsor"))),
+    phase === "poll" ? /*#__PURE__*/React.createElement("div", { style: { flex: "1 1 auto", overflowY: "auto", WebkitOverflowScrolling: "touch", display: "flex", flexDirection: "column", padding: "0 22px 14px" } }, React.createElement("div", { style: { margin: "auto 0" } }, React.createElement("h1", { style: { fontSize: 24, fontWeight: 800, lineHeight: 1.15, margin: "0 0 10px", textAlign: "center" } }, hp[0], React.createElement("span", { style: { color: "#ff3ea0" } }, brand), hp[1] || ""), pollStep === "store" && React.createElement("div", { style: { margin: "0 0 18px", textAlign: "center" } }, React.createElement("p", { style: { color: "#ccc3cc", fontSize: 16, lineHeight: 1.5, margin: "0 0 10px" } }, String(s.obBody).split("**").map(function (seg, i) { return i % 2 ? React.createElement("span", { key: i, style: { color: "#ffcc02", fontWeight: 800 } }, seg) : seg; })), React.createElement("p", { style: { color: "#f0ebe3", fontSize: 16, fontWeight: 700, lineHeight: 1.4, margin: 0 } }, s.obBodyCta)), React.createElement(HebPollFlow, { t: t, onStep: setPollStep, onDone: function () { setPhase("welcome"); } }))) :
+    /*#__PURE__*/React.createElement("div", { style: { flex: "1 1 auto", overflowY: "auto", WebkitOverflowScrolling: "touch", display: "flex", flexDirection: "column", padding: "0 22px 14px" } }, React.createElement("div", { style: { margin: "auto 0", textAlign: "center" } }, React.createElement("h1", { style: { fontSize: 26, fontWeight: 800, lineHeight: 1.15, margin: "6px 0 16px" } }, s.obTourHead), React.createElement("div", { style: { textAlign: "left", display: "flex", flexDirection: "column", gap: 8, margin: "0 0 14px" } }, items.map(function (it) { return React.createElement("button", { key: it[3], onClick: goto(it[3]), style: { display: "flex", alignItems: "flex-start", gap: 11, width: "100%", textAlign: "left", padding: "10px 12px", borderRadius: 12, border: "1px solid #4d2254", background: "rgba(255,255,255,0.04)", color: "#f0ebe3", cursor: "pointer", fontFamily: "inherit" } }, React.createElement("span", { style: { fontSize: 22, lineHeight: 1.1, flexShrink: 0 } }, it[0]), React.createElement("span", null, React.createElement("span", { style: { display: "block", fontSize: 15, fontWeight: 800, color: "#fff", marginBottom: 2 } }, it[1]), React.createElement("span", { style: { display: "block", fontSize: 13.5, lineHeight: 1.4, color: "#ccc3cc" } }, it[2]))); })), React.createElement("p", { style: { color: "#ccc3cc", fontSize: 15, lineHeight: 1.5, margin: 0 } }, s.obSupport))), 
     /*#__PURE__*/React.createElement("div", { style: { flex: "0 0 auto", borderTop: "1px solid #4d2254", background: "#230a24e6", padding: "12px 22px calc(env(safe-area-inset-bottom) + 20px)" } },
-      /*#__PURE__*/React.createElement("button", { onClick: props.onDone, style: { width: "100%", padding: 16, border: "none", borderRadius: 14, cursor: "pointer", background: "#ed3b94", color: "#42194a", fontSize: 16, fontWeight: 700 } }, s.obStart)));
+      phase === "poll"
+        ? /*#__PURE__*/React.createElement("button", { onClick: props.onDone, style: { width: "100%", padding: 16, border: "2px solid #ed3b94", borderRadius: 14, cursor: "pointer", background: "transparent", color: "#f0ebe3", fontSize: 16, fontWeight: 700, fontFamily: "inherit" } }, s.obSkip)
+        : /*#__PURE__*/React.createElement("button", { onClick: props.onDone, style: { width: "100%", padding: 16, border: "none", borderRadius: 14, cursor: "pointer", background: "#ed3b94", color: "#42194a", fontSize: 16, fontWeight: 700 } }, s.obStart)));
 }
 
 const HEB_LOGO = "data:image/webp;base64,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"; /* Presenting sponsor (H-E-B): paste logo data URI here; empty shows "H-E-B" text */
@@ -15570,7 +15819,33 @@ function programCard(p, i) {
         /*#__PURE__*/React.createElement("img", { src: p.sponsorSrc, alt: p.sponsorAlt || "", loading: "lazy", style: { maxWidth: "72%", height: 26, objectFit: "contain", display: "block", margin: "0 auto" } })) : null));
 }
 var TIER_CELL_H = { "Presenting": 120, "Gold": 112, "Silver": 104, "Bronze": 96, "Community Partner": 62, "Community Supporter": 62, "Local Business Supporter": 58, "Official Clean Energy Partner": 58, "Hotel Partners": 50 };
-function sponsorCell(sp, i, ch) { return /*#__PURE__*/React.createElement("div", { key: i, style: { height: sp.h || ch, background: "#3a1640", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, boxSizing: "border-box" } }, sp.src ? /*#__PURE__*/React.createElement("img", { src: sp.src, alt: sp.alt, loading: "lazy", style: { maxWidth: "90%", maxHeight: "84%", width: "auto", height: "auto", objectFit: "contain", display: "block" } }) : /*#__PURE__*/React.createElement("div", { style: { color: "#f0ebe3", fontWeight: 800, fontSize: 18, letterSpacing: "0.04em", textAlign: "center" } }, sp.alt)); }
+function HebFeaturedCard(props) {
+  var ds = React.useState(hebPollDone), setDone = ds[1];
+  var done = ds[0] || hebPollDone(); // re-check on every render so an answer given in onboarding shows here too
+  var os = React.useState(false), open = os[0], setOpen = os[1];
+  var card = React.createElement("div", { style: { position: "relative", borderRadius: 16, padding: 16, marginBottom: 14, background: "linear-gradient(135deg, #5c1230 0%, #3e0f2f 60%, #42194a 100%)", border: "2px solid #e4002b", boxShadow: "0 0 0 1px rgba(228,0,43,0.25), 0 10px 28px rgba(228,0,43,0.22)" } },
+    React.createElement("div", { style: { display: "inline-flex", alignItems: "center", background: "#ffcc02", color: "#2a0e2e", fontSize: 10.5, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "3px 9px", borderRadius: 999, marginBottom: 10 } }, "Presenting Partner"),
+    React.createElement("div", { onClick: props.onOpenDetails, style: { display: "flex", alignItems: "center", gap: 11, cursor: "pointer" } },
+      HEB_LOGO ? React.createElement("img", { src: HEB_LOGO, alt: "H-E-B", style: { height: 34, width: "auto", display: "block", flexShrink: 0 } }) : React.createElement("span", { style: { fontWeight: 900, color: "#fff", background: "#e4002b", borderRadius: 999, padding: "4px 12px", fontSize: 16, flexShrink: 0 } }, "H-E-B"),
+      React.createElement("div", { style: { flex: 1 } },
+        React.createElement("div", { style: { fontSize: 16.5, fontWeight: 800, color: "#fff", lineHeight: 1.2 } }, "Visit H-E-B at NightMarket.fun"),
+        React.createElement("div", { style: { fontSize: 12.5, color: "#cfc3d0", marginTop: 3, lineHeight: 1.35 } }, "Our presenting partner is here all night. Stop by and say hello.")
+      )
+    ),
+    React.createElement("button", { onClick: props.onTogglePlan, style: { marginTop: 12, display: "inline-block", border: "1px solid rgba(255,255,255,0.35)", background: props.inPlan ? "rgba(237,59,148,0.22)" : "rgba(255,255,255,0.06)", color: "#f0ebe3", fontSize: 12.5, fontWeight: 700, borderRadius: 9, padding: "7px 13px", cursor: "pointer", fontFamily: "inherit" } }, props.inPlan ? "In your plan" : "+ Add to plan"),
+    done ? React.createElement("div", { style: { marginTop: 10, fontSize: 12, color: "#98cb66", fontWeight: 700 } }, "\u2713 Thanks for answering H-E-B's question. +" + HEB_POLL_POINTS + " points.")
+      : React.createElement("button", { onClick: function () { setOpen(true); }, style: { marginTop: 10, display: "block", background: "none", border: "none", padding: 0, color: "#ffcc02", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", textAlign: "left", lineHeight: 1.35 } }, "Skipped H-E-B's question? Answer it here for +" + HEB_POLL_POINTS + " points \u2192")
+  );
+  var modal = open ? React.createElement("div", { style: { position: "fixed", left: 0, right: 0, top: 0, bottom: 0, zIndex: 4000, background: "rgba(10,4,12,0.72)", display: "flex", alignItems: "flex-end", justifyContent: "center" }, onClick: function () { setOpen(false); } },
+    React.createElement("div", { onClick: function (e) { e.stopPropagation(); }, style: { width: "100%", maxWidth: 480, background: "#2a0e2e", borderRadius: "18px 18px 0 0", padding: "16px 16px calc(20px + env(safe-area-inset-bottom,0px))", maxHeight: "88vh", overflowY: "auto" } },
+      React.createElement("div", { style: { display: "flex", justifyContent: "flex-end", marginBottom: 4 } },
+        React.createElement("button", { onClick: function () { setOpen(false); }, "aria-label": "Close", style: { width: 36, height: 36, borderRadius: 999, border: "1px solid #5c3a5e", background: "transparent", color: "#cfc3d0", fontSize: 17, cursor: "pointer", fontFamily: "inherit" } }, "\u2715")),
+      React.createElement(HebPollFlow, { t: props.t, title: "A question from H-E-B", onDone: function () { setDone(true); setOpen(false); } })
+    )
+  ) : null;
+  return React.createElement("div", null, card, modal);
+}
+  function sponsorCell(sp, i, ch) { return /*#__PURE__*/React.createElement("div", { key: i, style: { height: sp.h || ch, background: "#3a1640", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, boxSizing: "border-box" } }, sp.src ? /*#__PURE__*/React.createElement("img", { src: sp.src, alt: sp.alt, loading: "lazy", style: { maxWidth: "90%", maxHeight: "84%", width: "auto", height: "auto", objectFit: "contain", display: "block" } }) : /*#__PURE__*/React.createElement("div", { style: { color: "#f0ebe3", fontWeight: 800, fontSize: 18, letterSpacing: "0.04em", textAlign: "center" } }, sp.alt)); }
 function ActSurveyCard({ t }) {
   const [code, setCode] = useState("");
   const [msg, setMsg] = useState("");
@@ -16186,7 +16461,7 @@ function NMFDiscover() {
   const [showRaffle, setShowRaffle] = useState(false);
   const [showMapFull, setShowMapFull] = useState(false);
   const [bbTick, setBbTick] = useState(0);
-  const [showOnboarding, setShowOnboarding] = useState(function () { try { return !localStorage.getItem("nmf_onboarded"); } catch (e) { return true; } });
+  const [showOnboarding, setShowOnboarding] = useState(function () { if (ONBOARD_ALWAYS) return true; try { return !localStorage.getItem("nmf_onboarded"); } catch (e) { return true; } });
   const [showAbout, setShowAbout] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState(null);
@@ -16295,7 +16570,8 @@ function NMFDiscover() {
     }
   });
   const setBonus = PASSPORT_SETS.reduce((a, st) => a + st.pts, 0);
-  const points = claimed.length * 10 + setBonus;
+  const hebBonus = hebPollDone() ? HEB_POLL_POINTS : 0;
+  const points = claimed.length * 10 + setBonus + hebBonus;
   const REWARD_TIERS = [100, 250, 500, 1000];
   const nextTier = REWARD_TIERS.find(x => x > points) || Math.ceil((points + 1) / 500) * 500;
   const rewardPct = Math.min(100, Math.round(points / nextTier * 100));
@@ -16941,7 +17217,7 @@ function NMFDiscover() {
     }
   }, /*#__PURE__*/React.createElement("span", {
     "aria-hidden": "true"
-  }, "\uD83C\uDFEE "), TRANSLATING_LABEL[lang])), (!results && !loading) && /*#__PURE__*/React.createElement("div", { onClick: function () { setActiveListing({ id: "heb-presenting", name: "H-E-B", category: "Vendor", subcategory: "Presenting Partner", description: "Our presenting partner is here all night. Stop by and say hello. Activity details coming soon.", products: "Activity details coming soon", tags: ["sponsor", "presenting"], familyFriendly: true }); }, style: { position: "relative", borderRadius: 16, padding: 14, marginBottom: 14, background: "#42194a", border: "1.5px solid #e4002b", cursor: "pointer" } }, /*#__PURE__*/React.createElement("div", { style: { display: "inline-flex", alignItems: "center", background: "#ffcc02", color: "#2a0e2e", fontSize: 10.5, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", padding: "3px 9px", borderRadius: 999, marginBottom: 10 } }, "Presenting Partner"), /*#__PURE__*/React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 11 } }, /*#__PURE__*/React.createElement("div", { style: { flexShrink: 0, background: "#fff", borderRadius: 8, padding: "5px 8px", display: "inline-flex", alignItems: "center" } }, HEB_LOGO ? /*#__PURE__*/React.createElement("img", { src: HEB_LOGO, alt: "H-E-B", style: { height: 24, width: "auto", display: "block" } }) : /*#__PURE__*/React.createElement("span", { style: { fontWeight: 900, color: "#e4002b", fontSize: 16 } }, "H-E-B")), /*#__PURE__*/React.createElement("div", { style: { flex: 1 } }, /*#__PURE__*/React.createElement("div", { style: { fontSize: 15.5, fontWeight: 800, color: "#fff", lineHeight: 1.2 } }, "Visit H-E-B at NightMarket.fun"), /*#__PURE__*/React.createElement("div", { style: { fontSize: 12.5, color: "#cfc3d0", marginTop: 3, lineHeight: 1.35 } }, "Our presenting partner is here all night. Stop by and say hello. Activity details coming soon."))), /*#__PURE__*/React.createElement("div", { style: { marginTop: 11, display: "inline-block", border: "1px solid #6b4a6d", color: "#f0ebe3", fontSize: 12.5, fontWeight: 700, borderRadius: 9, padding: "7px 13px" } }, "Tap for details \u2192")), !loading && displayVendors.map(v => /*#__PURE__*/React.createElement(VendorCard, {
+  }, "\uD83C\uDFEE "), TRANSLATING_LABEL[lang])), (!results && !loading) && /*#__PURE__*/React.createElement(HebFeaturedCard, { t: t, onOpenDetails: function () { setActiveListing({ id: "heb-presenting", name: "H-E-B", category: "Vendor", subcategory: "Presenting Partner", description: "Our presenting partner is here all night. Stop by and say hello. Activity details coming soon.", products: "Activity details coming soon", tags: ["sponsor", "presenting"], familyFriendly: true }); }, inPlan: plan.includes("heb-presenting"), onTogglePlan: function () { togglePlan("heb-presenting"); } }), !loading && displayVendors.map(v => /*#__PURE__*/React.createElement(VendorCard, {
     key: v.id,
     vendor: v,
     freeLabel: t.free,
@@ -17022,7 +17298,7 @@ function NMFDiscover() {
     }
   }, t.mapTitle), /*#__PURE__*/React.createElement(MapPreview, { t: t, src: MAP_IMG, onOpen: function () { setShowMapFull(true); try { var __e = document.documentElement; if (__e.requestFullscreen) __e.requestFullscreen().catch(function(){}); } catch (e) {} try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock("portrait").catch(function(){}); } catch (e) {} } })), mapView === "schedule" && /*#__PURE__*/React.createElement(SchedulePanel, {
     t: t
-  }), React.createElement("button", { onClick: function() { setShowOnboarding(true); }, style: { display: "block", width: "100%", marginTop: 24, padding: "12px", background: "transparent", border: "1px solid #4d2254", borderRadius: 12, color: "#ccc3cc", fontSize: 14, fontWeight: 600, fontFamily: "inherit", cursor: "pointer" } }, t.obReplay || "View the welcome again")), tab === "passport" && /*#__PURE__*/React.createElement("div", {
+  }), React.createElement("button", { onClick: function() { setShowOnboarding(true); }, style: { display: "block", width: "100%", marginTop: 24, padding: "12px", background: "transparent", border: "1px solid #4d2254", borderRadius: 12, color: "#ccc3cc", fontSize: 14, fontWeight: 600, fontFamily: "inherit", cursor: "pointer" } }, t.obReplay || "View the welcome again"), ONBOARD_ALWAYS && React.createElement("button", { onClick: function() { try { localStorage.removeItem("nmf_heb_poll_done"); localStorage.removeItem("nmf_onboarded"); } catch (e) {} setShowOnboarding(false); setTimeout(function () { setShowOnboarding(true); }, 0); }, style: { display: "block", width: "100%", marginTop: 8, padding: "12px", background: "transparent", border: "1px dashed #ffcc02", borderRadius: 12, color: "#ffcc02", fontSize: 14, fontWeight: 700, fontFamily: "inherit", cursor: "pointer" } }, "Reset poll (review only)")), tab === "passport" && /*#__PURE__*/React.createElement("div", {
     style: {
       paddingTop: 12
     }
